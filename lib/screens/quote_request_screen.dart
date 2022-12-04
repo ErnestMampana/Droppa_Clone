@@ -156,7 +156,7 @@ class _QuoteRequestScreenState extends State<QuoteRequestScreen> {
                 height: 10,
               ),
               Container(
-                margin: const EdgeInsets.all(10),
+                // margin: const EdgeInsets.all(10),
                 child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
@@ -165,7 +165,7 @@ class _QuoteRequestScreenState extends State<QuoteRequestScreen> {
                         size: 15,
                         color: Color.fromARGB(255, 219, 8, 8),
                       ),
-                      const Text(' - - - - - - - '),
+                      const Text(' - - - - - - '),
                       Container(
                         width: 150,
                         height: 30,
@@ -182,7 +182,7 @@ class _QuoteRequestScreenState extends State<QuoteRequestScreen> {
                           ),
                         ),
                       ),
-                      const Text(' - - - - - - - '),
+                      const Text(' - - - - - - '),
                       const Icon(
                         Icons.circle,
                         size: 15,

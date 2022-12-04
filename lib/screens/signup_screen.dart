@@ -1,3 +1,4 @@
+import 'package:droppa_clone/backend/services/firebase_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -12,6 +13,8 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
+  Authantication _authentication = Authantication();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -107,12 +110,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
             ),
             MaterialButton(
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => const LoginScreen(),
-                  ),
-                );
+                _handleSignUp();
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(
+                //     builder: (_) => const LoginScreen(),
+                //   ),
+                // );
               },
               color: Colors.blue,
               shape: RoundedRectangleBorder(
@@ -151,5 +155,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
         ),
       ),
     );
+  }
+
+  _handleSignUp() async {
+    Map<String, dynamic> userDetails = {
+      'email': 'ernest.mampana@gmail.com',
+      'password': 'thatomohlala',
+      'returnSecureToken': true
+    };
+
+    await _authentication.signUp(userDetails);
   }
 }
