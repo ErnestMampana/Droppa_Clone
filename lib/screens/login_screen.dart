@@ -1,7 +1,10 @@
+import 'package:droppa_clone/backend/services/firebase_service.dart';
 import 'package:droppa_clone/screens/signup_screen.dart';
+import 'package:droppa_clone/widgets/loader.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -11,6 +14,13 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  //variables
+  final Authantication _authantication = Authantication();
+
+  //controllers
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passordController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,9 +57,10 @@ class _LoginScreenState extends State<LoginScreen> {
               height: 30,
             ),
             Column(
-              children: const [
+              children: [
                 TextField(
-                  decoration: InputDecoration(
+                  controller: _emailController,
+                  decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                     labelText: 'Email',
                   ),
@@ -60,10 +71,11 @@ class _LoginScreenState extends State<LoginScreen> {
               height: 30,
             ),
             Column(
-              children: const [
+              children: [
                 TextField(
+                  controller: _passordController,
                   obscureText: true,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                     labelText: 'Password',
                   ),
@@ -93,13 +105,24 @@ class _LoginScreenState extends State<LoginScreen> {
               height: 30,
             ),
             MaterialButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => const LoginScreen(),
-                  ),
-                );
+              onPressed: () async {
+                await _handleLogin();
+                setState(() {
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return Center(
+                          child: LoadingAnimationWidget.discreteCircle(
+                              color: Colors.blue.shade600, size: 75),
+                        );
+                      });
+                });
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(
+                //     builder: (_) => const LoginScreen(),
+                //   ),
+                // );
               },
               color: Colors.blue,
               shape: RoundedRectangleBorder(
@@ -143,5 +166,24 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       ),
     );
+  }
+
+  _handleLogin() async {
+    LoadingAnimationWidget.discreteCircle(
+        color: Colors.blue.shade600, size: 20);
+    Map<String, dynamic> userdetails = {
+      'email': _emailController.text,
+      'password': _passordController.text,
+      'returnSecureToken': true
+    };
+    var response = await _authantication.login(userdetails);
+    print(response.statusCode.toString());
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passordController.dispose();
+    super.dispose();
   }
 }

@@ -52,7 +52,7 @@ class _SelectVehicleControllerState extends State<SelectVehicleController> {
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           Image.asset(
             _imageUrl!,

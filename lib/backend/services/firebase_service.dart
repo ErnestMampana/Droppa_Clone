@@ -15,4 +15,13 @@ class Authantication {
     var response = await http.post(Uri.parse(url), body: requestBody);
     print(jsonDecode(response.body));
   }
+
+  Future<http.Response> login(Map<String, dynamic> userdetails) async {
+    var url =
+        "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=$key";
+    var requestBody = jsonEncode(userdetails);
+    var response = await http.post(Uri.parse(url), body: requestBody);
+    //print(jsonDecode(response.statusCode.toString()));
+    return response;
+  }
 }

@@ -47,7 +47,8 @@ class _VehicleQuoteScreenState extends State<VehicleQuoteScreen> {
                               height: 20,
                             ),
                             Row(
-                                //mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
                                 children: [
                                   const Icon(
                                     Icons.my_location_outlined,
@@ -74,7 +75,8 @@ class _VehicleQuoteScreenState extends State<VehicleQuoteScreen> {
                               thickness: 2,
                             ),
                             Row(
-                                //mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
                                 children: [
                                   const Icon(
                                     Icons.my_location_outlined,
