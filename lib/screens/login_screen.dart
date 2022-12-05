@@ -1,10 +1,7 @@
 import 'package:droppa_clone/backend/services/firebase_service.dart';
 import 'package:droppa_clone/screens/signup_screen.dart';
-import 'package:droppa_clone/widgets/loader.dart';
+import 'package:droppa_clone/widgets/dialog.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -16,6 +13,8 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   //variables
   final Authantication _authantication = Authantication();
+  bool _emailValid = false;
+  bool _passwordValid = false;
 
   //controllers
   final TextEditingController _emailController = TextEditingController();
@@ -58,12 +57,29 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             Column(
               children: [
-                TextField(
+                TextFormField(
+                  // validator: (value) {
+                  //   if (value == null || value.isEmpty) {
+                  //     return 'Can\'t be empty';
+                  //   }
+                  //   if (value.length < 4) {
+                  //     return 'Too short';
+                  //   }
+                  //   return null;
+                  // },
+                  // onChanged: (value) =>
+                  //     setState(() => _emailController.text = value),
                   controller: _emailController,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
+                  decoration: InputDecoration(
+                    errorText: _emailValid ? 'Required field' : null,
+                    border: const OutlineInputBorder(),
                     labelText: 'Email',
                   ),
+                  onTap: (() {
+                    setState(() {
+                      _emailValid = false;
+                    });
+                  }),
                 )
               ],
             ),
@@ -75,10 +91,16 @@ class _LoginScreenState extends State<LoginScreen> {
                 TextField(
                   controller: _passordController,
                   obscureText: true,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
+                  decoration: InputDecoration(
+                    errorText: _passwordValid ? 'Required field' : null,
+                    border: const OutlineInputBorder(),
                     labelText: 'Password',
                   ),
+                  onTap: () {
+                    setState(() {
+                      _passwordValid = false;
+                    });
+                  },
                 )
               ],
             ),
@@ -106,16 +128,19 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             MaterialButton(
               onPressed: () async {
-                await _handleLogin();
                 setState(() {
-                  showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return Center(
-                          child: LoadingAnimationWidget.discreteCircle(
-                              color: Colors.blue.shade600, size: 75),
-                        );
-                      });
+                  if (_emailController.text.isEmpty &&
+                      _passordController.text.isEmpty) {
+                    _emailValid = true;
+                    _passwordValid = true;
+                    //_valid = false;
+                  } else if (_passordController.text.isEmpty) {
+                    _passwordValid = true;
+                  } else if (_passordController.text.isEmpty == true) {
+                    _passwordValid = true;
+                  } else {
+                    _handleLogin();
+                  }
                 });
                 // Navigator.push(
                 //   context,
@@ -169,14 +194,15 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   _handleLogin() async {
-    LoadingAnimationWidget.discreteCircle(
-        color: Colors.blue.shade600, size: 20);
+    DialogUtils.showLoading(context);
+
     Map<String, dynamic> userdetails = {
       'email': _emailController.text,
       'password': _passordController.text,
       'returnSecureToken': true
     };
     var response = await _authantication.login(userdetails);
+    DialogUtils.hideDialog(context);
     print(response.statusCode.toString());
   }
 
