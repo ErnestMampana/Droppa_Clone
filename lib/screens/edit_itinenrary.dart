@@ -4,6 +4,7 @@ import 'package:droppa_clone/widgets/date_time.dart';
 import 'package:droppa_clone/widgets/pickdrop.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'dart:io' show Platform;
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
@@ -184,7 +185,9 @@ class _EditItineraryScreenState extends State<EditItineraryScreen> {
               icon: Icons.watch_later_outlined,
               title: 'Time',
             ),
-            PickUpAndDrop(),
+            const PickUpAndDrop(
+              title: 'Pick-up Details',
+            ),
             const Padding(
               padding: EdgeInsets.all(10),
               child: Text(
@@ -203,7 +206,9 @@ class _EditItineraryScreenState extends State<EditItineraryScreen> {
             const SizedBox(
               height: 10,
             ),
-            PickUpAndDrop(),
+            PickUpAndDrop(
+              title: 'Drop-off Details',
+            ),
             const Padding(
               padding: EdgeInsets.all(10),
               child: Align(
@@ -217,9 +222,84 @@ class _EditItineraryScreenState extends State<EditItineraryScreen> {
               number: _loadsNumber,
               onTap: () {},
             ),
-            const SizedBox(
-              height: 10,
-            ),
+            Container(
+              width: 400,
+              height: 200,
+              margin: const EdgeInsets.all(10),
+              color: Colors.white,
+              child: Column(
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.all(10),
+                    child: Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        'What needs to be delivered/special instructions?',
+                        style: TextStyle(fontSize: 18),
+                      ),
+                    ),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.all(10),
+                    child: SizedBox(
+                      //height: 100,
+                      child: TextField(
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: const [
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            'TEARMS AND CONDITIONS',
+                            style: TextStyle(
+                              color: Colors.blue,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Platform.isIOS
+                              ? CupertinoSwitch(
+                                  value: _isSwitched,
+                                  onChanged: (value) {
+                                    _isSwitched = value;
+                                    setState(
+                                      () {},
+                                    );
+                                  },
+                                  thumbColor: Colors.white,
+                                  activeColor: Colors.blue,
+                                )
+                              : Switch(
+                                  value: _isSwitched,
+                                  onChanged: (value) {
+                                    setState(
+                                      () {
+                                        _isSwitched = value;
+                                      },
+                                    );
+                                  },
+                                ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            )
           ],
         ),
       ),

@@ -5,7 +5,8 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'dart:io' show Platform;
 
 class PickUpAndDrop extends StatefulWidget {
-  const PickUpAndDrop({super.key});
+  final String title;
+  const PickUpAndDrop({super.key, required this.title});
 
   @override
   State<PickUpAndDrop> createState() => _PickUpAndDropState();
@@ -30,13 +31,13 @@ class _PickUpAndDropState extends State<PickUpAndDrop> {
           const SizedBox(
             height: 10,
           ),
-          const Padding(
-            padding: EdgeInsets.only(left: 10),
+          Padding(
+            padding: const EdgeInsets.only(left: 10),
             child: Align(
               alignment: Alignment.topLeft,
               child: Text(
-                'Pick-up Details',
-                style: TextStyle(
+                widget.title,
+                style: const TextStyle(
                   color: Colors.blue,
                   fontWeight: FontWeight.bold,
                 ),
