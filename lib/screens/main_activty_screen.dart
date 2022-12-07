@@ -6,6 +6,7 @@ import 'package:droppa_clone/screens/login_screen.dart';
 import 'package:droppa_clone/screens/quote_request_screen.dart';
 import 'package:droppa_clone/screens/rental_service_screen.dart';
 import 'package:droppa_clone/screens/vehlicle_quote_screen.dart';
+import 'package:droppa_clone/screens/wallet.dart';
 import 'package:droppa_clone/widgets/button.dart';
 import 'package:droppa_clone/widgets/drawer.dart';
 import 'package:droppa_clone/widgets/vehicle_select.dart';
@@ -144,12 +145,22 @@ class _MainActivityScreenState extends State<MainActivityScreen> {
                               const SizedBox(
                                 height: 5,
                               ),
-                              const Text(
-                                'R1600,24',
-                                style: TextStyle(
-                                  fontSize: 11,
-                                  color: Colors.blue,
+                              GestureDetector(
+                                child: const Text(
+                                  'R1600,24',
+                                  style: TextStyle(
+                                    fontSize: 11,
+                                    color: Colors.blue,
+                                  ),
                                 ),
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (_) => const WalletScreen(),
+                                    ),
+                                  );
+                                },
                               ),
                             ])
                           ],

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-class SelectVehicleController extends StatefulWidget {
+class SelectVehicleController extends StatelessWidget {
   final String title;
   final String description;
   final String imageUrl;
   final int itemNumber;
   final int groupValue;
-  final Function onChanged;
+  final Function(int?)? onChanged;
   const SelectVehicleController(
       {Key? key,
       required this.title,
@@ -17,31 +17,17 @@ class SelectVehicleController extends StatefulWidget {
       required this.onChanged})
       : super(key: key);
 
-  @override
-  State<SelectVehicleController> createState() =>
-      _SelectVehicleControllerState();
-}
+  // String? _imageUrl;
 
-class _SelectVehicleControllerState extends State<SelectVehicleController> {
-  String? _imageUrl;
-  String? _description;
-  String? _title;
-  int? _itemNumber;
-  int? _groupValue;
-  Function? _onChanged;
+  // String? _description;
 
-  @override
-  void initState() {
-    _imageUrl = widget.imageUrl;
-    _description = widget.description;
-    _title = widget.title;
-    _groupValue = widget.groupValue;
-    _itemNumber = widget.itemNumber;
-    _onChanged = widget.onChanged;
+  // String? _title;
 
-    super.initState();
-  }
+  // int? _itemNumber;
 
+  // int? _groupValue;
+
+  //Function(int)? _onChanged;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -55,7 +41,7 @@ class _SelectVehicleControllerState extends State<SelectVehicleController> {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           Image.asset(
-            _imageUrl!,
+            imageUrl,
             //fit: BoxFit.scaleDown,
             height: 120,
             width: 120,
@@ -67,7 +53,7 @@ class _SelectVehicleControllerState extends State<SelectVehicleController> {
               ),
               Center(
                 child: Text(
-                  _title!,
+                  title,
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                   ),
@@ -77,14 +63,14 @@ class _SelectVehicleControllerState extends State<SelectVehicleController> {
                 height: 20,
               ),
               Text(
-                _description!,
+                description,
               ),
             ],
           ),
           Radio(
-            value: _itemNumber,
-            groupValue: _groupValue,
-            onChanged: _onChanged!(_itemNumber),
+            value: itemNumber,
+            groupValue: groupValue,
+            onChanged: onChanged,
             activeColor: Colors.red[400],
           ),
         ],

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class Booking with ChangeNotifier {
   final String? pickupadress;
   final String? dropoffadress;
-  final DateTime? date;
+  final String? date;
   final String? vehicle;
   final String? status;
   final String? pickUpName;
@@ -74,13 +74,18 @@ class Booking with ChangeNotifier {
   static List<Booking> bookings = [
     Booking(
         pickupadress: 'Mogalatsane',
-        dropoffadress: 'Leboakgomo',
+        dropoffadress: '2 Waterbessie Ave, Roodekrans, Roodepoort, 1724',
         status: 'Awaiting for payments',
         vehicle: '1-ton'),
     Booking(
-        pickupadress: 'Mogalatsane',
-        dropoffadress: 'Leboakgomo',
-        status: 'Awaiting for payments',
+        pickupadress: 'Elandskraal',
+        dropoffadress: '88 Montjane St, Emangweni, Tembisa',
+        status: 'Driver Assigned',
+        vehicle: '1-ton'),
+    Booking(
+        pickupadress: 'Elandskraal',
+        dropoffadress: '88 Montjane St, Emangweni, Tembisa',
+        status: 'Completed',
         vehicle: '1-ton'),
   ];
 }

@@ -14,20 +14,224 @@ class BookingsScreen extends StatefulWidget {
 
 class _BookingsScreenState extends State<BookingsScreen> {
   List<Map<String, dynamic>> _bookings = [];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    // print(Booking.bookings.);
+    setState(() {
+      //vancanciesFuture = _getVacancies();
+
+      _bookings.clear();
+      for (var booking in Booking.bookings) {
+        _bookings.add(booking.toMap());
+      }
+      //_runFilter();
+      debugPrint(_bookings.toString());
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.grey[200],
-        appBar: AppBar(
-          title: Text('Bookings'),
-          centerTitle: true,
-          elevation: 0,
-        ),
-        body: ListView.builder(
-          itemBuilder: (context, index) {
-            return BookingsDetails();
-          },
-          itemCount: Booking.bookings.length,
-        ));
+      backgroundColor: Colors.grey[200],
+      appBar: AppBar(
+        title: Text('Bookings'),
+        centerTitle: true,
+        elevation: 0,
+      ),
+      body: ListView.builder(
+        itemBuilder: (context, index) {
+          // if () {
+          return _bookingItem(
+              Booking.fromJson(
+                _bookings[index],
+              ),
+              _bookings);
+
+          // Center(
+          //   child: Text(
+          //     "No Bookings Found",
+          //     textAlign: TextAlign.center,
+          //     style: TextStyle(
+          //       //fontFamily: GlobalUI.FONT_MEDIUM,
+          //       fontSize: 70,
+          //       color: Colors.black,
+          //     ),
+          //   ),
+          // );
+        },
+        itemCount: Booking.bookings.length,
+      ),
+    );
+  }
+
+  Widget _bookingItem(
+      Booking bookingData, List<Map<String, dynamic>> bookings) {
+    return bookings.isEmpty
+        ? Center(
+            child: Text(
+              "No Bookings Found",
+              //textAlign: TextAlign.center,
+              style: TextStyle(
+                //fontFamily: GlobalUI.FONT_MEDIUM,
+                fontSize: 70,
+                color: Colors.black,
+              ),
+            ),
+          )
+        : Container(
+            height: 250,
+            width: 400,
+            margin: const EdgeInsets.all(10),
+            decoration: const BoxDecoration(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(12),
+                ),
+                color: Colors.white),
+            child: Column(
+              children: [
+                const SizedBox(
+                  height: 20,
+                ),
+                const Text(
+                  'Saturday,Dec 24,2022',
+                  style: TextStyle(
+                      fontSize: 17,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.grey),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 10),
+                          child: Row(
+                            //mainAxisAlignment: MainAxisAlignment.Spa,
+                            children: [
+                              const Icon(
+                                Icons.circle,
+                                color: Colors.green,
+                                size: 25,
+                              ),
+                              // Flexible(
+                              //   child:
+                              SizedBox(
+                                width: 250,
+                                child: Text(bookingData.pickupadress!),
+                              ),
+                              //  ),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 10),
+                          child: Row(
+                            children: [
+                              Align(
+                                alignment: Alignment.topLeft,
+                                child: RotatedBox(
+                                  quarterTurns: 1,
+                                  child: RichText(
+                                    text: const TextSpan(
+                                      text: '---',
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 250,
+                              ),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 10),
+                          child: Row(
+                            //mainAxisAlignment: MainAxisAlignment.Spa,
+                            children: [
+                              const Icon(
+                                Icons.circle,
+                                color: Colors.red,
+                                size: 25,
+                              ),
+                              // Flexible(
+                              //   child:
+                              SizedBox(
+                                width: 250,
+                                child: Text(bookingData.dropoffadress!),
+                              ),
+                              // ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 0),
+                      child: Container(
+                        height: 100,
+                        width: 70,
+                        decoration: const BoxDecoration(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(12),
+                          ),
+                          color: Colors.black,
+                        ),
+                        child: Center(
+                          child: Text(
+                            bookingData.vehicle!,
+                            style: const TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Text('2022-12-24'),
+                    Text('2022-12-24'),
+                    Text('11:34 AM'),
+                  ],
+                ),
+                Divider(
+                  thickness: 2,
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                InkWell(
+                  child: Text(
+                    bookingData.status!,
+                    style: TextStyle(fontSize: 17, color: Colors.blue),
+                  ),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => BookingScreen(),
+                      ),
+                    );
+                  },
+                )
+              ],
+            ),
+          );
   }
 }

@@ -149,9 +149,9 @@ class _VehicleQuoteScreenState extends State<VehicleQuoteScreen> {
                     groupValue: _groupValue,
                     onChanged: (itemNumber) {
                       print('Mini van ton selected');
-                      // setState(() {
-                      //   _groupValue = itemNumber;
-                      // });
+                      setState(() {
+                        _groupValue = itemNumber!;
+                      });
                     },
                   ),
                   const SizedBox(
@@ -165,9 +165,9 @@ class _VehicleQuoteScreenState extends State<VehicleQuoteScreen> {
                     groupValue: _groupValue,
                     onChanged: (itemNumber) {
                       print('1 ton ton selected');
-                      // setState(() {
-                      //   _groupValue = itemNumber;
-                      // });
+                      setState(() {
+                        _groupValue = itemNumber!;
+                      });
                     },
                   ),
                   const SizedBox(
@@ -181,9 +181,9 @@ class _VehicleQuoteScreenState extends State<VehicleQuoteScreen> {
                     groupValue: _groupValue,
                     onChanged: (itemNumber) {
                       print('1.5 ton selected');
-                      // setState(() {
-                      //   _groupValue = itemNumber;
-                      // });
+                      setState(() {
+                        _groupValue = itemNumber!;
+                      });
                     },
                   ),
                   const SizedBox(
@@ -191,15 +191,15 @@ class _VehicleQuoteScreenState extends State<VehicleQuoteScreen> {
                   ),
                   SelectVehicleController(
                     title: '4 Ton',
-                    description: 'Toyota Dyna , Isuzu NMR250\n      or Similar',
+                    description: 'Toyota Dyna , Isuzu \n      or Similar',
                     imageUrl: Strings.fourTon,
                     itemNumber: 4,
                     groupValue: _groupValue,
                     onChanged: (itemNumber) {
                       print('4 ton selected');
-                      // setState(() {
-                      //   _groupValue = itemNumber;
-                      // });
+                      setState(() {
+                        _groupValue = 4;
+                      });
                     },
                   ),
                   const SizedBox(
@@ -212,10 +212,10 @@ class _VehicleQuoteScreenState extends State<VehicleQuoteScreen> {
                     itemNumber: 5,
                     groupValue: _groupValue,
                     onChanged: (itemNumber) {
-                      print('$itemNumber 8 ton selected');
-                      // setState(() {
-                      //   _groupValue = itemNumber;
-                      // });
+                      //print('$itemNumber 8 ton selected');
+                      setState(() {
+                        _groupValue = itemNumber!;
+                      });
                     },
                   ),
                   const SizedBox(
