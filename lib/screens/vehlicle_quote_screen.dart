@@ -1,5 +1,5 @@
 import 'package:droppa_clone/LookUp/strings.dart';
-import 'package:droppa_clone/screens/edit_itinenrary.dart';
+import 'package:droppa_clone/screens/edit_itinenrary_screen.dart';
 import 'package:droppa_clone/widgets/button.dart';
 import 'package:droppa_clone/widgets/vehicle_select.dart';
 import 'package:flutter/material.dart';

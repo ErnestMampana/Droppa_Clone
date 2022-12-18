@@ -1,6 +1,6 @@
 // ignore_for_file: sized_box_for_whitespace
 
-import 'package:droppa_clone/screens/parcel.dart';
+import 'package:droppa_clone/screens/parcel_screen.dart';
 import 'package:droppa_clone/screens/rental_service_screen.dart';
 import 'package:droppa_clone/screens/vehlicle_quote_screen.dart';
 import 'package:droppa_clone/widgets/buttom_sheet.dart';

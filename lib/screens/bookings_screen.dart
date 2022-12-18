@@ -1,5 +1,6 @@
+import 'package:droppa_clone/LookUp/lookup.dart';
 import 'package:droppa_clone/backend/classes/booking.dart';
-import 'package:droppa_clone/screens/booking.dart';
+import 'package:droppa_clone/screens/booking_screen.dart';
 import 'package:droppa_clone/widgets/bookings_details.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
@@ -23,7 +24,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
       //vancanciesFuture = _getVacancies();
 
       _bookings.clear();
-      for (var booking in Booking.bookings) {
+      for (var booking in LookUp.bookings) {
         _bookings.add(booking.toMap());
       }
       //_runFilter();
@@ -62,7 +63,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
           //   ),
           // );
         },
-        itemCount: Booking.bookings.length,
+        itemCount: LookUp.bookings.length,
       ),
     );
   }

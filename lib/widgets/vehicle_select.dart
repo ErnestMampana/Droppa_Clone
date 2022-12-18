@@ -16,18 +16,6 @@ class SelectVehicleController extends StatelessWidget {
       required this.groupValue,
       required this.onChanged})
       : super(key: key);
-
-  // String? _imageUrl;
-
-  // String? _description;
-
-  // String? _title;
-
-  // int? _itemNumber;
-
-  // int? _groupValue;
-
-  //Function(int)? _onChanged;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -62,8 +50,10 @@ class SelectVehicleController extends StatelessWidget {
               const SizedBox(
                 height: 20,
               ),
-              Text(
-                description,
+              Expanded(
+                child: Text(
+                  description,
+                ),
               ),
             ],
           ),

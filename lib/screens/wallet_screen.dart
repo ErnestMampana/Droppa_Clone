@@ -1,4 +1,4 @@
-import 'package:droppa_clone/screens/load_wallet.dart';
+import 'package:droppa_clone/screens/load_wallet_screen.dart';
 import 'package:flutter/material.dart';
 
 class WalletScreen extends StatefulWidget {

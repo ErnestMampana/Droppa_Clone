@@ -196,17 +196,23 @@ class _EditItineraryScreenState extends State<EditItineraryScreen> {
             ),
             Counter(
               number: _labourNumber,
-              onTap: () {
+              onTapPlus: () {
                 setState(() {
-                  print('minus tapped');
-                  _labourNumber - 1;
+                  _labourNumber += 1;
                 });
               },
+              onTapMinus: _labourNumber == 1
+                  ? null
+                  : () {
+                      setState(() {
+                        _labourNumber -= 1;
+                      });
+                    },
             ),
             const SizedBox(
               height: 10,
             ),
-            PickUpAndDrop(
+            const PickUpAndDrop(
               title: 'Drop-off Details',
             ),
             const Padding(
@@ -220,7 +226,18 @@ class _EditItineraryScreenState extends State<EditItineraryScreen> {
             ),
             Counter(
               number: _loadsNumber,
-              onTap: () {},
+              onTapPlus: () {
+                setState(() {
+                  _loadsNumber += 1;
+                });
+              },
+              onTapMinus: _loadsNumber == 1
+                  ? null
+                  : () {
+                      setState(() {
+                        _loadsNumber -= 1;
+                      });
+                    },
             ),
             Container(
               width: 400,

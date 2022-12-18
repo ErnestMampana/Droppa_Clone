@@ -20,7 +20,7 @@ class RentalTextField extends StatelessWidget {
         const TextField(
           autocorrect: false,
           decoration: InputDecoration(
-            contentPadding: EdgeInsets.symmetric(vertical: 2.0),
+            //contentPadding: EdgeInsets.symmetric(vertical: 2.0),
             border: OutlineInputBorder(),
           ),
         ),

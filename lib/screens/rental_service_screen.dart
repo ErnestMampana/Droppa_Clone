@@ -1,5 +1,6 @@
 import 'package:droppa_clone/LookUp/lookup.dart';
 import 'package:droppa_clone/screens/login_screen.dart';
+import 'package:droppa_clone/screens/rental_quote_screen.dart';
 import 'package:droppa_clone/widgets/Rental_textField.dart';
 import 'package:droppa_clone/widgets/button.dart';
 import 'package:flutter/cupertino.dart';
@@ -30,8 +31,8 @@ class _RentalServiceScreenState extends State<RentalServiceScreen> {
         title: const Text('Rental Service'),
       ),
       body: SingleChildScrollView(
-        child: Container(
-          margin: const EdgeInsets.all(20),
+        child: Padding(
+          padding: const EdgeInsets.all(20),
           child: Column(children: [
             Row(children: const [
               Text(
@@ -115,8 +116,13 @@ class _RentalServiceScreenState extends State<RentalServiceScreen> {
               onSelectionChanged: _onSelectionChanged,
               selectionMode: DateRangePickerSelectionMode.range,
               initialSelectedRange: PickerDateRange(
-                  DateTime.now().subtract(const Duration(days: 4)),
-                  DateTime.now().add(const Duration(days: 3))),
+                DateTime.now().subtract(
+                  const Duration(days: 4),
+                ),
+                DateTime.now().add(
+                  const Duration(days: 3),
+                ),
+              ),
             ),
             const SizedBox(
               height: 20,
@@ -165,7 +171,7 @@ class _RentalServiceScreenState extends State<RentalServiceScreen> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (_) => const LoginScreen(),
+                      builder: (_) => const RentalQuoteScreen(),
                     ),
                   );
                 }),

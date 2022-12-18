@@ -163,7 +163,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
       'password': 'thatomohlala',
       'returnSecureToken': true
     };
-
     await _authentication.signUp(userDetails);
   }
 }

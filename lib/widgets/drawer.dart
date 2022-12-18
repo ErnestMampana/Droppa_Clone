@@ -1,4 +1,4 @@
-import 'package:droppa_clone/screens/bookings.dart';
+import 'package:droppa_clone/screens/bookings_screen.dart';
 import 'package:flutter/material.dart';
 
 class CustomDrawer extends StatefulWidget {

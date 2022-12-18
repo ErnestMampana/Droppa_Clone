@@ -1,4 +1,5 @@
 import 'package:droppa_clone/widgets/button.dart';
+import 'package:droppa_clone/widgets/walllet_amount_select.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -140,57 +141,22 @@ class _LoadWalletScreenState extends State<LoadWalletScreen> {
           const SizedBox(
             height: 15,
           ),
-          Container(
-            height: 50,
-            width: 300,
-            decoration: _groupValue == 0 || _isSelected2
-                ? BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: const BorderRadius.all(
-                      Radius.circular(10),
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.3),
-                        spreadRadius: 5,
-                        blurRadius: 10,
-                        offset:
-                            const Offset(1, 1), // changes position of shadow
-                      ),
-                    ],
-                  )
-                : BoxDecoration(
-                    color: Colors.grey[200],
-                  ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Padding(
-                  padding: EdgeInsets.only(left: 20),
-                  child: Text(
-                    'R1 000',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                Radio(
-                  value: 2,
-                  groupValue: _groupValue,
-                  onChanged: (value) {
-                    setState(() {
-                      _groupValue = 2;
-                      _isSelected1 = false;
-                      _isSelected2 = true;
-                      _isSelected3 = false;
-                      _isSelected4 = false;
-                      _isSelected5 = false;
-                      _isSelected6 = false;
-                    });
-                  },
-                ),
-              ],
-            ),
+          WalletAmountSelect(
+            price: "R 1000",
+            value: 2,
+            groupValue: _groupValue,
+            isSelected: _isSelected2,
+            onChanged: (value) {
+              setState(() {
+                _groupValue = 2;
+                _isSelected1 = false;
+                _isSelected2 = true;
+                _isSelected3 = false;
+                _isSelected4 = false;
+                _isSelected5 = false;
+                _isSelected6 = false;
+              });
+            },
           ),
           const SizedBox(
             height: 15,
