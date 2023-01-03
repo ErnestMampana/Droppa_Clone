@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 
 class RentalTextField extends StatelessWidget {
   final String label;
-  const RentalTextField({Key? key, required this.label}) : super(key: key);
+  final TextEditingController textController;
+  const RentalTextField(
+      {Key? key, required this.label, required this.textController})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,10 +20,11 @@ class RentalTextField extends StatelessWidget {
         const SizedBox(
           height: 10,
         ),
-        const TextField(
+        TextField(
+          controller: textController,
           autocorrect: false,
-          decoration: InputDecoration(
-            //contentPadding: EdgeInsets.symmetric(vertical: 2.0),
+          decoration: const InputDecoration(
+            contentPadding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 7),
             border: OutlineInputBorder(),
           ),
         ),

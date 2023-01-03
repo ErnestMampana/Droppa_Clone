@@ -4,16 +4,26 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'dart:io' show Platform;
 
-class PickUpAndDrop extends StatefulWidget {
+class PickUpAndDrop extends StatelessWidget {
   final String title;
-  const PickUpAndDrop({super.key, required this.title});
+  final String pickUpOrDrop;
+  final TextEditingController nameController;
+  final TextEditingController numberController;
+  final bool nameValid;
+  final bool numberValid;
+  final void Function(bool?)? onChanged;
+  final bool isSwitched;
+  const PickUpAndDrop(
+      {super.key,
+      required this.title,
+      required this.pickUpOrDrop,
+      required this.nameController,
+      required this.numberController,
+      required this.nameValid,
+      required this.numberValid,
+      required this.onChanged,
+      required this.isSwitched});
 
-  @override
-  State<PickUpAndDrop> createState() => _PickUpAndDropState();
-}
-
-class _PickUpAndDropState extends State<PickUpAndDrop> {
-  bool _isSwitched = false;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -36,7 +46,7 @@ class _PickUpAndDropState extends State<PickUpAndDrop> {
             child: Align(
               alignment: Alignment.topLeft,
               child: Text(
-                widget.title,
+                title,
                 style: const TextStyle(
                   color: Colors.blue,
                   fontWeight: FontWeight.bold,
@@ -51,36 +61,25 @@ class _PickUpAndDropState extends State<PickUpAndDrop> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Row(
-                children: const [
-                  SizedBox(
+                children: [
+                  const SizedBox(
                     width: 10,
                   ),
-                  Text('I will be at the Pick-up'),
+                  Text("I will be at the $pickUpOrDrop"),
                 ],
               ),
               Row(
                 children: [
                   Platform.isIOS
                       ? CupertinoSwitch(
-                          value: _isSwitched,
-                          onChanged: (value) {
-                            _isSwitched = value;
-                            setState(
-                              () {},
-                            );
-                          },
+                          value: isSwitched,
+                          onChanged: onChanged,
                           thumbColor: Colors.white,
                           activeColor: Colors.blue,
                         )
                       : Switch(
-                          value: _isSwitched,
-                          onChanged: (value) {
-                            setState(
-                              () {
-                                _isSwitched = value;
-                              },
-                            );
-                          },
+                          value: isSwitched,
+                          onChanged: onChanged,
                         ),
                   const SizedBox(
                     width: 10,
@@ -110,10 +109,18 @@ class _PickUpAndDropState extends State<PickUpAndDrop> {
               ),
             ),
           ),
-          const SizedBox(
-            width: 350,
-            height: 30,
-            child: TextField(),
+          Padding(
+            padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+            child: SizedBox(
+              width: 350,
+              height: 30,
+              child: TextField(
+                controller: nameController,
+                decoration: InputDecoration(
+                  errorText: nameValid ? 'Required field' : null,
+                ),
+              ),
+            ),
           ),
           const SizedBox(
             height: 15,
@@ -127,10 +134,18 @@ class _PickUpAndDropState extends State<PickUpAndDrop> {
               ),
             ),
           ),
-          const SizedBox(
-            width: 350,
-            height: 30,
-            child: TextField(),
+          Padding(
+            padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+            child: SizedBox(
+              width: 350,
+              height: 30,
+              child: TextField(
+                controller: numberController,
+                decoration: InputDecoration(
+                  errorText: numberValid ? 'Required field' : null,
+                ),
+              ),
+            ),
           ),
         ],
       ),

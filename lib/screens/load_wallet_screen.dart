@@ -1,3 +1,5 @@
+import 'package:droppa_clone/backend/classes/person.dart';
+import 'package:droppa_clone/screens/wallet_screen.dart';
 import 'package:droppa_clone/widgets/button.dart';
 import 'package:droppa_clone/widgets/walllet_amount_select.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +22,7 @@ class _LoadWalletScreenState extends State<LoadWalletScreen> {
   bool _isSelected4 = false;
   bool _isSelected5 = false;
   bool _isSelected6 = false;
+  double price = 0.00;
 
   @override
   Widget build(BuildContext context) {
@@ -67,8 +70,8 @@ class _LoadWalletScreenState extends State<LoadWalletScreen> {
             padding: const EdgeInsets.fromLTRB(50, 15, 50, 15),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: const [
-                Text(
+              children: [
+                const Text(
                   'Total',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
@@ -76,8 +79,8 @@ class _LoadWalletScreenState extends State<LoadWalletScreen> {
                   ),
                 ),
                 Text(
-                  'R0,00',
-                  style: TextStyle(
+                  'R $price',
+                  style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
                   ),
@@ -86,300 +89,68 @@ class _LoadWalletScreenState extends State<LoadWalletScreen> {
               ],
             ),
           ),
-          Container(
-            height: 50,
-            width: 300,
-            decoration: _groupValue == 0 || _isSelected1
-                ? BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: const BorderRadius.all(
-                      Radius.circular(10),
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.3),
-                        spreadRadius: 5,
-                        blurRadius: 10,
-                        offset:
-                            const Offset(1, 1), // changes position of shadow
-                      ),
-                    ],
-                  )
-                : BoxDecoration(
-                    color: Colors.grey[200],
-                  ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Padding(
-                  padding: EdgeInsets.only(left: 20),
-                  child: Text(
-                    'R500',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                Radio(
-                  value: 1,
-                  groupValue: _groupValue,
-                  onChanged: (value) {
-                    setState(() {
-                      _groupValue = 1;
-                      _isSelected1 = true;
-                      _isSelected2 = false;
-                      _isSelected3 = false;
-                      _isSelected4 = false;
-                      _isSelected5 = false;
-                      _isSelected6 = false;
-                    });
-                  },
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(
-            height: 15,
+          WalletAmountSelect(
+            onTap: () => _changeRadio(1),
+            price: "R 500",
+            value: 1,
+            groupValue: _groupValue,
+            isSelected: _isSelected1,
+            onChanged: (value) {
+              _changeRadio(1);
+            },
           ),
           WalletAmountSelect(
+            onTap: () => _changeRadio(2),
             price: "R 1000",
             value: 2,
             groupValue: _groupValue,
             isSelected: _isSelected2,
             onChanged: (value) {
-              setState(() {
-                _groupValue = 2;
-                _isSelected1 = false;
-                _isSelected2 = true;
-                _isSelected3 = false;
-                _isSelected4 = false;
-                _isSelected5 = false;
-                _isSelected6 = false;
-              });
+              _changeRadio(2);
+            },
+          ),
+          WalletAmountSelect(
+            onTap: () => _changeRadio(3),
+            price: "R 2000",
+            value: 3,
+            groupValue: _groupValue,
+            isSelected: _isSelected3,
+            onChanged: (value) {
+              _changeRadio(3);
+            },
+          ),
+          WalletAmountSelect(
+            onTap: () => _changeRadio(4),
+            price: "R 5000",
+            value: 4,
+            groupValue: _groupValue,
+            isSelected: _isSelected4,
+            onChanged: (value) {
+              _changeRadio(4);
+            },
+          ),
+          WalletAmountSelect(
+            onTap: () => _changeRadio(5),
+            price: "R 10 000",
+            value: 5,
+            groupValue: _groupValue,
+            isSelected: _isSelected5,
+            onChanged: (value) {
+              _changeRadio(5);
+            },
+          ),
+          WalletAmountSelect(
+            onTap: () => _changeRadio(6),
+            price: "R 20 000",
+            value: 6,
+            groupValue: _groupValue,
+            isSelected: _isSelected6,
+            onChanged: (value) {
+              _changeRadio(6);
             },
           ),
           const SizedBox(
             height: 15,
-          ),
-          Container(
-            height: 50,
-            width: 300,
-            decoration: _groupValue == 0 || _isSelected3
-                ? BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: const BorderRadius.all(
-                      Radius.circular(10),
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.3),
-                        spreadRadius: 5,
-                        blurRadius: 10,
-                        offset:
-                            const Offset(1, 1), // changes position of shadow
-                      ),
-                    ],
-                  )
-                : BoxDecoration(
-                    color: Colors.grey[200],
-                  ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Padding(
-                  padding: EdgeInsets.only(left: 20),
-                  child: Text(
-                    'R2 000',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                Radio(
-                  value: 3,
-                  groupValue: _groupValue,
-                  onChanged: (value) {
-                    setState(() {
-                      _groupValue = 3;
-                      _isSelected1 = false;
-                      _isSelected2 = false;
-                      _isSelected3 = true;
-                      _isSelected4 = false;
-                      _isSelected5 = false;
-                      _isSelected6 = false;
-                    });
-                  },
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(
-            height: 15,
-          ),
-          Container(
-            height: 50,
-            width: 300,
-            decoration: _groupValue == 0 || _isSelected4
-                ? BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: const BorderRadius.all(
-                      Radius.circular(10),
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.3),
-                        spreadRadius: 5,
-                        blurRadius: 10,
-                        offset:
-                            const Offset(1, 1), // changes position of shadow
-                      ),
-                    ],
-                  )
-                : BoxDecoration(
-                    color: Colors.grey[200],
-                  ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Padding(
-                  padding: EdgeInsets.only(left: 20),
-                  child: Text(
-                    'R5 000',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                Radio(
-                  value: 4,
-                  groupValue: _groupValue,
-                  onChanged: (value) {
-                    setState(() {
-                      _groupValue = 4;
-                      _isSelected1 = false;
-                      _isSelected2 = false;
-                      _isSelected3 = false;
-                      _isSelected4 = true;
-                      _isSelected5 = false;
-                      _isSelected6 = false;
-                    });
-                  },
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(
-            height: 15,
-          ),
-          Container(
-            height: 50,
-            width: 300,
-            decoration: _groupValue == 0 || _isSelected5
-                ? BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: const BorderRadius.all(
-                      Radius.circular(10),
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.3),
-                        spreadRadius: 5,
-                        blurRadius: 10,
-                        offset:
-                            const Offset(1, 1), // changes position of shadow
-                      ),
-                    ],
-                  )
-                : BoxDecoration(
-                    color: Colors.grey[200],
-                  ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Padding(
-                  padding: EdgeInsets.only(left: 20),
-                  child: Text(
-                    'R10 000',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                Radio(
-                  value: 5,
-                  groupValue: _groupValue,
-                  onChanged: (value) {
-                    setState(() {
-                      _groupValue = 5;
-                      _isSelected1 = false;
-                      _isSelected2 = false;
-                      _isSelected3 = false;
-                      _isSelected4 = false;
-                      _isSelected5 = true;
-                      _isSelected6 = false;
-                    });
-                  },
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(
-            height: 15,
-          ),
-          Container(
-            height: 50,
-            width: 300,
-            decoration: _groupValue == 0 || _isSelected6
-                ? BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: const BorderRadius.all(
-                      Radius.circular(10),
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.3),
-                        spreadRadius: 5,
-                        blurRadius: 10,
-                        offset:
-                            const Offset(1, 1), // changes position of shadow
-                      ),
-                    ],
-                  )
-                : BoxDecoration(
-                    color: Colors.grey[200],
-                  ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Padding(
-                  padding: EdgeInsets.only(left: 20),
-                  child: Text(
-                    'R20 000',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                Radio(
-                  value: 6,
-                  groupValue: _groupValue,
-                  onChanged: (value) {
-                    setState(() {
-                      _groupValue = 6;
-                      _isSelected1 = false;
-                      _isSelected2 = false;
-                      _isSelected3 = false;
-                      _isSelected4 = false;
-                      _isSelected5 = false;
-                      _isSelected6 = true;
-                    });
-                  },
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(
-            height: 30,
           ),
           Padding(
             padding: const EdgeInsets.only(
@@ -389,11 +160,99 @@ class _LoadWalletScreenState extends State<LoadWalletScreen> {
             child: RsButton(
               title: 'Credit wallet',
               radisNumber: 20,
-              onTaped: () {},
+              onTaped: () {
+                setState(() {
+                  userPersonalDetailsDTO!.walletBalance =
+                      (double.parse(userPersonalDetailsDTO!.walletBalance) +
+                              price)
+                          .toString();
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const WalletScreen(),
+                    ),
+                  );
+                });
+              },
             ),
           ),
         ],
       ),
     );
+  }
+
+  _changeRadio(int itemNumber) {
+    if (itemNumber == 1) {
+      setState(() {
+        _groupValue = itemNumber;
+        _isSelected1 = true;
+        _isSelected2 = false;
+        _isSelected3 = false;
+        _isSelected4 = false;
+        _isSelected5 = false;
+        _isSelected6 = false;
+        price = 500;
+      });
+    }
+    if (itemNumber == 2) {
+      setState(() {
+        _groupValue = itemNumber;
+        _isSelected1 = false;
+        _isSelected2 = true;
+        _isSelected3 = false;
+        _isSelected4 = false;
+        _isSelected5 = false;
+        _isSelected6 = false;
+        price = 1000;
+      });
+    }
+    if (itemNumber == 3) {
+      setState(() {
+        _groupValue = itemNumber;
+        _isSelected1 = false;
+        _isSelected2 = false;
+        _isSelected3 = true;
+        _isSelected4 = false;
+        _isSelected5 = false;
+        _isSelected6 = false;
+        price = 2000;
+      });
+    }
+    if (itemNumber == 4) {
+      setState(() {
+        _groupValue = itemNumber;
+        _isSelected1 = false;
+        _isSelected2 = false;
+        _isSelected3 = false;
+        _isSelected4 = true;
+        _isSelected5 = false;
+        _isSelected6 = false;
+        price = 5000;
+      });
+    }
+    if (itemNumber == 5) {
+      setState(() {
+        _groupValue = itemNumber;
+        _isSelected1 = false;
+        _isSelected2 = false;
+        _isSelected3 = false;
+        _isSelected4 = false;
+        _isSelected5 = true;
+        _isSelected6 = false;
+        price = 10000;
+      });
+    }
+    if (itemNumber == 6) {
+      setState(() {
+        _groupValue = itemNumber;
+        _isSelected1 = false;
+        _isSelected2 = false;
+        _isSelected3 = false;
+        _isSelected4 = false;
+        _isSelected5 = false;
+        _isSelected6 = true;
+        price = 20000;
+      });
+    }
   }
 }

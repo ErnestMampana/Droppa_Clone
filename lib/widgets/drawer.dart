@@ -43,10 +43,11 @@ class CustomDrawerState extends State<CustomDrawer> {
               ),
             ),
           ),
-          GestureDetector(
-            child: const SizedBox(
-              height: 25,
-              child: Center(
+          Padding(
+            padding: const EdgeInsets.only(left: 40.0),
+            child: GestureDetector(
+              child: const SizedBox(
+                height: 25,
                 child: Text(
                   'History',
                   style: TextStyle(
@@ -60,12 +61,13 @@ class CustomDrawerState extends State<CustomDrawer> {
           const Divider(
             thickness: 1,
           ),
-          GestureDetector(
-            child: Container(
-              width: 200,
-              height: 25,
-              color: Colors.blue,
-              child: Center(
+          Padding(
+            padding: const EdgeInsets.only(left: 40.0),
+            child: GestureDetector(
+              child: Container(
+                width: 200,
+                height: 25,
+                color: Colors.blue,
                 child: Text(
                   'Bookings',
                   style: TextStyle(
@@ -74,23 +76,26 @@ class CustomDrawerState extends State<CustomDrawer> {
                       fontSize: 18),
                 ),
               ),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => BookingsScreen(),
+                  ),
+                );
+                //Navigator.pop(context);
+              },
             ),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => BookingsScreen(),
-                ),
-              );
-            },
           ),
           const Divider(
             thickness: 1,
           ),
-          GestureDetector(
-            child: const SizedBox(
-              height: 25,
-              child: Center(
+          Padding(
+            padding: const EdgeInsets.only(left: 40.0),
+            child: GestureDetector(
+              child: const SizedBox(
+                height: 25,
                 child: Text(
                   'Rentals',
                   style: TextStyle(
@@ -104,10 +109,11 @@ class CustomDrawerState extends State<CustomDrawer> {
           const Divider(
             thickness: 1,
           ),
-          GestureDetector(
-            child: const SizedBox(
-              height: 25,
-              child: Center(
+          Padding(
+            padding: const EdgeInsets.only(left: 40.0),
+            child: GestureDetector(
+              child: const SizedBox(
+                height: 25,
                 child: Text(
                   'Wallet',
                   style: TextStyle(
@@ -121,10 +127,11 @@ class CustomDrawerState extends State<CustomDrawer> {
           const Divider(
             thickness: 1,
           ),
-          GestureDetector(
-            child: const SizedBox(
-              height: 25,
-              child: Center(
+          Padding(
+            padding: const EdgeInsets.only(left: 40.0),
+            child: GestureDetector(
+              child: const SizedBox(
+                height: 25,
                 child: Text(
                   'FAQs',
                   style: TextStyle(
@@ -139,15 +146,21 @@ class CustomDrawerState extends State<CustomDrawer> {
             thickness: 1,
           ),
           GestureDetector(
-            child: const SizedBox(
-              height: 25,
-              child: Center(
-                child: Text(
-                  "T & C's",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18),
+            onTap: () {
+              Navigator.pop(context);
+            },
+            child: Padding(
+              padding: const EdgeInsets.only(left: 40.0),
+              child: GestureDetector(
+                child: const SizedBox(
+                  height: 25,
+                  child: Text(
+                    "T & C's",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18),
+                  ),
                 ),
               ),
             ),
@@ -155,10 +168,11 @@ class CustomDrawerState extends State<CustomDrawer> {
           const Divider(
             thickness: 1,
           ),
-          GestureDetector(
-            child: const SizedBox(
-              height: 25,
-              child: Center(
+          Padding(
+            padding: const EdgeInsets.only(left: 40.0),
+            child: GestureDetector(
+              child: const SizedBox(
+                height: 25,
                 child: Text(
                   'Sign in',
                   style: TextStyle(

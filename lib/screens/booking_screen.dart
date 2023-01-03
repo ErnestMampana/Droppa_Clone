@@ -73,7 +73,7 @@ class _BookingScreenState extends State<BookingScreen> {
                   elevation: 0,
                   minWidth: 180,
                   child: const Text(
-                    'Cancel',
+                    'Cancel Booking',
                     style: TextStyle(
                       color: Colors.white,
                     ),
@@ -156,13 +156,17 @@ class _BookingScreenState extends State<BookingScreen> {
                   const SizedBox(
                     height: 10,
                   ),
-                  BookingDetails(title: 'Pick-up date', details: '2022-12-24'),
-                  BookingDetails(title: 'Payment type', details: 'ONLINE_PAY'),
-                  BookingDetails(title: 'Time', details: '11:30 AM'),
-                  BookingDetails(title: 'Loads', details: '1'),
-                  BookingDetails(title: 'Labours', details: '1'),
-                  BookingDetails(title: 'Status', details: 'Awaiting payments'),
-                  BookingDetails(title: 'Track Number', details: 'GAU149080'),
+                  const BookingDetails(
+                      title: 'Pick-up date', details: '2022-12-24'),
+                  const BookingDetails(
+                      title: 'Payment type', details: 'ONLINE_PAY'),
+                  const BookingDetails(title: 'Time', details: '11:30 AM'),
+                  const BookingDetails(title: 'Loads', details: '1'),
+                  const BookingDetails(title: 'Labours', details: '1'),
+                  const BookingDetails(
+                      title: 'Status', details: 'Awaiting payments'),
+                  const BookingDetails(
+                      title: 'Track Number', details: 'GAU149080'),
                   const Padding(
                     padding: EdgeInsets.all(20),
                     child: SizedBox(

@@ -1,7 +1,10 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables
 
+import 'package:droppa_clone/LookUp/lookup.dart';
 import 'package:droppa_clone/LookUp/strings.dart';
+import 'package:droppa_clone/backend/classes/person.dart';
 import 'package:droppa_clone/screens/booking_screen.dart';
+import 'package:droppa_clone/screens/bookings_screen.dart';
 import 'package:droppa_clone/screens/login_screen.dart';
 import 'package:droppa_clone/screens/quote_request_screen.dart';
 import 'package:droppa_clone/screens/rental_service_screen.dart';
@@ -20,6 +23,16 @@ class MainActivityScreen extends StatefulWidget {
 }
 
 class _MainActivityScreenState extends State<MainActivityScreen> {
+  late int _numberOfBookings;
+
+  @override
+  void initState() {
+    super.initState();
+    _numberOfBookings = LookUp.bookings.length;
+    userPersonalDetailsDTO = Person('Xyhaliojjsy567ggvc', 'Ernest',
+        '0723568069', '13000', LookUp.bookings, 'Mampana');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -123,11 +136,21 @@ class _MainActivityScreenState extends State<MainActivityScreen> {
                               const SizedBox(
                                 height: 5,
                               ),
-                              const Text(
-                                '12',
-                                style: TextStyle(
-                                  fontSize: 11,
-                                  color: Colors.blue,
+                              InkWell(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (_) => const BookingsScreen(),
+                                    ),
+                                  );
+                                },
+                                child: Text(
+                                  '$_numberOfBookings',
+                                  style: const TextStyle(
+                                    fontSize: 11,
+                                    color: Colors.blue,
+                                  ),
                                 ),
                               ),
                             ]),
@@ -146,9 +169,9 @@ class _MainActivityScreenState extends State<MainActivityScreen> {
                                 height: 5,
                               ),
                               GestureDetector(
-                                child: const Text(
-                                  'R1600,24',
-                                  style: TextStyle(
+                                child: Text(
+                                  'R ${userPersonalDetailsDTO!.walletBalance}',
+                                  style: const TextStyle(
                                     fontSize: 11,
                                     color: Colors.blue,
                                   ),
@@ -157,7 +180,7 @@ class _MainActivityScreenState extends State<MainActivityScreen> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (_) => WalletScreen(),
+                                      builder: (_) => const WalletScreen(),
                                     ),
                                   );
                                 },

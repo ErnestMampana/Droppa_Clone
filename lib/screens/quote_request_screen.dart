@@ -1,9 +1,12 @@
 // ignore_for_file: sized_box_for_whitespace
 
+import 'package:droppa_clone/LookUp/lookup.dart';
 import 'package:droppa_clone/screens/parcel_screen.dart';
 import 'package:droppa_clone/screens/rental_service_screen.dart';
 import 'package:droppa_clone/screens/vehlicle_quote_screen.dart';
+import 'package:droppa_clone/widgets/Rental_textField.dart';
 import 'package:droppa_clone/widgets/buttom_sheet.dart';
+import 'package:droppa_clone/widgets/button.dart';
 import 'package:flutter/material.dart';
 
 class QuoteRequestScreen extends StatefulWidget {
@@ -19,14 +22,71 @@ class QuoteRequestScreen extends StatefulWidget {
 }
 
 class _QuoteRequestScreenState extends State<QuoteRequestScreen> {
+  //Text Controllers
+  final TextEditingController _pickBuildingNumberController =
+      TextEditingController();
+  final TextEditingController _pickCompanyNameTextController =
+      TextEditingController();
+  final TextEditingController _pickPostalTextController =
+      TextEditingController();
+  final TextEditingController _pickProvinceTextController =
+      TextEditingController();
+  final TextEditingController _pickStreetTextController =
+      TextEditingController();
+  final TextEditingController _pickSuburbTextController =
+      TextEditingController();
+  final TextEditingController _pickUnitNumberController =
+      TextEditingController();
+
+  final TextEditingController _dropBuildingNumberController =
+      TextEditingController();
+  final TextEditingController _dropCompanyNameTextController =
+      TextEditingController();
+  final TextEditingController _dropPostalTextController =
+      TextEditingController();
+  final TextEditingController _dropProvinceTextController =
+      TextEditingController();
+  final TextEditingController _dropStreetTextController =
+      TextEditingController();
+  final TextEditingController _dropSuburbTextController =
+      TextEditingController();
+  final TextEditingController _dropUnitNumberController =
+      TextEditingController();
+
+  TextEditingController _pickUpAdress = TextEditingController();
+  TextEditingController _dropOffAdress = TextEditingController();
+
   String? _title;
   String? _description;
+
+  bool _dismiss = false;
 
   @override
   void initState() {
     _title = widget.title;
     _description = widget.description;
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _dropBuildingNumberController.dispose();
+    _dropCompanyNameTextController.dispose();
+    _dropPostalTextController.dispose();
+    _dropProvinceTextController.dispose();
+    _dropStreetTextController.dispose();
+    _dropUnitNumberController.dispose();
+    _dropSuburbTextController.dispose();
+    _pickBuildingNumberController.dispose();
+    _pickCompanyNameTextController.dispose();
+    _pickPostalTextController.dispose();
+    _pickProvinceTextController.dispose();
+    _pickStreetTextController.dispose();
+    _pickSuburbTextController.dispose();
+    _pickUnitNumberController.dispose();
+    _pickUpAdress.dispose();
+    _dropOffAdress.dispose();
+    super.dispose();
   }
 
   @override
@@ -92,9 +152,11 @@ class _QuoteRequestScreenState extends State<QuoteRequestScreen> {
                                 height: 30,
                                 child: GestureDetector(
                                   onTap: () {},
-                                  child: const TextField(
+                                  child: TextField(
+                                    //maxLines: 500,
+                                    controller: _pickUpAdress,
                                     enabled: false,
-                                    decoration: InputDecoration(
+                                    decoration: const InputDecoration(
                                       suffixIcon: Icon(Icons.search),
                                       border: OutlineInputBorder(),
                                     ),
@@ -109,7 +171,7 @@ class _QuoteRequestScreenState extends State<QuoteRequestScreen> {
                           onTap: () {
                             showModalBottomSheet(
                                 context: context,
-                                isDismissible: false,
+                                isDismissible: _dismiss,
                                 isScrollControlled: true,
                                 shape: const RoundedRectangleBorder(
                                   borderRadius: BorderRadius.vertical(
@@ -118,7 +180,39 @@ class _QuoteRequestScreenState extends State<QuoteRequestScreen> {
                                 ),
                                 clipBehavior: Clip.antiAliasWithSaveLayer,
                                 builder: (BuildContext context) {
-                                  return const ButtomSheetWidget();
+                                  return ButtomSheetWidget(
+                                    buildingNumberController:
+                                        _pickBuildingNumberController,
+                                    conpanyNameTextController:
+                                        _pickCompanyNameTextController,
+                                    postalTextController:
+                                        _pickPostalTextController,
+                                    provinceTextController:
+                                        _pickProvinceTextController,
+                                    streetTextController:
+                                        _pickStreetTextController,
+                                    suburbTextController:
+                                        _pickSuburbTextController,
+                                    unitNumberController:
+                                        _pickUnitNumberController,
+                                    onChanged: (dynamic value) {
+                                      setState(() {
+                                        FocusScope.of(context)
+                                            .requestFocus(FocusNode());
+                                      });
+                                    },
+                                    onPress: () {
+                                      _pickUpAdress.text =
+                                          "Unit ${_pickUnitNumberController.text} Building ${_pickBuildingNumberController.text} ${_pickSuburbTextController.text} ${_pickStreetTextController.text} ${_pickProvinceTextController.text}";
+                                      print(_pickUpAdress.text);
+                                      Navigator.pop(context);
+                                    },
+                                    onCancel: () {
+                                      setState(() {
+                                        Navigator.pop(context);
+                                      });
+                                    },
+                                  );
                                 });
                           },
                           child: const Text(
@@ -263,15 +357,62 @@ class _QuoteRequestScreenState extends State<QuoteRequestScreen> {
                         const SizedBox(
                           height: 10,
                         ),
-                        const InkWell(
-                          child: Text(
+                        InkWell(
+                          onTap: () {
+                            showModalBottomSheet(
+                                context: context,
+                                isDismissible: _dismiss,
+                                isScrollControlled: true,
+                                shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.vertical(
+                                    top: Radius.circular(15),
+                                  ),
+                                ),
+                                clipBehavior: Clip.antiAliasWithSaveLayer,
+                                builder: (BuildContext context) {
+                                  return ButtomSheetWidget(
+                                    buildingNumberController:
+                                        _dropBuildingNumberController,
+                                    conpanyNameTextController:
+                                        _dropCompanyNameTextController,
+                                    postalTextController:
+                                        _dropPostalTextController,
+                                    provinceTextController:
+                                        _dropProvinceTextController,
+                                    streetTextController:
+                                        _dropStreetTextController,
+                                    suburbTextController:
+                                        _dropSuburbTextController,
+                                    unitNumberController:
+                                        _dropUnitNumberController,
+                                    onChanged: (dynamic value) {
+                                      setState(() {
+                                        FocusScope.of(context)
+                                            .requestFocus(FocusNode());
+                                      });
+                                    },
+                                    onPress: () {
+                                      _dropOffAdress.text =
+                                          "Unit ${_dropUnitNumberController.text} Building ${_dropBuildingNumberController.text} ${_dropSuburbTextController.text} ${_dropStreetTextController.text} ${_dropProvinceTextController.text}";
+                                      print(_dropOffAdress.text);
+                                      Navigator.pop(context);
+                                    },
+                                    onCancel: () {
+                                      setState(() {
+                                        Navigator.pop(context);
+                                      });
+                                    },
+                                  );
+                                });
+                          },
+                          child: const Text(
                             "Can't find address? Click here",
                             style: TextStyle(
                               decoration: TextDecoration.underline,
                               color: Colors.blue,
                             ),
                           ),
-                        ),
+                        )
                       ],
                     ),
                   ),
@@ -296,14 +437,27 @@ class _QuoteRequestScreenState extends State<QuoteRequestScreen> {
                 ],
               ),
               MaterialButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => const VehicleQuoteScreen(),
-                    ),
-                  );
-                },
+                onPressed: _title == 'Courier'
+                    ? () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const ParcelScreen(),
+                          ),
+                        );
+                      }
+                    : () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => VehicleQuoteScreen(
+                              kilometers: 10.57,
+                              dropOffAdress: _dropOffAdress.text,
+                              pickUpAdress: _pickUpAdress.text,
+                            ),
+                          ),
+                        );
+                      },
                 color: Colors.blue,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30)),

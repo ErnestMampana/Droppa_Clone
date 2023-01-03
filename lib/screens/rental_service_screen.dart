@@ -5,6 +5,7 @@ import 'package:droppa_clone/widgets/Rental_textField.dart';
 import 'package:droppa_clone/widgets/button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'dart:io' show Platform;
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:intl/intl.dart';
@@ -18,10 +19,21 @@ class RentalServiceScreen extends StatefulWidget {
 }
 
 class _RentalServiceScreenState extends State<RentalServiceScreen> {
+//Text Controllers
+  final TextEditingController _streetTextController = TextEditingController();
+  final TextEditingController _postalCodeTextController =
+      TextEditingController();
+  final TextEditingController _suburbTextController = TextEditingController();
+  final TextEditingController _complexNameTextController =
+      TextEditingController();
+  final TextEditingController _unitNumberTextController =
+      TextEditingController();
+
   String _selectedDate = '';
   String _dateCount = '';
   String _range = '';
   String _rangeCount = '';
+  bool _isSwitched = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,18 +57,23 @@ class _RentalServiceScreenState extends State<RentalServiceScreen> {
             const SizedBox(
               height: 20,
             ),
-            const RentalTextField(label: 'Street Address'),
+            RentalTextField(
+              label: 'Street Address',
+              textController: _streetTextController,
+            ),
             const SizedBox(
               height: 20,
             ),
-            const RentalTextField(
+            RentalTextField(
               label: 'Postal Code',
+              textController: _postalCodeTextController,
             ),
             const SizedBox(
               height: 20,
             ),
-            const RentalTextField(
+            RentalTextField(
               label: 'Suburb',
+              textController: _suburbTextController,
             ),
             const SizedBox(
               height: 20,
@@ -91,14 +108,16 @@ class _RentalServiceScreenState extends State<RentalServiceScreen> {
             const SizedBox(
               height: 20,
             ),
-            const RentalTextField(
+            RentalTextField(
               label: 'Complex Name (Optional)',
+              textController: _complexNameTextController,
             ),
             const SizedBox(
               height: 20,
             ),
-            const RentalTextField(
+            RentalTextField(
               label: 'Unit Number/Floor (Optional)',
+              textController: _unitNumberTextController,
             ),
             const SizedBox(
               height: 20,
@@ -138,7 +157,10 @@ class _RentalServiceScreenState extends State<RentalServiceScreen> {
             ),
             DropdownButtonFormField(
               decoration: const InputDecoration(
-                contentPadding: EdgeInsets.symmetric(vertical: 2.0),
+                contentPadding: EdgeInsets.symmetric(
+                  vertical: 2.0,
+                  horizontal: 7,
+                ),
                 border: OutlineInputBorder(),
               ),
               items: LookUp.typesOfTruck
@@ -158,7 +180,28 @@ class _RentalServiceScreenState extends State<RentalServiceScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 const Text('is the distance over 200km?'),
-                Switch(value: false, onChanged: (dynamic value) {}),
+                Platform.isIOS
+                    ? CupertinoSwitch(
+                        value: _isSwitched,
+                        onChanged: (value) {
+                          _isSwitched = value;
+                          setState(
+                            () {},
+                          );
+                        },
+                        thumbColor: Colors.white,
+                        activeColor: Colors.blue,
+                      )
+                    : Switch(
+                        value: _isSwitched,
+                        onChanged: (value) {
+                          setState(
+                            () {
+                              _isSwitched = value;
+                            },
+                          );
+                        },
+                      ),
               ],
             ),
             const SizedBox(

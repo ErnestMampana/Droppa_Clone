@@ -1,3 +1,7 @@
+import 'package:droppa_clone/LookUp/lookup.dart';
+import 'package:droppa_clone/backend/classes/booking.dart';
+import 'package:droppa_clone/backend/classes/person.dart';
+import 'package:droppa_clone/screens/main_activty_screen.dart';
 import 'package:droppa_clone/widgets/button.dart';
 import 'package:droppa_clone/widgets/counter.dart';
 import 'package:droppa_clone/widgets/date_time.dart';
@@ -9,17 +13,55 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
 class EditItineraryScreen extends StatefulWidget {
-  const EditItineraryScreen({super.key});
+  final double quotePrice;
+  final String vehicleType;
+  final String pickUpAdress;
+  final String dropOffAdress;
+  const EditItineraryScreen(
+      {super.key,
+      required this.quotePrice,
+      required this.vehicleType,
+      required this.pickUpAdress,
+      required this.dropOffAdress});
 
   @override
   State<EditItineraryScreen> createState() => _EditItineraryScreenState();
 }
 
 class _EditItineraryScreenState extends State<EditItineraryScreen> {
+  //controllers
+  final TextEditingController _pickUpname = TextEditingController();
+  final TextEditingController _pickUpNumber = TextEditingController();
+  final TextEditingController _dropOffName = TextEditingController();
+  final TextEditingController _dropOffNumber = TextEditingController();
+  final TextEditingController _specialNote = TextEditingController();
   //Variables
   bool _isSwitched = false;
+  bool _isPickSwitched = false;
+  bool _pickNameValid = false;
+  bool _dropOffSwitch = false;
+  bool _dropOffNameValid = false;
+  bool _dropOffNumberValid = false;
+  bool _pickNumberValid = false;
   int _labourNumber = 1;
   int _loadsNumber = 1;
+
+  late double _totalPrice;
+  final double _labourPrice = 0.0;
+  late double _price;
+  late String _vehicleType;
+  late String _dropOffAdress;
+  late String _pickUpAdress;
+
+  @override
+  void initState() {
+    super.initState();
+    _price = widget.quotePrice;
+    _totalPrice = _price;
+    _vehicleType = widget.vehicleType;
+    _dropOffAdress = widget.dropOffAdress;
+    _pickUpAdress = widget.pickUpAdress;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,9 +97,9 @@ class _EditItineraryScreenState extends State<EditItineraryScreen> {
                     'Total (Incl VAT)',
                     style: TextStyle(color: Colors.white),
                   ),
-                  const Text(
-                    'R 1 214,00',
-                    style: TextStyle(
+                  Text(
+                    'R $_totalPrice',
+                    style: const TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
                     ),
@@ -71,12 +113,7 @@ class _EditItineraryScreenState extends State<EditItineraryScreen> {
                 title: 'Proceed to payment',
                 radisNumber: 5,
                 onTaped: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => const EditItineraryScreen(),
-                    ),
-                  );
+                  _handlePriceCalculations();
                 },
               ),
             ],
@@ -93,7 +130,7 @@ class _EditItineraryScreenState extends State<EditItineraryScreen> {
               children: [
                 Container(
                   width: 400,
-                  height: 200,
+                  height: 210,
                   margin: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
                     color: Colors.white,
@@ -103,7 +140,7 @@ class _EditItineraryScreenState extends State<EditItineraryScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       const SizedBox(
-                        height: 20,
+                        height: 30,
                       ),
                       Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -113,15 +150,20 @@ class _EditItineraryScreenState extends State<EditItineraryScreen> {
                               color: Colors.blue,
                               size: 30,
                             ),
-                            Column(
-                              children: const [
-                                Text('Pick-up Details'),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Text(
-                                    '5099 Skosana St, Orlando East, Soweto, 1804, \nSouth Africa'),
-                              ],
+                            SizedBox(
+                              height: 75,
+                              width: 300,
+                              child: Column(
+                                children: [
+                                  const Text('Pick-up Details'),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Expanded(
+                                    child: Text(_pickUpAdress),
+                                  ),
+                                ],
+                              ),
                             ),
                           ]),
                       const SizedBox(
@@ -140,15 +182,20 @@ class _EditItineraryScreenState extends State<EditItineraryScreen> {
                               color: Color.fromARGB(255, 226, 13, 13),
                               size: 30,
                             ),
-                            Column(
-                              children: const [
-                                Text('Drop-off Details'),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Text(
-                                    '5099 Skosana St, Orlando East, Soweto, 1804, \nSouth Africa'),
-                              ],
+                            SizedBox(
+                              height: 75,
+                              width: 300,
+                              child: Column(
+                                children: [
+                                  const Text('Drop-off Details'),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Expanded(
+                                    child: Text(_dropOffAdress),
+                                  ),
+                                ],
+                              ),
                             ),
                           ]),
                     ],
@@ -185,8 +232,27 @@ class _EditItineraryScreenState extends State<EditItineraryScreen> {
               icon: Icons.watch_later_outlined,
               title: 'Time',
             ),
-            const PickUpAndDrop(
+            PickUpAndDrop(
+              isSwitched: _isPickSwitched,
               title: 'Pick-up Details',
+              pickUpOrDrop: 'Pick-Up',
+              nameController: _pickUpname,
+              numberController: _pickUpNumber,
+              nameValid: _pickNameValid,
+              numberValid: _pickNumberValid,
+              onChanged: (isSwitched) {
+                setState(() {
+                  _isPickSwitched = isSwitched!;
+                  if (_isPickSwitched) {
+                    _pickUpNumber.text = userPersonalDetailsDTO!.celphoneNumber;
+                    _pickUpname.text =
+                        "${userPersonalDetailsDTO!.userName} ${userPersonalDetailsDTO!.surname}";
+                  } else {
+                    _pickUpname.text = '';
+                    _pickUpNumber.text = '';
+                  }
+                });
+              },
             ),
             const Padding(
               padding: EdgeInsets.all(10),
@@ -199,21 +265,51 @@ class _EditItineraryScreenState extends State<EditItineraryScreen> {
               onTapPlus: () {
                 setState(() {
                   _labourNumber += 1;
+                  if (_labourNumber >= 2) {
+                    //_labourPrice += 200;
+                    _totalPrice += 200;
+                    //print('Ernest =============== $_labourPrice');
+                  }
                 });
               },
               onTapMinus: _labourNumber == 1
                   ? null
                   : () {
                       setState(() {
-                        _labourNumber -= 1;
+                        if (_labourNumber >= 2) {
+                          _labourNumber -= 1;
+                          // _labourPrice -= 200;
+                          _totalPrice -= 200;
+                          //print('Ernest =============== $_labourPrice');
+                        }
                       });
                     },
             ),
             const SizedBox(
               height: 10,
             ),
-            const PickUpAndDrop(
+            PickUpAndDrop(
               title: 'Drop-off Details',
+              pickUpOrDrop: 'Drop-Off',
+              nameController: _dropOffName,
+              numberController: _dropOffNumber,
+              isSwitched: _dropOffSwitch,
+              nameValid: _dropOffNameValid,
+              numberValid: _dropOffNumberValid,
+              onChanged: (isSwitched) {
+                setState(() {
+                  _dropOffSwitch = isSwitched!;
+                  if (_dropOffSwitch) {
+                    _dropOffNumber.text =
+                        userPersonalDetailsDTO!.celphoneNumber;
+                    _dropOffName.text =
+                        "${userPersonalDetailsDTO!.userName} ${userPersonalDetailsDTO!.surname}";
+                  } else {
+                    _dropOffNumber.text = '';
+                    _dropOffName.text = '';
+                  }
+                });
+              },
             ),
             const Padding(
               padding: EdgeInsets.all(10),
@@ -229,6 +325,7 @@ class _EditItineraryScreenState extends State<EditItineraryScreen> {
               onTapPlus: () {
                 setState(() {
                   _loadsNumber += 1;
+                  _totalPrice += _price;
                 });
               },
               onTapMinus: _loadsNumber == 1
@@ -236,6 +333,7 @@ class _EditItineraryScreenState extends State<EditItineraryScreen> {
                   : () {
                       setState(() {
                         _loadsNumber -= 1;
+                        _totalPrice -= _price;
                       });
                     },
             ),
@@ -256,12 +354,13 @@ class _EditItineraryScreenState extends State<EditItineraryScreen> {
                       ),
                     ),
                   ),
-                  const Padding(
-                    padding: EdgeInsets.all(10),
+                  Padding(
+                    padding: const EdgeInsets.all(10),
                     child: SizedBox(
                       //height: 100,
                       child: TextField(
-                        decoration: InputDecoration(
+                        controller: _specialNote,
+                        decoration: const InputDecoration(
                           border: OutlineInputBorder(),
                         ),
                       ),
@@ -321,5 +420,56 @@ class _EditItineraryScreenState extends State<EditItineraryScreen> {
         ),
       ),
     );
+  }
+
+  _handlePriceCalculations() {
+    setState(() {
+      if (_pickUpNumber.text.isEmpty &&
+          _pickUpname.text.isEmpty &&
+          _dropOffName.text.isEmpty &&
+          _dropOffNumber.text.isEmpty) {
+        _pickNumberValid = true;
+        _pickNameValid = true;
+        _dropOffNameValid = true;
+        _dropOffNumberValid = true;
+      } else if (_pickUpNumber.text.isEmpty) {
+        _pickNumberValid = true;
+      } else if (_pickUpname.text.isEmpty) {
+        _pickNameValid = true;
+      } else if (_dropOffName.text.isEmpty) {
+        _dropOffNameValid = true;
+      } else if (_dropOffNumber.text.isEmpty) {
+        _dropOffNumberValid = true;
+      } else {
+        LookUp.bookings.add(
+          Booking(
+            date: '24/12/2022',
+            dropOffName: _dropOffName.text,
+            labours: _labourNumber,
+            loads: _loadsNumber,
+            dropOffPhone: _dropOffNumber.text,
+            dropoffadress: _dropOffAdress,
+            itemsToBeDelivered: _specialNote.text,
+            paymentType: 'Online Payment',
+            pickUpCellphone: _pickUpNumber.text,
+            pickUpName: _pickUpname.text,
+            pickupadress: _pickUpAdress,
+            status: 'Awaiting Driver',
+            trackNumber: 'DropT5903N12',
+            vehicle: _vehicleType,
+          ),
+        );
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => const MainActivityScreen(),
+          ),
+        );
+      }
+    });
+
+    // Map<Booking> bookingDetails = {
+
+    // };
   }
 }

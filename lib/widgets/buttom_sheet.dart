@@ -1,130 +1,186 @@
+import 'package:droppa_clone/LookUp/lookup.dart';
 import 'package:droppa_clone/LookUp/strings.dart';
+import 'package:droppa_clone/widgets/Rental_textField.dart';
+import 'package:droppa_clone/widgets/button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
 class ButtomSheetWidget extends StatelessWidget {
-  const ButtomSheetWidget({Key? key}) : super(key: key);
+  final void Function(String?)? onChanged;
+  final TextEditingController conpanyNameTextController;
+  final TextEditingController buildingNumberController;
+  final TextEditingController unitNumberController;
+  final TextEditingController streetTextController;
+  final TextEditingController postalTextController;
+  final TextEditingController suburbTextController;
+  final TextEditingController provinceTextController;
+  final Function onPress;
+  final VoidCallback onCancel;
+  const ButtomSheetWidget({
+    Key? key,
+    required this.onChanged,
+    required this.conpanyNameTextController,
+    required this.buildingNumberController,
+    required this.unitNumberController,
+    required this.streetTextController,
+    required this.postalTextController,
+    required this.suburbTextController,
+    required this.provinceTextController,
+    required this.onPress,
+    required this.onCancel,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Container(
-          color: Colors.transparent,
-          height: MediaQuery.of(context).size.height * 0.75,
-          child: Column(
-            children: [
-              const SizedBox(
-                height: 5,
-              ),
-              const Center(
-                child: Divider(
-                  color: Colors.black,
-                  thickness: 5,
-                  endIndent: 150,
-                  indent: 150,
-                ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              Stack(children: [
-                Container(
-                  //width: 400,
-                  //height: 560,
-                  margin: const EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(12),
+    return Container(
+      height: MediaQuery.of(context).size.height * 0.90,
+      color: Colors.grey[400],
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(""),
+                  InkWell(
+                    onTap: onCancel,
+                    child: const Text(
+                      "Cancel",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                          color: Colors.blue),
+                    ),
                   ),
-                  child: Container(
-                    margin: const EdgeInsets.fromLTRB(15, 15, 15, 0),
+                ],
+              ),
+            ),
+            Stack(
+              children: [
+                Container(
+                  margin: const EdgeInsets.fromLTRB(20, 10, 20, 20),
+                  height: 750,
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(12),
+                    ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                      left: 25,
+                      right: 25,
+                    ),
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Expanded(
-                          child: Text(
-                            Strings.courrierNote,
-                            style: const TextStyle(color: Colors.black),
-                          ),
+                        const SizedBox(
+                          height: 60,
+                        ),
+                        const Text(
+                          'Please note that this service is for BUDGET COURIER & EXPRESS COURIER',
                         ),
                         const SizedBox(
-                          height: 50,
+                          height: 15,
                         ),
-                        const TextField(
-                          decoration: InputDecoration(
-                            contentPadding:
-                                EdgeInsets.symmetric(vertical: 10.0),
+                        DropdownButtonFormField(
+                          hint: const Text(
+                            'Address Type',
+                          ),
+                          decoration: const InputDecoration(
+                            contentPadding: EdgeInsets.symmetric(
+                              vertical: 2.0,
+                              horizontal: 7,
+                            ),
                             border: OutlineInputBorder(),
                           ),
+                          items: LookUp.adressType
+                              .map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
+                          onChanged: onChanged,
+                          // (dynamic value) {
+                          //   setState(() {
+                          //     FocusScope.of(context).requestFocus(FocusNode());
+                          //   });
+                          // },
                         ),
                         const SizedBox(
-                          height: 20,
+                          height: 15,
                         ),
-                        const TextField(
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(),
-                          ),
+                        RentalTextField(
+                          label: 'Company Name(Optional)',
+                          textController: conpanyNameTextController,
                         ),
                         const SizedBox(
-                          height: 20,
+                          height: 15,
                         ),
-                        Row(children: const [
+                        Row(children: [
                           Expanded(
                             child: TextField(
-                              decoration: InputDecoration(
+                              controller: buildingNumberController,
+                              decoration: const InputDecoration(
                                 border: OutlineInputBorder(),
+                                contentPadding: EdgeInsets.symmetric(
+                                    vertical: 5.0, horizontal: 7),
                               ),
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 15,
                           ),
                           Expanded(
                             child: TextField(
-                              decoration: InputDecoration(
+                              controller: unitNumberController,
+                              decoration: const InputDecoration(
                                 border: OutlineInputBorder(),
+                                contentPadding: EdgeInsets.symmetric(
+                                    vertical: 5.0, horizontal: 7),
                               ),
                             ),
                           ),
                         ]),
                         const SizedBox(
-                          height: 20,
+                          height: 15,
                         ),
-                        const TextField(
-                          decoration: InputDecoration(
-                            //suffixIcon: Icon(Icons.search),
-                            border: OutlineInputBorder(),
-                          ),
+                        RentalTextField(
+                          label: 'Street Address',
+                          textController: streetTextController,
                         ),
                         const SizedBox(
-                          height: 20,
+                          height: 15,
                         ),
-                        const TextField(
-                          decoration: InputDecoration(
-                            //suffixIcon: Icon(Icons.search),
-                            border: OutlineInputBorder(),
-                          ),
+                        RentalTextField(
+                          label: 'Postal Code',
+                          textController: postalTextController,
                         ),
                         const SizedBox(
-                          height: 20,
+                          height: 15,
                         ),
-                        const TextField(
-                          decoration: InputDecoration(
-                            //suffixIcon: Icon(Icons.search),
-                            border: OutlineInputBorder(),
-                          ),
+                        RentalTextField(
+                          label: 'Suburb',
+                          textController: suburbTextController,
                         ),
                         const SizedBox(
-                          height: 20,
+                          height: 15,
                         ),
-                        const TextField(
-                          decoration: InputDecoration(
-                            //suffixIcon: Icon(Icons.search),
-                            border: OutlineInputBorder(),
-                          ),
+                        RentalTextField(
+                          label: 'Province',
+                          textController: provinceTextController,
+                        ),
+                        const SizedBox(
+                          height: 15,
+                        ),
+                        RsButton(
+                          title: 'Done',
+                          radisNumber: 12,
+                          onTaped: onPress,
                         ),
                       ],
                     ),
@@ -132,27 +188,30 @@ class ButtomSheetWidget extends StatelessWidget {
                 ),
                 Center(
                   child: Container(
-                    width: 200,
                     height: 30,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      color: const Color.fromARGB(255, 40, 63, 73),
+                    width: 250,
+                    decoration: const BoxDecoration(
+                      color: Color.fromARGB(255, 40, 63, 73),
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(12),
+                      ),
                     ),
-                    //color: Colors.black54,
                     child: const Center(
                       child: Text(
                         'Address Information',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ]),
-            ],
-          ),
+              ],
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 }

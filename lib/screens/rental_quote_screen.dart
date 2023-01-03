@@ -1,3 +1,4 @@
+import 'package:droppa_clone/screens/confirm_rental_screen.dart';
 import 'package:droppa_clone/screens/edit_itinenrary_screen.dart';
 import 'package:droppa_clone/widgets/button.dart';
 import 'package:droppa_clone/widgets/vehicle_select.dart';
@@ -67,7 +68,7 @@ class _RentalQuoteScreenState extends State<RentalQuoteScreen> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (_) => const EditItineraryScreen(),
+                      builder: (_) => const ConfirmRentalScreen(),
                     ),
                   );
                 },

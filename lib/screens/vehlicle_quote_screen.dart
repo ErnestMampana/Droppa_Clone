@@ -1,3 +1,4 @@
+import 'package:droppa_clone/LookUp/lookup.dart';
 import 'package:droppa_clone/LookUp/strings.dart';
 import 'package:droppa_clone/screens/edit_itinenrary_screen.dart';
 import 'package:droppa_clone/widgets/button.dart';
@@ -5,7 +6,15 @@ import 'package:droppa_clone/widgets/vehicle_select.dart';
 import 'package:flutter/material.dart';
 
 class VehicleQuoteScreen extends StatefulWidget {
-  const VehicleQuoteScreen({Key? key}) : super(key: key);
+  final double? kilometers;
+  final String? pickUpAdress;
+  final String? dropOffAdress;
+  const VehicleQuoteScreen(
+      {Key? key,
+      required this.kilometers,
+      required this.pickUpAdress,
+      required this.dropOffAdress})
+      : super(key: key);
 
   @override
   State<VehicleQuoteScreen> createState() => _VehicleQuoteScreenState();
@@ -13,6 +22,17 @@ class VehicleQuoteScreen extends StatefulWidget {
 
 class _VehicleQuoteScreenState extends State<VehicleQuoteScreen> {
   int _groupValue = 1;
+  late double _totalPrice;
+  late String _vehicleType;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _totalPrice = (LookUp.basePrice * widget.kilometers!) + LookUp.minivanPrice;
+    _vehicleType = 'Mini-Van';
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,7 +55,7 @@ class _VehicleQuoteScreenState extends State<VehicleQuoteScreen> {
                     children: [
                       Container(
                         width: 400,
-                        height: 200,
+                        height: 210,
                         margin: const EdgeInsets.all(10),
                         decoration: BoxDecoration(
                           color: Colors.white,
@@ -45,7 +65,7 @@ class _VehicleQuoteScreenState extends State<VehicleQuoteScreen> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             const SizedBox(
-                              height: 20,
+                              height: 30,
                             ),
                             Row(
                                 mainAxisAlignment:
@@ -56,15 +76,19 @@ class _VehicleQuoteScreenState extends State<VehicleQuoteScreen> {
                                     color: Colors.blue,
                                     size: 30,
                                   ),
-                                  Column(
-                                    children: const [
-                                      Text('Pick-up Details'),
-                                      SizedBox(
-                                        height: 10,
-                                      ),
-                                      Text(
-                                          '5099 Skosana St, Orlando East, Soweto, 1804, \nSouth Africa'),
-                                    ],
+                                  SizedBox(
+                                    height: 75,
+                                    width: 300,
+                                    child: Column(
+                                      children: [
+                                        const Text('Pick-up Details'),
+                                        const SizedBox(
+                                          height: 10,
+                                        ),
+                                        Expanded(
+                                            child: Text(widget.pickUpAdress!)),
+                                      ],
+                                    ),
                                   ),
                                 ]),
                             const SizedBox(
@@ -84,15 +108,19 @@ class _VehicleQuoteScreenState extends State<VehicleQuoteScreen> {
                                     color: Color.fromARGB(255, 226, 13, 13),
                                     size: 30,
                                   ),
-                                  Column(
-                                    children: const [
-                                      Text('Drop-off Details'),
-                                      SizedBox(
-                                        height: 10,
-                                      ),
-                                      Text(
-                                          '5099 Skosana St, Orlando East, Soweto, 1804, \nSouth Africa'),
-                                    ],
+                                  SizedBox(
+                                    height: 75,
+                                    width: 300,
+                                    child: Column(
+                                      children: [
+                                        const Text('Drop-off Details'),
+                                        const SizedBox(
+                                          height: 10,
+                                        ),
+                                        Expanded(
+                                            child: Text(widget.dropOffAdress!)),
+                                      ],
+                                    ),
                                   ),
                                 ]),
                           ],
@@ -148,10 +176,7 @@ class _VehicleQuoteScreenState extends State<VehicleQuoteScreen> {
                     itemNumber: 1,
                     groupValue: _groupValue,
                     onChanged: (itemNumber) {
-                      print('Mini van ton selected');
-                      setState(() {
-                        _groupValue = itemNumber!;
-                      });
+                      _handlePriceCalculations(itemNumber!);
                     },
                   ),
                   const SizedBox(
@@ -164,10 +189,7 @@ class _VehicleQuoteScreenState extends State<VehicleQuoteScreen> {
                     itemNumber: 2,
                     groupValue: _groupValue,
                     onChanged: (itemNumber) {
-                      print('1 ton ton selected');
-                      setState(() {
-                        _groupValue = itemNumber!;
-                      });
+                      _handlePriceCalculations(itemNumber!);
                     },
                   ),
                   const SizedBox(
@@ -180,10 +202,7 @@ class _VehicleQuoteScreenState extends State<VehicleQuoteScreen> {
                     itemNumber: 3,
                     groupValue: _groupValue,
                     onChanged: (itemNumber) {
-                      print('1.5 ton selected');
-                      setState(() {
-                        _groupValue = itemNumber!;
-                      });
+                      _handlePriceCalculations(itemNumber!);
                     },
                   ),
                   const SizedBox(
@@ -196,10 +215,7 @@ class _VehicleQuoteScreenState extends State<VehicleQuoteScreen> {
                     itemNumber: 4,
                     groupValue: _groupValue,
                     onChanged: (itemNumber) {
-                      print('4 ton selected');
-                      setState(() {
-                        _groupValue = 4;
-                      });
+                      _handlePriceCalculations(itemNumber!);
                     },
                   ),
                   const SizedBox(
@@ -212,10 +228,7 @@ class _VehicleQuoteScreenState extends State<VehicleQuoteScreen> {
                     itemNumber: 5,
                     groupValue: _groupValue,
                     onChanged: (itemNumber) {
-                      //print('$itemNumber 8 ton selected');
-                      setState(() {
-                        _groupValue = itemNumber!;
-                      });
+                      _handlePriceCalculations(itemNumber!);
                     },
                   ),
                   const SizedBox(
@@ -250,9 +263,9 @@ class _VehicleQuoteScreenState extends State<VehicleQuoteScreen> {
                     'Total (Incl VAT)',
                     style: TextStyle(color: Colors.white),
                   ),
-                  const Text(
-                    'R 1 214,00',
-                    style: TextStyle(
+                  Text(
+                    'R $_totalPrice',
+                    style: const TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
                     ),
@@ -269,7 +282,12 @@ class _VehicleQuoteScreenState extends State<VehicleQuoteScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (_) => const EditItineraryScreen(),
+                        builder: (_) => EditItineraryScreen(
+                          dropOffAdress: widget.dropOffAdress!,
+                          pickUpAdress: widget.pickUpAdress!,
+                          quotePrice: _totalPrice,
+                          vehicleType: _vehicleType,
+                        ),
                       ),
                     );
                   })
@@ -278,5 +296,32 @@ class _VehicleQuoteScreenState extends State<VehicleQuoteScreen> {
         ),
       ),
     );
+  }
+
+  _handlePriceCalculations(int item) {
+    setState(() {
+      _groupValue = item;
+      if (item == 1) {
+        _vehicleType = 'Mini-Van';
+        _totalPrice =
+            (LookUp.basePrice * widget.kilometers!) + LookUp.minivanPrice;
+      } else if (item == 2) {
+        _vehicleType = '1-ton';
+        _totalPrice =
+            (LookUp.basePrice * widget.kilometers!) + LookUp.oneTonVanPrice;
+      } else if (item == 3) {
+        _vehicleType = '1.5-ton';
+        _totalPrice =
+            (LookUp.basePrice * widget.kilometers!) + LookUp.pointFivePrice;
+      } else if (item == 4) {
+        _vehicleType = '4-ton';
+        _totalPrice =
+            (LookUp.basePrice * widget.kilometers!) + LookUp.fourTonTruckPrice;
+      } else if (item == 5) {
+        _vehicleType = '8-ton';
+        _totalPrice =
+            (LookUp.basePrice * widget.kilometers!) + LookUp.eightTonTruckPrice;
+      }
+    });
   }
 }

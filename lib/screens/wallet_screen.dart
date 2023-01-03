@@ -1,3 +1,4 @@
+import 'package:droppa_clone/backend/classes/person.dart';
 import 'package:droppa_clone/screens/load_wallet_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -9,6 +10,16 @@ class WalletScreen extends StatefulWidget {
 }
 
 class _WalletScreenState extends State<WalletScreen> {
+  //variables
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    userPersonalDetailsDTO!.walletBalance =
+        userPersonalDetailsDTO!.walletBalance;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,8 +44,8 @@ class _WalletScreenState extends State<WalletScreen> {
                 Padding(
                   padding: const EdgeInsets.only(top: 30),
                   child: Column(
-                    children: const [
-                      Text(
+                    children: [
+                      const Text(
                         'Wallet balance',
                         style: TextStyle(
                           color: Colors.white,
@@ -42,8 +53,11 @@ class _WalletScreenState extends State<WalletScreen> {
                         ),
                       ),
                       Text(
-                        'R0,00',
-                        style: TextStyle(color: Colors.white, fontSize: 20),
+                        'R ${userPersonalDetailsDTO!.walletBalance}',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                        ),
                       ),
                     ],
                   ),
@@ -63,15 +77,14 @@ class _WalletScreenState extends State<WalletScreen> {
                     decoration: const BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.all(
-                        Radius.circular(12),
+                        Radius.circular(15),
                       ),
                     ),
                     child: const Center(
                       child: Text(
-                        "Load wallet",
+                        "Load Wallet",
                         style: TextStyle(
-                          color: Colors.blue,
-                        ),
+                            color: Colors.blue, fontWeight: FontWeight.bold),
                       ),
                     ),
                   ),
