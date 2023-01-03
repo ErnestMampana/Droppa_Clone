@@ -32,7 +32,7 @@ class _ParcelScreenState extends State<ParcelScreen> {
       backgroundColor: Colors.grey[200],
       appBar: AppBar(
         title: const Text('Parcel'),
-        centerTitle: false,
+        centerTitle: true,
       ),
       body: SingleChildScrollView(
         child: Container(
