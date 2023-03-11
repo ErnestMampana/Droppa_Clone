@@ -1,5 +1,5 @@
 import 'package:droppa_clone/screens/main_activty_screen.dart';
-import 'package:droppa_clone/screens/quote_request_screen.dart';
+import 'package:droppa_clone/screens/otp_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() {

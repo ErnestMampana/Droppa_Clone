@@ -1,8 +1,16 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'dart:convert';
+
+import 'package:droppa_clone/backend/services/WebApiDataService%20.dart';
 import 'package:droppa_clone/backend/services/firebase_service.dart';
+import 'package:droppa_clone/screens/main_activty_screen.dart';
+import 'package:droppa_clone/screens/otp_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
+import '../widgets/dialog.dart';
 import 'login_screen.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -13,7 +21,26 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
-  Authantication _authentication = Authantication();
+  final Authantication _authentication = Authantication();
+  final WebApiDataService _webApiDataService = WebApiDataService();
+
+  //Controllers
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
+  final TextEditingController _cellphoneNumberController =
+      TextEditingController();
+  final TextEditingController _userNameController = TextEditingController();
+  final TextEditingController _userSurnameController = TextEditingController();
+
+  //TextFiend validation
+  bool _emailValid = false;
+  bool _nameValid = false;
+  bool _surnameValid = false;
+  bool _cellphoneValid = false;
+  bool _passwordValid = false;
+  bool _confirmPasswordValid = false;
 
   @override
   Widget build(BuildContext context) {
@@ -51,57 +78,99 @@ class _SignUpScreenState extends State<SignUpScreen> {
               height: 30,
             ),
             Column(
-              children: const [
+              children: [
                 TextField(
                   decoration: InputDecoration(
-                    border: OutlineInputBorder(),
+                    errorText: _nameValid ? 'Required field' : null,
+                    border: const OutlineInputBorder(),
                     labelText: 'Name',
                   ),
+                  onTap: () {
+                    setState(() {
+                      _nameValid = false;
+                    });
+                  },
+                  controller: _userNameController,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 TextField(
                   decoration: InputDecoration(
-                    border: OutlineInputBorder(),
+                    errorText: _surnameValid ? 'Required field' : null,
+                    border: const OutlineInputBorder(),
                     labelText: 'Surname',
                   ),
+                  onTap: () {
+                    setState(() {
+                      _surnameValid = false;
+                    });
+                  },
+                  controller: _userSurnameController,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 TextField(
                   decoration: InputDecoration(
-                    border: OutlineInputBorder(),
+                    errorText: _cellphoneValid ? 'Required field' : null,
+                    border: const OutlineInputBorder(),
                     labelText: 'Phone',
                   ),
+                  onTap: () {
+                    setState(() {
+                      _cellphoneValid = false;
+                    });
+                  },
+                  controller: _cellphoneNumberController,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 TextField(
                   decoration: InputDecoration(
-                    border: OutlineInputBorder(),
+                    errorText: _emailValid ? 'Required field' : null,
+                    border: const OutlineInputBorder(),
                     labelText: 'Email',
                   ),
+                  controller: _emailController,
+                  onTap: () {
+                    setState(() {
+                      _emailValid = false;
+                    });
+                  },
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 TextField(
                   decoration: InputDecoration(
-                    border: OutlineInputBorder(),
+                    errorText: _passwordValid ? 'Required field' : null,
+                    border: const OutlineInputBorder(),
                     labelText: 'Password',
                   ),
+                  onTap: () {
+                    setState(() {
+                      _passwordValid = false;
+                    });
+                  },
+                  controller: _passwordController,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 TextField(
                   decoration: InputDecoration(
-                    border: OutlineInputBorder(),
+                    errorText: _confirmPasswordValid ? 'Required field' : null,
+                    border: const OutlineInputBorder(),
                     labelText: 'Confirm Password',
                   ),
+                  onTap: () {
+                    setState(() {
+                      _confirmPasswordValid = false;
+                    });
+                  },
+                  controller: _confirmPasswordController,
                 )
               ],
             ),
@@ -158,11 +227,47 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   _handleSignUp() async {
-    Map<String, dynamic> userDetails = {
-      'email': 'ernest.mampana@gmail.com',
-      'password': 'thatomohlala',
-      'returnSecureToken': true
-    };
-    await _authentication.signUp(userDetails);
+    bool strongPassword = false;
+
+    String pattern =
+        r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$';
+    RegExp regExp = RegExp(pattern);
+    strongPassword = regExp.hasMatch(_passwordController.text);
+    if (strongPassword) {
+      if (_passwordController.text == _confirmPasswordController.text) {
+        DialogUtils.showLoading(context);
+        Map<String, dynamic> userPersonalDetails = {
+          'userName': _userNameController.text,
+          'surname': _userSurnameController.text,
+          'celphone': _cellphoneNumberController.text,
+          'email': _emailController.text,
+          'password': _passwordController.text
+        };
+        var response =
+            await _webApiDataService.createAccount(userPersonalDetails);
+        Map<String, dynamic> map = json.decode(response.body);
+        DialogUtils.hideDialog(context);
+        if (response.statusCode == 200) {
+          print(map["message"]);
+
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => const OtpScreen(),
+            ),
+          );
+        } else {
+          print("=========================== : " + map["message"]);
+        }
+      }
+    }
+
+    // For firebase connection
+    // Map<String, dynamic> userDetails = {
+    //   'email': 'ernest.mampana@gmail.com',
+    //   'password': 'thatomohlala',
+    //   'returnSecureToken': true
+    // };
+    // await _authentication.signUp(userDetails);
   }
 }

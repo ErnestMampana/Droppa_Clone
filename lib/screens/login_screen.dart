@@ -1,3 +1,9 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'dart:convert';
+
+import 'package:droppa_clone/LookUp/lookup.dart';
+import 'package:droppa_clone/backend/services/WebApiDataService%20.dart';
 import 'package:droppa_clone/backend/services/firebase_service.dart';
 import 'package:droppa_clone/screens/signup_screen.dart';
 import 'package:droppa_clone/widgets/dialog.dart';
@@ -12,7 +18,9 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   //variables
-  final Authantication _authantication = Authantication();
+  final WebApiDataService _webApiDataService = WebApiDataService();
+
+  //TextField Validation
   bool _emailValid = false;
   bool _passwordValid = false;
 
@@ -197,13 +205,25 @@ class _LoginScreenState extends State<LoginScreen> {
     DialogUtils.showLoading(context);
 
     Map<String, dynamic> userdetails = {
-      'email': _emailController.text,
+      'username': _emailController.text,
       'password': _passordController.text,
-      'returnSecureToken': true
+      //'returnSecureToken': true
     };
-    var response = await _authantication.login(userdetails);
+    var response = await _webApiDataService.login(userdetails);
     DialogUtils.hideDialog(context);
-    print(response.statusCode.toString());
+    if (response.statusCode == 200) {
+      Map<String, dynamic> map = json.decode(response.body);
+      String email = map['email'];
+      var resp = await _webApiDataService.getBookingsForUser(email);
+      Map<String, dynamic> mapBookings = json.decode(response.body);
+      mapBookings.forEach((key, value) {
+        LookUp.bookings.add(value);
+      });
+      print(resp.body.toString());
+    }
+
+    //if(response.body.toString())
+    print(response.body.toString());
   }
 
   @override
