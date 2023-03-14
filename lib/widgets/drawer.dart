@@ -68,7 +68,7 @@ class CustomDrawerState extends State<CustomDrawer> {
                 width: 200,
                 height: 25,
                 color: Colors.blue,
-                child: Text(
+                child: const Text(
                   'Bookings',
                   style: TextStyle(
                       color: Colors.white,
@@ -81,7 +81,7 @@ class CustomDrawerState extends State<CustomDrawer> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (_) => BookingsScreen(),
+                    builder: (_) => const BookingsScreen(),
                   ),
                 );
                 //Navigator.pop(context);

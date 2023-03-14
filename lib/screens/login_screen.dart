@@ -217,7 +217,7 @@ class _LoginScreenState extends State<LoginScreen> {
       var resp = await _webApiDataService.getBookingsForUser(email);
       Map<String, dynamic> mapBookings = json.decode(response.body);
       mapBookings.forEach((key, value) {
-        LookUp.bookings.add(value);
+        //LookUp.bookings.add(key);
       });
       print(resp.body.toString());
     }
