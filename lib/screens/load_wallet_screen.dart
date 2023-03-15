@@ -1,10 +1,13 @@
+import 'package:droppa_clone/backend/providers/app_data.dart';
 import 'package:droppa_clone/backend/classes/person.dart';
+import 'package:droppa_clone/backend/services/user_service.dart';
 import 'package:droppa_clone/screens/wallet_screen.dart';
 import 'package:droppa_clone/widgets/button.dart';
 import 'package:droppa_clone/widgets/walllet_amount_select.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:provider/provider.dart';
 
 class LoadWalletScreen extends StatefulWidget {
   const LoadWalletScreen({super.key});
@@ -22,7 +25,9 @@ class _LoadWalletScreenState extends State<LoadWalletScreen> {
   bool _isSelected4 = false;
   bool _isSelected5 = false;
   bool _isSelected6 = false;
-  double price = 0.00;
+  double price = 453.00;
+
+  final UserService _userService = UserService();
 
   @override
   Widget build(BuildContext context) {
@@ -161,17 +166,19 @@ class _LoadWalletScreenState extends State<LoadWalletScreen> {
               title: 'Credit wallet',
               radisNumber: 20,
               onTaped: () {
+                _loadWallet();
+                //context.read<AppData>().changePrice(2300);
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const WalletScreen(),
+                  ),
+                );
                 setState(() {
-                  userPersonalDetailsDTO!.walletBalance =
-                      (double.parse(userPersonalDetailsDTO!.walletBalance) +
-                              price)
-                          .toString();
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => const WalletScreen(),
-                    ),
-                  );
+                  // userPersonalDetailsDTO!.walletBalance =
+                  //     (double.parse(userPersonalDetailsDTO!.walletBalance) +
+                  //             price)
+                  //         .toString();
                 });
               },
             ),
@@ -179,6 +186,12 @@ class _LoadWalletScreenState extends State<LoadWalletScreen> {
         ],
       ),
     );
+  }
+
+  _loadWallet() async{
+    userPersonalDetailsDTO!.userId!;
+
+    _userService.loadWallet( price);
   }
 
   _changeRadio(int itemNumber) {

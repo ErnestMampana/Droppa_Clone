@@ -3,6 +3,7 @@
 import 'dart:convert';
 
 import 'package:droppa_clone/backend/services/WebApiDataService%20.dart';
+import 'package:droppa_clone/backend/services/user_service.dart';
 import 'package:droppa_clone/screens/main_activty_screen.dart';
 import 'package:droppa_clone/widgets/Rental_textField.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +19,7 @@ class OtpScreen extends StatefulWidget {
 
 class _OtpScreenState extends State<OtpScreen> {
   //Web service
-  final WebApiDataService _webApiDataService = WebApiDataService();
+  final UserService _userService = UserService();
 
   //TextController
   final TextEditingController _otpController = TextEditingController();
@@ -93,9 +94,9 @@ class _OtpScreenState extends State<OtpScreen> {
     String email = "ernest@gmail.com";
     int code = int.parse(_otpController.text);
 
-    var response = await _webApiDataService.confirmOtp(email, code);
+    var userPersonalDetailsDTO = await _userService.confirmOtp(email, code);
     DialogUtils.hideDialog(context);
-    if (response.statusCode == 200) {
+    if (userPersonalDetailsDTO.token != null) {
       print("================ : Account Activated");
       Navigator.push(
         context,
@@ -104,8 +105,8 @@ class _OtpScreenState extends State<OtpScreen> {
         ),
       );
     } else {
-      Map<String, dynamic> map = json.decode(response.body);
-      print("================ : " + map['message']);
+      // Map<String, dynamic> map = json.decode(response.body);
+      // print("================ : " + map['message']);
     }
   }
 }

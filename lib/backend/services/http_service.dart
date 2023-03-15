@@ -24,6 +24,19 @@ class HttpService {
     return response;
   }
 
+  // Future<BaseApiResponse> post(String url, dynamic body) async {
+  //   var headers = await _getHeaders(false);
+  //   var urlParse = Uri.parse(url);
+  //   final response = await http.post(urlParse, headers: headers, body: body);
+  //   if (response.statusCode == 200) {
+  //     return ApiResponse.fromJson(json.decode(response.body));
+  //   } else {
+  //     //toastMessage(response.body[3]);
+  //     //toastMessage(json.decode(response.body));
+  //     return ApiErrorResponse.fromJson(json.decode(response.body));
+  //   }
+  // }
+
   Future<Response> put(String url, dynamic body) async {
     var headers = await _getHeaders(false);
     var urlParse = Uri.parse(url);

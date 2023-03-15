@@ -1,6 +1,8 @@
+import 'package:droppa_clone/backend/providers/app_data.dart';
 import 'package:droppa_clone/backend/classes/person.dart';
 import 'package:droppa_clone/screens/load_wallet_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class WalletScreen extends StatefulWidget {
   const WalletScreen({super.key});
@@ -12,13 +14,13 @@ class WalletScreen extends StatefulWidget {
 class _WalletScreenState extends State<WalletScreen> {
   //variables
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    userPersonalDetailsDTO!.walletBalance =
-        userPersonalDetailsDTO!.walletBalance;
-  }
+  // @override
+  // void initState() {
+  //   // TODO: implement initState
+  //   super.initState();
+  //   userPersonalDetailsDTO!.walletBalance =
+  //       userPersonalDetailsDTO!.walletBalance;
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -52,12 +54,16 @@ class _WalletScreenState extends State<WalletScreen> {
                           fontSize: 20,
                         ),
                       ),
-                      Text(
-                        'R ${userPersonalDetailsDTO!.walletBalance}',
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 20,
-                        ),
+                      Consumer<Person>(
+                        builder: (context, value, child) {
+                          return Text(
+                            'R ${value.walletBalance}',
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                            ),
+                          );
+                        },
                       ),
                     ],
                   ),

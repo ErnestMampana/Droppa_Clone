@@ -4,6 +4,7 @@ import 'dart:convert';
 
 import 'package:droppa_clone/backend/services/WebApiDataService%20.dart';
 import 'package:droppa_clone/backend/services/firebase_service.dart';
+import 'package:droppa_clone/backend/services/user_service.dart';
 import 'package:droppa_clone/screens/main_activty_screen.dart';
 import 'package:droppa_clone/screens/otp_screen.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +23,7 @@ class SignUpScreen extends StatefulWidget {
 
 class _SignUpScreenState extends State<SignUpScreen> {
   final Authantication _authentication = Authantication();
-  final WebApiDataService _webApiDataService = WebApiDataService();
+  final UserService _userService = UserService();
 
   //Controllers
   final TextEditingController _emailController = TextEditingController();
@@ -244,12 +245,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
           'password': _passwordController.text
         };
         var response =
-            await _webApiDataService.createAccount(userPersonalDetails);
-        Map<String, dynamic> map = json.decode(response.body);
+            await _userService.createAccount(userPersonalDetails);
+        //Map<String, dynamic> map = json.decode(response.body);
         DialogUtils.hideDialog(context);
-        if (response.statusCode == 200) {
-          print(map["message"]);
-
+        if (response == "") {
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -257,7 +256,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             ),
           );
         } else {
-          print("=========================== : " + map["message"]);
+          //print("=========================== : " + map["message"]);
         }
       }
     }

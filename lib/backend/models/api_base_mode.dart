@@ -3,6 +3,7 @@ class BaseApiResponse {
   BaseApiResponse(this.success);
 }
 
+//When status code is 200
 class ApiResponse extends BaseApiResponse {
   final dynamic data;
   final ApiResponseMetadata? metadata;
@@ -11,7 +12,7 @@ class ApiResponse extends BaseApiResponse {
   factory ApiResponse.fromJson(Map<String, dynamic> json) {
     ApiResponseMetadata? metaData;
     var metaDataJson = json["metadata"];
-    if (json["metadata"] != null) {
+    if (json != null) {
       metaData = ApiResponseMetadata.fromJson(json["metadata"]);
     }
     return ApiResponse(json["success"], json["data"], metaData);
@@ -41,14 +42,14 @@ class ApiErrorResponse extends BaseApiResponse {
 }
 
 class ApiResponseErrorModel {
-  final int? code;
+  // final int? code;
   final String? message;
-  final dynamic erroData;
+  // final dynamic erroData;
 
-  ApiResponseErrorModel(this.code, this.message, this.erroData);
+  ApiResponseErrorModel( this.message);
   factory ApiResponseErrorModel.fromJson(Map<String, dynamic> json) {
     return ApiResponseErrorModel(
-        json["Code"], json["Message"], json["ErroData"]);
+        json["Message"]);
   }
 }
 

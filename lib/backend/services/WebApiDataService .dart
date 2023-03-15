@@ -7,14 +7,14 @@ import '../models/api_base_mode.dart';
 
 class WebApiDataService {
 
-  final String baseUrl = "http://10.0.2.2:8080";
+  final String baseUrl = "http://10.0.2.2:8080/api/v1";
 
   //final String apiBaseSagment = "api/v1";
   final HttpService httpService = HttpService();
 
   Future<Response> createAccount(
       Map<String, dynamic> userPersonalDetails) async {
-    var url = "$baseUrl/user/createuser";
+    var url = "$baseUrl/auth/register";
     var requestBody = jsonEncode(userPersonalDetails);
     return await httpService.post(url, requestBody);
     //return a;
@@ -35,6 +35,12 @@ class WebApiDataService {
   Future<Response> getBookingsForUser(String userId) async{
     var url = "$baseUrl/booking/bookingByUserId/$userId";
     return await httpService.get(url);
+  }
+
+  Future<Response>  loadWallet(String email, double price) async {
+    var url = "$baseUrl/loadwallet/$email?amount=$price";
+    //var requestBody = jsonEncode(userPersonalDetails);
+    return await httpService.put(url,null);
   }
 
   // Future<BaseApiResponse> updatePersonalDetails(

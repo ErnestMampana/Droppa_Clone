@@ -2,6 +2,7 @@
 
 import 'package:droppa_clone/LookUp/lookup.dart';
 import 'package:droppa_clone/LookUp/strings.dart';
+import 'package:droppa_clone/backend/providers/app_data.dart';
 import 'package:droppa_clone/backend/classes/person.dart';
 import 'package:droppa_clone/screens/booking_screen.dart';
 import 'package:droppa_clone/screens/bookings_screen.dart';
@@ -14,6 +15,7 @@ import 'package:droppa_clone/widgets/button.dart';
 import 'package:droppa_clone/widgets/drawer.dart';
 import 'package:droppa_clone/widgets/vehicle_select.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class MainActivityScreen extends StatefulWidget {
   const MainActivityScreen({Key? key}) : super(key: key);
@@ -29,8 +31,7 @@ class _MainActivityScreenState extends State<MainActivityScreen> {
   void initState() {
     super.initState();
     _numberOfBookings = LookUp.bookings.length;
-    userPersonalDetailsDTO = Person('Xyhaliojjsy567ggvc', 'Ernest',
-        '0723568069', '13000', LookUp.bookings, 'Mampana');
+    userPersonalDetailsDTO;
   }
 
   @override
@@ -169,12 +170,16 @@ class _MainActivityScreenState extends State<MainActivityScreen> {
                                 height: 5,
                               ),
                               GestureDetector(
-                                child: Text(
-                                  'R ${userPersonalDetailsDTO!.walletBalance}',
-                                  style: const TextStyle(
-                                    fontSize: 11,
-                                    color: Colors.blue,
-                                  ),
+                                child: Consumer<Person>(
+                                  builder: (context, value, child) {
+                                    return Text(
+                                      'R ${value.walletBalance}',
+                                      style: const TextStyle(
+                                        fontSize: 11,
+                                        color: Colors.blue,
+                                      ),
+                                    );
+                                  },
                                 ),
                                 onTap: () {
                                   Navigator.push(

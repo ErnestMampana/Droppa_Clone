@@ -244,7 +244,7 @@ class _EditItineraryScreenState extends State<EditItineraryScreen> {
                 setState(() {
                   _isPickSwitched = isSwitched!;
                   if (_isPickSwitched) {
-                    _pickUpNumber.text = userPersonalDetailsDTO!.celphoneNumber;
+                    _pickUpNumber.text = userPersonalDetailsDTO!.celphoneNumber!;
                     _pickUpname.text =
                         "${userPersonalDetailsDTO!.userName} ${userPersonalDetailsDTO!.surname}";
                   } else {
@@ -301,7 +301,7 @@ class _EditItineraryScreenState extends State<EditItineraryScreen> {
                   _dropOffSwitch = isSwitched!;
                   if (_dropOffSwitch) {
                     _dropOffNumber.text =
-                        userPersonalDetailsDTO!.celphoneNumber;
+                        userPersonalDetailsDTO!.celphoneNumber!;
                     _dropOffName.text =
                         "${userPersonalDetailsDTO!.userName} ${userPersonalDetailsDTO!.surname}";
                   } else {

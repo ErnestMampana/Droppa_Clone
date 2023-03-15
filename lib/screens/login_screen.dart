@@ -211,19 +211,19 @@ class _LoginScreenState extends State<LoginScreen> {
     };
     var response = await _webApiDataService.login(userdetails);
     DialogUtils.hideDialog(context);
-    if (response.statusCode == 200) {
-      Map<String, dynamic> map = json.decode(response.body);
-      String email = map['email'];
-      var resp = await _webApiDataService.getBookingsForUser(email);
-      Map<String, dynamic> mapBookings = json.decode(response.body);
-      mapBookings.forEach((key, value) {
-        //LookUp.bookings.add(key);
-      });
-      print(resp.body.toString());
-    }
+    // if (response.statusCode == 200) {
+    //   Map<String, dynamic> map = json.decode(response.body);
+    //   String email = map['email'];
+    //   var resp = await _webApiDataService.getBookingsForUser(email);
+    //   Map<String, dynamic> mapBookings = json.decode(response.body);
+    //   mapBookings.forEach((key, value) {
+    //     //LookUp.bookings.add(key);
+    //   });
+    //   print(resp.body.toString());
+    // }
 
-    //if(response.body.toString())
-    print(response.body.toString());
+    // //if(response.body.toString())
+    // print(response.body.toString());
   }
 
   @override

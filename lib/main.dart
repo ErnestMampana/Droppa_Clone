@@ -1,9 +1,18 @@
+import 'package:droppa_clone/backend/classes/person.dart';
+import 'package:droppa_clone/backend/providers/app_data.dart';
 import 'package:droppa_clone/screens/main_activty_screen.dart';
 import 'package:droppa_clone/screens/otp_screen.dart';
+import 'package:droppa_clone/screens/wallet_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(providers: [
+      ChangeNotifierProvider(create: (_) => Person()),
+    ],
+    child: const MyApp(),)
+    );
 }
 
 class MyApp extends StatelessWidget {
@@ -17,7 +26,10 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home:
-          const MainActivityScreen(), // const MyHomePage(title: 'Flutter Demo Home Page'),
+          const MainActivityScreen(), 
+          // routes: {
+          //   '/wallet_screen': (context) => const WalletScreen(),
+          // },
     );
   }
 }
