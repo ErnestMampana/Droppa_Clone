@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:droppa_clone/backend/providers/app_data.dart';
 import 'package:droppa_clone/backend/classes/person.dart';
 import 'package:droppa_clone/backend/services/user_service.dart';
@@ -25,7 +27,7 @@ class _LoadWalletScreenState extends State<LoadWalletScreen> {
   bool _isSelected4 = false;
   bool _isSelected5 = false;
   bool _isSelected6 = false;
-  double price = 453.00;
+  double? _price = 00.0;
 
   final UserService _userService = UserService();
 
@@ -83,12 +85,16 @@ class _LoadWalletScreenState extends State<LoadWalletScreen> {
                     fontSize: 16,
                   ),
                 ),
-                Text(
-                  'R $price',
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                  ),
+                Consumer<AppData>(
+                  builder: (context, value, child) {
+                    return Text(
+                      'R ${value.walletPrice + _price!}',
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    );
+                  },
                 ),
                 // ),
               ],
@@ -168,12 +174,7 @@ class _LoadWalletScreenState extends State<LoadWalletScreen> {
               onTaped: () {
                 _loadWallet();
                 //context.read<AppData>().changePrice(2300);
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => const WalletScreen(),
-                  ),
-                );
+
                 setState(() {
                   // userPersonalDetailsDTO!.walletBalance =
                   //     (double.parse(userPersonalDetailsDTO!.walletBalance) +
@@ -188,10 +189,15 @@ class _LoadWalletScreenState extends State<LoadWalletScreen> {
     );
   }
 
-  _loadWallet() async{
-    userPersonalDetailsDTO!.userId!;
-
-    _userService.loadWallet( price);
+  _loadWallet() async {
+    double amount = await _userService.loadWallet(_price!);
+    context.read<AppData>().changePrice(amount);
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (_) => const WalletScreen(),
+      ),
+    );
   }
 
   _changeRadio(int itemNumber) {
@@ -204,7 +210,7 @@ class _LoadWalletScreenState extends State<LoadWalletScreen> {
         _isSelected4 = false;
         _isSelected5 = false;
         _isSelected6 = false;
-        price = 500;
+        _price = 500;
       });
     }
     if (itemNumber == 2) {
@@ -216,7 +222,7 @@ class _LoadWalletScreenState extends State<LoadWalletScreen> {
         _isSelected4 = false;
         _isSelected5 = false;
         _isSelected6 = false;
-        price = 1000;
+        _price = 1000;
       });
     }
     if (itemNumber == 3) {
@@ -228,7 +234,7 @@ class _LoadWalletScreenState extends State<LoadWalletScreen> {
         _isSelected4 = false;
         _isSelected5 = false;
         _isSelected6 = false;
-        price = 2000;
+        _price = 2000;
       });
     }
     if (itemNumber == 4) {
@@ -240,7 +246,7 @@ class _LoadWalletScreenState extends State<LoadWalletScreen> {
         _isSelected4 = true;
         _isSelected5 = false;
         _isSelected6 = false;
-        price = 5000;
+        _price = 5000;
       });
     }
     if (itemNumber == 5) {
@@ -252,7 +258,7 @@ class _LoadWalletScreenState extends State<LoadWalletScreen> {
         _isSelected4 = false;
         _isSelected5 = true;
         _isSelected6 = false;
-        price = 10000;
+        _price = 10000;
       });
     }
     if (itemNumber == 6) {
@@ -264,7 +270,7 @@ class _LoadWalletScreenState extends State<LoadWalletScreen> {
         _isSelected4 = false;
         _isSelected5 = false;
         _isSelected6 = true;
-        price = 20000;
+        _price = 20000;
       });
     }
   }

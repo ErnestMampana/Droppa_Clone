@@ -6,7 +6,6 @@ import 'package:http/http.dart';
 import '../models/api_base_mode.dart';
 
 class WebApiDataService {
-
   final String baseUrl = "http://10.0.2.2:8080/api/v1";
 
   //final String apiBaseSagment = "api/v1";
@@ -20,27 +19,44 @@ class WebApiDataService {
     //return a;
   }
 
-  Future<Response> confirmOtp(String email,int code) async{
+  Future<Response> confirmOtp(String email, int code) async {
     var url = "$baseUrl/user/email/confirmation/$email?code=$code";
     //var requestBody = jsonEncode(userPersonalDetails);
-    return await httpService.put(url,null);
+    return await httpService.put(url, null);
   }
 
   Future<Response> login(Map<String, dynamic> userdetails) async {
-    var url = "$baseUrl/login/userlogin";
+    var url = "$baseUrl/auth/login";
     var requestBody = jsonEncode(userdetails);
     return await httpService.post(url, requestBody);
   }
 
-  Future<Response> getBookingsForUser(String userId) async{
+  Future<Response> getBookingsForUser(String userId) async {
     var url = "$baseUrl/booking/bookingByUserId/$userId";
     return await httpService.get(url);
   }
 
-  Future<Response>  loadWallet(String email, double price) async {
-    var url = "$baseUrl/loadwallet/$email?amount=$price";
+  Future<Response> loadWallet(String email, double price) async {
+    var url = "$baseUrl/user/loadwallet/$email?amount=$price";
     //var requestBody = jsonEncode(userPersonalDetails);
-    return await httpService.put(url,null);
+    return await httpService.put(url, null);
+  }
+
+  requestPrice(Map<String, dynamic> addressDetails) async {
+    var url = "$baseUrl/booking/getprice";
+    var requestBody = jsonEncode(addressDetails);
+    return await httpService.post(url, requestBody);
+  }
+
+  createBooking(Map<String, dynamic> booking) async {
+    var url = "$baseUrl/booking/book";
+    var requestBody = jsonEncode(booking);
+    return await httpService.post(url, requestBody);
+  }
+
+  Future<Response> getAllBookings(String userId) async {
+    var url = "$baseUrl/booking/bookingByUserId/$userId";
+    return await httpService.get(url);
   }
 
   // Future<BaseApiResponse> updatePersonalDetails(

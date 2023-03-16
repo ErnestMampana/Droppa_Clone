@@ -170,10 +170,10 @@ class _MainActivityScreenState extends State<MainActivityScreen> {
                                 height: 5,
                               ),
                               GestureDetector(
-                                child: Consumer<Person>(
+                                child: Consumer<AppData>(
                                   builder: (context, value, child) {
                                     return Text(
-                                      'R ${value.walletBalance}',
+                                      'R ${value.walletPrice}',
                                       style: const TextStyle(
                                         fontSize: 11,
                                         color: Colors.blue,

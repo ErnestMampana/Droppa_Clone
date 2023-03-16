@@ -54,10 +54,10 @@ class _WalletScreenState extends State<WalletScreen> {
                           fontSize: 20,
                         ),
                       ),
-                      Consumer<Person>(
+                      Consumer<AppData>(
                         builder: (context, value, child) {
                           return Text(
-                            'R ${value.walletBalance}',
+                            'R ${value.walletPrice}',
                             style: const TextStyle(
                               color: Colors.white,
                               fontSize: 20,

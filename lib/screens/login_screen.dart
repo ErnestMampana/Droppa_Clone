@@ -3,11 +3,16 @@
 import 'dart:convert';
 
 import 'package:droppa_clone/LookUp/lookup.dart';
+import 'package:droppa_clone/backend/providers/app_data.dart';
 import 'package:droppa_clone/backend/services/WebApiDataService%20.dart';
 import 'package:droppa_clone/backend/services/firebase_service.dart';
+import 'package:droppa_clone/backend/services/user_service.dart';
 import 'package:droppa_clone/screens/signup_screen.dart';
 import 'package:droppa_clone/widgets/dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import 'main_activty_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -18,7 +23,7 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   //variables
-  final WebApiDataService _webApiDataService = WebApiDataService();
+  final UserService _userService = UserService();
 
   //TextField Validation
   bool _emailValid = false;
@@ -203,14 +208,27 @@ class _LoginScreenState extends State<LoginScreen> {
 
   _handleLogin() async {
     DialogUtils.showLoading(context);
-
     Map<String, dynamic> userdetails = {
       'username': _emailController.text,
       'password': _passordController.text,
       //'returnSecureToken': true
     };
-    var response = await _webApiDataService.login(userdetails);
-    DialogUtils.hideDialog(context);
+    var response = await _userService.login(userdetails);
+    
+    if (response.token != null) {
+      context.read<AppData>().changePrice(response.walletBalance!);
+      await _userService.getAllBookings(response.userId);
+      DialogUtils.hideDialog(context);
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => const MainActivityScreen(),
+        ),
+      );
+    } else {
+      // Map<String, dynamic> map = json.decode(response.body);
+      // print("================ : " + map['message']);
+    }
     // if (response.statusCode == 200) {
     //   Map<String, dynamic> map = json.decode(response.body);
     //   String email = map['email'];

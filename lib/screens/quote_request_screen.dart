@@ -1,6 +1,7 @@
-// ignore_for_file: sized_box_for_whitespace
+// ignore_for_file: sized_box_for_whitespace, use_build_context_synchronously
 
 import 'package:droppa_clone/LookUp/lookup.dart';
+import 'package:droppa_clone/backend/services/user_service.dart';
 import 'package:droppa_clone/screens/parcel_screen.dart';
 import 'package:droppa_clone/screens/rental_service_screen.dart';
 import 'package:droppa_clone/screens/vehlicle_quote_screen.dart';
@@ -22,6 +23,8 @@ class QuoteRequestScreen extends StatefulWidget {
 }
 
 class _QuoteRequestScreenState extends State<QuoteRequestScreen> {
+  final UserService _userService = UserService();
+
   //Text Controllers
   final TextEditingController _pickBuildingNumberController =
       TextEditingController();
@@ -447,16 +450,10 @@ class _QuoteRequestScreenState extends State<QuoteRequestScreen> {
                         );
                       }
                     : () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => VehicleQuoteScreen(
-                              kilometers: 10.57,
-                              dropOffAdress: _dropOffAdress.text,
-                              pickUpAdress: _pickUpAdress.text,
-                            ),
-                          ),
-                        );
+                        if (_pickUpAdress.text != "" ||
+                            _dropOffAdress.text != "") {
+                          _handlePriceRequest();
+                        }
                       },
                 color: Colors.blue,
                 shape: RoundedRectangleBorder(
@@ -472,6 +469,24 @@ class _QuoteRequestScreenState extends State<QuoteRequestScreen> {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  void _handlePriceRequest() async {
+    Map<String, dynamic> addressDetails = {
+      "pickupCoordinates": _pickUpAdress.text,
+      "dropOffCoordinates": _dropOffAdress.text
+    };
+    double requestedAmount = await _userService.requestPrice(addressDetails);
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => VehicleQuoteScreen(
+          price: requestedAmount,
+          dropOffAdress: _dropOffAdress.text,
+          pickUpAdress: _pickUpAdress.text,
         ),
       ),
     );

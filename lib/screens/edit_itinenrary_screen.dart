@@ -1,6 +1,7 @@
 import 'package:droppa_clone/LookUp/lookup.dart';
 import 'package:droppa_clone/backend/classes/booking.dart';
 import 'package:droppa_clone/backend/classes/person.dart';
+import 'package:droppa_clone/backend/services/user_service.dart';
 import 'package:droppa_clone/screens/main_activty_screen.dart';
 import 'package:droppa_clone/widgets/button.dart';
 import 'package:droppa_clone/widgets/counter.dart';
@@ -29,6 +30,8 @@ class EditItineraryScreen extends StatefulWidget {
 }
 
 class _EditItineraryScreenState extends State<EditItineraryScreen> {
+
+  final UserService _userService = UserService();
   //controllers
   final TextEditingController _pickUpname = TextEditingController();
   final TextEditingController _pickUpNumber = TextEditingController();
@@ -244,7 +247,8 @@ class _EditItineraryScreenState extends State<EditItineraryScreen> {
                 setState(() {
                   _isPickSwitched = isSwitched!;
                   if (_isPickSwitched) {
-                    _pickUpNumber.text = userPersonalDetailsDTO!.celphoneNumber!;
+                    _pickUpNumber.text =
+                        userPersonalDetailsDTO!.celphoneNumber!;
                     _pickUpname.text =
                         "${userPersonalDetailsDTO!.userName} ${userPersonalDetailsDTO!.surname}";
                   } else {
@@ -441,24 +445,44 @@ class _EditItineraryScreenState extends State<EditItineraryScreen> {
       } else if (_dropOffNumber.text.isEmpty) {
         _dropOffNumberValid = true;
       } else {
-        LookUp.bookings.add(
-          Booking(
-            date: '24/12/2022',
-            dropOffName: _dropOffName.text,
-            labours: _labourNumber,
-            loads: _loadsNumber,
-            dropOffPhone: _dropOffNumber.text,
-            dropoffadress: _dropOffAdress,
-            itemsToBeDelivered: _specialNote.text,
-            paymentType: 'Online Payment',
-            pickUpCellphone: _pickUpNumber.text,
-            pickUpName: _pickUpname.text,
-            pickupadress: _pickUpAdress,
-            status: 'Awaiting Driver',
-            trackNumber: 'DropT5903N12',
-            vehicle: _vehicleType,
-          ),
-        );
+
+        Map<String, dynamic> booking = {
+          "userId": userPersonalDetailsDTO!.userId!,
+          "pickupadress": "806 Mohlitsi Street Soweto 1203 Gauteng",
+          "dropoffadress": "5099/1 Montjane Street Tembisa 1632 Gauteng",
+          "date": "2023-03-16",
+          "vehicle": "Mini_Van",
+          "paymentType": "paymentType",
+          "loads": 1,
+          "labours": 2,
+          "itemsToBeDelivered": "Bar fridge and micro-oven",
+          "pickUpName": "Ernest Mampana",
+          "pickUpCellphone": "0723568069",
+          "dropOffName": "Ernest Mampana",
+          "dropOffPhone": "0723568069",
+          "price": 554,
+          "time": "12:45"
+        };
+
+        _userService.createBooking(booking);
+        // LookUp.bookings.add(
+        //   Booking(
+        //     date: '24/12/2022',
+        //     dropOffName: _dropOffName.text,
+        //     labours: _labourNumber,
+        //     loads: _loadsNumber,
+        //     dropOffPhone: _dropOffNumber.text,
+        //     dropoffadress: _dropOffAdress,
+        //     itemsToBeDelivered: _specialNote.text,
+        //     paymentType: 'Online Payment',
+        //     pickUpCellphone: _pickUpNumber.text,
+        //     pickUpName: _pickUpname.text,
+        //     pickupadress: _pickUpAdress,
+        //     status: 'Awaiting Driver',
+        //     trackNumber: 'DropT5903N12',
+        //     vehicle: _vehicleType,
+        //   ),
+        // );
         Navigator.push(
           context,
           MaterialPageRoute(

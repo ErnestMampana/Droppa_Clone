@@ -1,17 +1,19 @@
 import 'package:droppa_clone/LookUp/lookup.dart';
 import 'package:droppa_clone/LookUp/strings.dart';
+import 'package:droppa_clone/backend/classes/person.dart';
 import 'package:droppa_clone/screens/edit_itinenrary_screen.dart';
+import 'package:droppa_clone/screens/login_screen.dart';
 import 'package:droppa_clone/widgets/button.dart';
 import 'package:droppa_clone/widgets/vehicle_select.dart';
 import 'package:flutter/material.dart';
 
 class VehicleQuoteScreen extends StatefulWidget {
-  final double? kilometers;
+  final double? price;
   final String? pickUpAdress;
   final String? dropOffAdress;
   const VehicleQuoteScreen(
       {Key? key,
-      required this.kilometers,
+      required this.price,
       required this.pickUpAdress,
       required this.dropOffAdress})
       : super(key: key);
@@ -29,7 +31,7 @@ class _VehicleQuoteScreenState extends State<VehicleQuoteScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _totalPrice = (LookUp.basePrice * widget.kilometers!) + LookUp.minivanPrice;
+    _totalPrice = widget.price! + LookUp.minivanPrice;
     _vehicleType = 'Mini-Van';
   }
 
@@ -282,12 +284,14 @@ class _VehicleQuoteScreenState extends State<VehicleQuoteScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (_) => EditItineraryScreen(
-                          dropOffAdress: widget.dropOffAdress!,
-                          pickUpAdress: widget.pickUpAdress!,
-                          quotePrice: _totalPrice,
-                          vehicleType: _vehicleType,
-                        ),
+                        builder: (_) => userPersonalDetailsDTO == null
+                            ? const LoginScreen()
+                            : EditItineraryScreen(
+                                dropOffAdress: widget.dropOffAdress!,
+                                pickUpAdress: widget.pickUpAdress!,
+                                quotePrice: _totalPrice,
+                                vehicleType: _vehicleType,
+                              ),
                       ),
                     );
                   })
@@ -303,24 +307,19 @@ class _VehicleQuoteScreenState extends State<VehicleQuoteScreen> {
       _groupValue = item;
       if (item == 1) {
         _vehicleType = 'Mini-Van';
-        _totalPrice =
-            (LookUp.basePrice * widget.kilometers!) + LookUp.minivanPrice;
+        _totalPrice = widget.price! + LookUp.minivanPrice;
       } else if (item == 2) {
         _vehicleType = '1-ton';
-        _totalPrice =
-            (LookUp.basePrice * widget.kilometers!) + LookUp.oneTonVanPrice;
+        _totalPrice = widget.price! + LookUp.oneTonVanPrice;
       } else if (item == 3) {
         _vehicleType = '1.5-ton';
-        _totalPrice =
-            (LookUp.basePrice * widget.kilometers!) + LookUp.pointFivePrice;
+        _totalPrice = widget.price! + LookUp.pointFivePrice;
       } else if (item == 4) {
         _vehicleType = '4-ton';
-        _totalPrice =
-            (LookUp.basePrice * widget.kilometers!) + LookUp.fourTonTruckPrice;
+        _totalPrice = widget.price! + LookUp.fourTonTruckPrice;
       } else if (item == 5) {
         _vehicleType = '8-ton';
-        _totalPrice =
-            (LookUp.basePrice * widget.kilometers!) + LookUp.eightTonTruckPrice;
+        _totalPrice = widget.price! + LookUp.eightTonTruckPrice;
       }
     });
   }

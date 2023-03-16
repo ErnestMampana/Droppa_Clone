@@ -24,7 +24,7 @@ class Person with ChangeNotifier {
 
   factory Person.fromJson(Map<String, dynamic> json) {
     return Person(
-        userId : json['userid'], 
+        userId : json['userId'], 
         userName:json['userName'], 
         celphoneNumber:json['celphoneNumber'], 
         walletBalance : json['walletBalance'], 
@@ -34,6 +34,6 @@ class Person with ChangeNotifier {
         );
   }
 
-// double get balance => walletBalance!;
+//double get balance => walletBalance!;
   notifyListeners();
 }

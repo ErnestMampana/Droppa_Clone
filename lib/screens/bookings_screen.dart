@@ -59,7 +59,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
               itemBuilder: (context, index) {
                 // if () {
                 return _bookingItem(
-                  Booking.fromJson(
+                  BookingItem.fromJson(
                     _bookings[index],
                   ),
                 );
@@ -68,7 +68,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
     );
   }
 
-  Widget _bookingItem(Booking bookingData) {
+  Widget _bookingItem(BookingItem bookingData) {
     return Container(
       height: 250,
       width: 400,
