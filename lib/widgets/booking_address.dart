@@ -5,13 +5,21 @@ import 'package:flutter/src/widgets/framework.dart';
 class BookingAddress extends StatelessWidget {
   final String title;
   final Color iconcolor;
+  final String address;
+  final String name;
+  final String contact;
   const BookingAddress(
-      {super.key, required this.title, required this.iconcolor});
+      {super.key,
+      required this.title,
+      required this.iconcolor,
+      required this.address,
+      required this.name,
+      required this.contact});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(10),
+      padding: const EdgeInsets.all(10),
       child: Column(
         children: [
           Padding(
@@ -19,8 +27,8 @@ class BookingAddress extends StatelessWidget {
             child: Align(
               alignment: Alignment.topLeft,
               child: Text(
-                '$title',
-                style: TextStyle(
+                title,
+                style: const TextStyle(
                   color: Colors.blue,
                   fontWeight: FontWeight.bold,
                 ),
@@ -39,8 +47,7 @@ class BookingAddress extends StatelessWidget {
                 size: 35,
               ),
               Expanded(
-                child: Text(
-                    '852 kobus st,Silverton, Pretoria, 0184, South Africa'),
+                child: Text(address),
               ),
             ],
           ),
@@ -51,10 +58,10 @@ class BookingAddress extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               Row(
-                children: [Icon(Icons.person), Text('Ernest Mampana')],
+                children: [Icon(Icons.person), Text(name)],
               ),
               Row(
-                children: [Icon(Icons.call), Text('0976656083')],
+                children: [Icon(Icons.call), Text(contact)],
               ),
             ],
           )

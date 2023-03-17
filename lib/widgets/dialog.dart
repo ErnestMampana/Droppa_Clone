@@ -2,6 +2,41 @@ import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class DialogUtils {
+  static void showErrorMessage(BuildContext context, String errorMessage,
+      {Color backColor = Colors.blue,
+      Color textColor = Colors.black,
+      Function? onOk}) {
+    AlertDialog alert = AlertDialog(
+      backgroundColor: backColor,
+      content: Text(
+        errorMessage,
+        style: const TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+        ),
+        //style: TextStyle(fontFamily: GlobalUI.FONT_MEDIUM, color: textColor),
+      ),
+    );
+    // show the dialog
+    if (onOk != null) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return alert;
+        },
+      ).then((val) {
+        onOk();
+      });
+    } else {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return alert;
+        },
+      );
+    }
+  }
+
   static void showLoading(BuildContext context) {
     showDialog(
         context: context,

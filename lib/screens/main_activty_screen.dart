@@ -12,9 +12,11 @@ import 'package:droppa_clone/screens/rental_service_screen.dart';
 import 'package:droppa_clone/screens/vehlicle_quote_screen.dart';
 import 'package:droppa_clone/screens/wallet_screen.dart';
 import 'package:droppa_clone/widgets/button.dart';
+import 'package:droppa_clone/widgets/dialog.dart';
 import 'package:droppa_clone/widgets/drawer.dart';
 import 'package:droppa_clone/widgets/vehicle_select.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:provider/provider.dart';
 
 class MainActivityScreen extends StatefulWidget {
@@ -31,7 +33,7 @@ class _MainActivityScreenState extends State<MainActivityScreen> {
   void initState() {
     super.initState();
     _numberOfBookings = LookUp.bookings.length;
-    userPersonalDetailsDTO;
+    //userPersonalDetailsDTO;
   }
 
   @override
@@ -58,7 +60,7 @@ class _MainActivityScreenState extends State<MainActivityScreen> {
                 Container(
                   //margin: const EdgeInsets.all(10.0),
                   //alignment: Alignment.centerLeft,
-                  width: 370,
+                  width: 400,
                   padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
                     boxShadow: [
@@ -109,12 +111,12 @@ class _MainActivityScreenState extends State<MainActivityScreen> {
                               ),
                               GestureDetector(
                                 onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (_) => const BookingScreen(),
-                                    ),
-                                  );
+                                  // Navigator.push(
+                                  //   context,
+                                  //   MaterialPageRoute(
+                                  //     builder: (_) => const BookingScreen(),
+                                  //   ),
+                                  // );
                                 },
                                 child: Text(
                                   Strings.noBooking,
@@ -139,19 +141,28 @@ class _MainActivityScreenState extends State<MainActivityScreen> {
                               ),
                               InkWell(
                                 onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (_) => const BookingsScreen(),
-                                    ),
-                                  );
+                                  if (userPersonalDetailsDTO != null) {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (_) => const BookingsScreen(),
+                                      ),
+                                    );
+                                  } else {
+                                    DialogUtils.showErrorMessage(context,
+                                        "Log in to access your bookings");
+                                  }
                                 },
-                                child: Text(
-                                  '$_numberOfBookings',
-                                  style: const TextStyle(
-                                    fontSize: 11,
-                                    color: Colors.blue,
-                                  ),
+                                child: Consumer<AppData>(
+                                  builder: (context, value, child) {
+                                    return Text(
+                                      '${value.bookingCount}',
+                                      style: const TextStyle(
+                                        fontSize: 11,
+                                        color: Colors.blue,
+                                      ),
+                                    );
+                                  },
                                 ),
                               ),
                             ]),
@@ -182,12 +193,29 @@ class _MainActivityScreenState extends State<MainActivityScreen> {
                                   },
                                 ),
                                 onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (_) => const WalletScreen(),
-                                    ),
-                                  );
+                                  if (userPersonalDetailsDTO != null) {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (_) => const WalletScreen(),
+                                      ),
+                                    );
+                                  } else {
+                                    DialogUtils.showErrorMessage(context,
+                                        "Log in to access your wallet");
+                                  }
+                                  // void toastMessage(String text) {
+                                  //   Fluttertoast.showToast(
+                                  //     msg: text,
+                                  //     toastLength: Toast.LENGTH_LONG,
+                                  //     gravity: ToastGravity.BOTTOM,
+                                  //     backgroundColor: Colors.black,
+                                  //     textColor: Colors.white,
+                                  //     fontSize: 16.0,
+                                  //   );
+                                  // }
+
+                                  //DialogUtils.hideDialog(context);
                                 },
                               ),
                             ])
@@ -360,6 +388,21 @@ class _MainActivityScreenState extends State<MainActivityScreen> {
                     );
                   },
                 ),
+                TextButton(
+                onPressed: () {
+                  DatePicker.showDateTimePicker(context, showTitleActions: true,
+                      onChanged: (date) {
+                    print('======== change $date in time zone ' );
+                  }, onConfirm: (date) {
+                    print('confirm $date');
+                  },
+                      currentTime: DateTime(2008, 12, 31, 23, 12, 34),
+                      locale: LocaleType.en);
+                },
+                child: Text(
+                  'show date time picker (Dutch)',
+                  style: TextStyle(color: Colors.blue),
+                )),
               ],
             ),
           ),

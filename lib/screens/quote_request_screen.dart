@@ -1,6 +1,7 @@
 // ignore_for_file: sized_box_for_whitespace, use_build_context_synchronously
 
 import 'package:droppa_clone/LookUp/lookup.dart';
+import 'package:droppa_clone/backend/classes/person.dart';
 import 'package:droppa_clone/backend/services/user_service.dart';
 import 'package:droppa_clone/screens/parcel_screen.dart';
 import 'package:droppa_clone/screens/rental_service_screen.dart';
@@ -26,6 +27,7 @@ class _QuoteRequestScreenState extends State<QuoteRequestScreen> {
   final UserService _userService = UserService();
 
   //Text Controllers
+  final _dropOffAddressController = TextEditingController();
   final TextEditingController _pickBuildingNumberController =
       TextEditingController();
   final TextEditingController _pickCompanyNameTextController =
@@ -348,9 +350,10 @@ class _QuoteRequestScreenState extends State<QuoteRequestScreen> {
                               Container(
                                 width: 225,
                                 height: 30,
-                                child: const TextField(
+                                child: TextField(
                                   enabled: false,
-                                  decoration: InputDecoration(
+                                  controller: _dropOffAddressController,
+                                  decoration: const InputDecoration(
                                     suffixIcon: Icon(Icons.search),
                                     border: OutlineInputBorder(),
                                   ),
@@ -395,8 +398,12 @@ class _QuoteRequestScreenState extends State<QuoteRequestScreen> {
                                       });
                                     },
                                     onPress: () {
-                                      _dropOffAdress.text =
-                                          "Unit ${_dropUnitNumberController.text} Building ${_dropBuildingNumberController.text} ${_dropSuburbTextController.text} ${_dropStreetTextController.text} ${_dropProvinceTextController.text}";
+                                      setState(() {
+                                        _dropOffAdress.text =
+                                            "Unit ${_dropUnitNumberController.text} Building ${_dropBuildingNumberController.text} ${_dropSuburbTextController.text} ${_dropStreetTextController.text} ${_dropProvinceTextController.text}";
+                                        _dropOffAddressController.text =
+                                            _dropOffAdress.text;
+                                      });
                                       print(_dropOffAdress.text);
                                       Navigator.pop(context);
                                     },

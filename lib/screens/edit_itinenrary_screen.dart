@@ -1,6 +1,9 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:droppa_clone/LookUp/lookup.dart';
 import 'package:droppa_clone/backend/classes/booking.dart';
 import 'package:droppa_clone/backend/classes/person.dart';
+import 'package:droppa_clone/backend/providers/app_data.dart';
 import 'package:droppa_clone/backend/services/user_service.dart';
 import 'package:droppa_clone/screens/main_activty_screen.dart';
 import 'package:droppa_clone/widgets/button.dart';
@@ -12,6 +15,11 @@ import 'package:flutter/material.dart';
 import 'dart:io' show Platform;
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
+
+import '../widgets/dialog.dart';
 
 class EditItineraryScreen extends StatefulWidget {
   final double quotePrice;
@@ -30,7 +38,6 @@ class EditItineraryScreen extends StatefulWidget {
 }
 
 class _EditItineraryScreenState extends State<EditItineraryScreen> {
-
   final UserService _userService = UserService();
   //controllers
   final TextEditingController _pickUpname = TextEditingController();
@@ -48,6 +55,7 @@ class _EditItineraryScreenState extends State<EditItineraryScreen> {
   bool _pickNumberValid = false;
   int _labourNumber = 1;
   int _loadsNumber = 1;
+  String? _bookingDate;
 
   late double _totalPrice;
   final double _labourPrice = 0.0;
@@ -55,6 +63,8 @@ class _EditItineraryScreenState extends State<EditItineraryScreen> {
   late String _vehicleType;
   late String _dropOffAdress;
   late String _pickUpAdress;
+  
+  String? _bookingTime;
 
   @override
   void initState() {
@@ -116,7 +126,7 @@ class _EditItineraryScreenState extends State<EditItineraryScreen> {
                 title: 'Proceed to payment',
                 radisNumber: 5,
                 onTaped: () {
-                  _handlePriceCalculations();
+                  _handleCreateBooking();
                 },
               ),
             ],
@@ -224,16 +234,40 @@ class _EditItineraryScreenState extends State<EditItineraryScreen> {
                 ),
               ],
             ),
-            const DateAndTime(
-              icon: Icons.calendar_month_outlined,
-              title: 'Date',
+            GestureDetector(
+              onTap: () {
+                DatePicker.showDatePicker(context,
+                    showTitleActions: true,
+                    // minTime: DateTime(2018, 3, 5),
+                    // maxTime: DateTime(2019, 6, 7), 
+                    onConfirm: (date) {
+                  setState(() {
+                    //formattedDate = 
+                    _bookingDate ="${date.year}-${date.month}-${date.day}";
+                  });
+                }, currentTime: DateTime.now(), locale: LocaleType.en);
+              },
+              child: DateAndTime(
+                icon: Icons.calendar_month_outlined,
+                title: _bookingDate == null ? 'Date' : '$_bookingDate',
+              ),
             ),
             const SizedBox(
               height: 10,
             ),
-            const DateAndTime(
-              icon: Icons.watch_later_outlined,
-              title: 'Time',
+            GestureDetector(
+              onTap: () {
+                DatePicker.showTime12hPicker(context, showTitleActions: true,
+                     onConfirm: (date) {
+                  setState(() {
+                    _bookingTime = date..toString();
+                  });
+                }, currentTime: DateTime.now());
+              },
+              child:  DateAndTime(
+                icon: Icons.watch_later_outlined,
+                title: _bookingTime == null ? 'Time' : '${_bookingTime}',
+              ),
             ),
             PickUpAndDrop(
               isSwitched: _isPickSwitched,
@@ -246,14 +280,16 @@ class _EditItineraryScreenState extends State<EditItineraryScreen> {
               onChanged: (isSwitched) {
                 setState(() {
                   _isPickSwitched = isSwitched!;
+                  _pickNameValid = false;
+                  _pickNumberValid = false;
                   if (_isPickSwitched) {
                     _pickUpNumber.text =
                         userPersonalDetailsDTO!.celphoneNumber!;
                     _pickUpname.text =
                         "${userPersonalDetailsDTO!.userName} ${userPersonalDetailsDTO!.surname}";
                   } else {
-                    _pickUpname.text = '';
-                    _pickUpNumber.text = '';
+                    _dropOffNumber.text = '';
+                    _dropOffName.text = '';
                   }
                 });
               },
@@ -303,6 +339,8 @@ class _EditItineraryScreenState extends State<EditItineraryScreen> {
               onChanged: (isSwitched) {
                 setState(() {
                   _dropOffSwitch = isSwitched!;
+                  _dropOffNameValid = false;
+                  _dropOffNumberValid = false;
                   if (_dropOffSwitch) {
                     _dropOffNumber.text =
                         userPersonalDetailsDTO!.celphoneNumber!;
@@ -426,7 +464,8 @@ class _EditItineraryScreenState extends State<EditItineraryScreen> {
     );
   }
 
-  _handlePriceCalculations() {
+  bool _handlePriceCalculations() {
+    bool valid = false;
     setState(() {
       if (_pickUpNumber.text.isEmpty &&
           _pickUpname.text.isEmpty &&
@@ -445,55 +484,43 @@ class _EditItineraryScreenState extends State<EditItineraryScreen> {
       } else if (_dropOffNumber.text.isEmpty) {
         _dropOffNumberValid = true;
       } else {
-
-        Map<String, dynamic> booking = {
-          "userId": userPersonalDetailsDTO!.userId!,
-          "pickupadress": "806 Mohlitsi Street Soweto 1203 Gauteng",
-          "dropoffadress": "5099/1 Montjane Street Tembisa 1632 Gauteng",
-          "date": "2023-03-16",
-          "vehicle": "Mini_Van",
-          "paymentType": "paymentType",
-          "loads": 1,
-          "labours": 2,
-          "itemsToBeDelivered": "Bar fridge and micro-oven",
-          "pickUpName": "Ernest Mampana",
-          "pickUpCellphone": "0723568069",
-          "dropOffName": "Ernest Mampana",
-          "dropOffPhone": "0723568069",
-          "price": 554,
-          "time": "12:45"
-        };
-
-        _userService.createBooking(booking);
-        // LookUp.bookings.add(
-        //   Booking(
-        //     date: '24/12/2022',
-        //     dropOffName: _dropOffName.text,
-        //     labours: _labourNumber,
-        //     loads: _loadsNumber,
-        //     dropOffPhone: _dropOffNumber.text,
-        //     dropoffadress: _dropOffAdress,
-        //     itemsToBeDelivered: _specialNote.text,
-        //     paymentType: 'Online Payment',
-        //     pickUpCellphone: _pickUpNumber.text,
-        //     pickUpName: _pickUpname.text,
-        //     pickupadress: _pickUpAdress,
-        //     status: 'Awaiting Driver',
-        //     trackNumber: 'DropT5903N12',
-        //     vehicle: _vehicleType,
-        //   ),
-        // );
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => const MainActivityScreen(),
-          ),
-        );
+        valid = true;
       }
     });
 
-    // Map<Booking> bookingDetails = {
+    return valid;
+  }
 
-    // };
+  _handleCreateBooking() async {
+    if (_handlePriceCalculations()) {
+      DialogUtils.showLoading(context);
+      Map<String, dynamic> booking = {
+        "userId": userPersonalDetailsDTO!.userId!,
+        "pickupadress": _pickUpAdress,
+        "dropoffadress": _dropOffAdress,
+        "date": "2023-03-16",
+        "vehicle": _vehicleType,
+        "paymentType": "paymentType",
+        "loads": _loadsNumber,
+        "labours": _labourNumber,
+        "itemsToBeDelivered": _specialNote.text,
+        "pickUpName": _pickUpname.text,
+        "pickUpCellphone": _pickUpNumber.text,
+        "dropOffName": _dropOffName.text,
+        "dropOffPhone": _dropOffNumber.text,
+        "bookingPrice": _totalPrice,
+        "time": "12:45",
+        "isPaid": true,
+      };
+      await _userService.createBooking(booking);
+      context.read<AppData>().refreshBookingCount();
+      DialogUtils.hideDialog(context);
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => const MainActivityScreen(),
+        ),
+      );
+    }
   }
 }

@@ -190,13 +190,13 @@ class _BookingsScreenState extends State<BookingsScreen> {
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
+            children: const [
               Text('2022-12-24'),
               Text('2022-12-24'),
               Text('11:34 AM'),
             ],
           ),
-          Divider(
+          const Divider(
             thickness: 2,
           ),
           const SizedBox(
@@ -205,13 +205,18 @@ class _BookingsScreenState extends State<BookingsScreen> {
           InkWell(
             child: Text(
               bookingData.status!,
-              style: TextStyle(fontSize: 17, color: Colors.blue),
+              style: const TextStyle(fontSize: 17, color: Colors.blue),
             ),
             onTap: () {
+              FocusScopeNode currentFocus = FocusScope.of(context);
+
+              if (!currentFocus.hasPrimaryFocus) {
+                currentFocus.unfocus();
+              }
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (_) => BookingScreen(),
+                  builder: (_) => BookingScreen(booking: bookingData),
                 ),
               );
             },

@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:ffi';
 
 import 'package:droppa_clone/backend/classes/booking.dart';
 import 'package:droppa_clone/backend/classes/person.dart';
@@ -52,7 +51,9 @@ class UserService {
       userPersonalDetailsDTO = Person.fromJson(jsonDecode(successResponse));
       return Person.fromJson(jsonDecode(successResponse));
     } else {
-      throw Exception(response.body);
+      var errorResponse = jsonDecode(response.body);
+      String message = errorResponse['message'];
+      throw Exception(message);
     }
   }
 
@@ -83,11 +84,24 @@ class UserService {
       var successResponse = response.body;
 
       List<dynamic> responseData = jsonDecode(successResponse);
+      LookUp.bookings.clear();
       for (var element in responseData) { 
         LookUp.bookings.add(Booking.fromJson(element));
       }
-      List<Booking> bookings =[];
+      List<Booking> bookings = [];
       return bookings;
+    } else {
+      throw Exception(response.body);
+    }
+  }
+
+  Future<Booking> cancelBooking(String? bookingId, String? userId)async {
+    var response = await _webApiService.cancelBooking(userId,bookingId);
+    if (response.statusCode == 200) {
+      await getAllBookings(userId);
+      var successResponse = response.body;
+      var booking = Booking.fromJson(jsonDecode(successResponse));
+      return booking;
     } else {
       throw Exception(response.body);
     }

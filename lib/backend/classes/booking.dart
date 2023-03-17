@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 
+BookingItem? book;
+
 class Booking with ChangeNotifier {
   final String? userId;
+  final String? bookingId;
   final String? pickupadress;
   final String? dropoffadress;
   final String? date;
@@ -21,6 +24,7 @@ class Booking with ChangeNotifier {
 
   Booking({
     this.userId,
+    this.bookingId,
     this.pickupadress,
     this.dropoffadress,
     this.date,
@@ -42,6 +46,7 @@ class Booking with ChangeNotifier {
   Map<String, dynamic> toMap() {
     return {
       'userId' : userId,
+      'bookingId' : bookingId,
       'pickupadress': pickupadress,
       'dropoffadress': dropoffadress,
       'date': date,
@@ -64,6 +69,7 @@ class Booking with ChangeNotifier {
   factory Booking.fromJson(Map<String, dynamic> json) {
     return Booking(
       userId : json['userId'],
+      bookingId : json['bookingId'],
       pickupadress: json['pickUpAddess'],
       dropoffadress: json['dropOffAdress'],
       date: json['bookingDate'],
@@ -79,13 +85,14 @@ class Booking with ChangeNotifier {
       pickUpCellphone: json['dropDetails']['pickUpContact'],
       dropOffName: json['dropDetails']['dropOffNames'],
       dropOffPhone: json['dropDetails']['dropOffContact'],
-      bookingPrice: json['bookingPrice']
+      bookingPrice: json['price']
     );
   }
 }
 
 class BookingItem with ChangeNotifier {
   final String? userId;
+  final String? bookingId;
   final String? pickupadress;
   final String? dropoffadress;
   final String? date;
@@ -105,6 +112,7 @@ class BookingItem with ChangeNotifier {
 
   BookingItem({
     this.userId,
+    this.bookingId,
     this.pickupadress,
     this.dropoffadress,
     this.date,
@@ -126,6 +134,7 @@ class BookingItem with ChangeNotifier {
   Map<String, dynamic> toMap() {
     return {
       'userId' : userId,
+      'bookingId' : bookingId,
       'pickupadress': pickupadress,
       'dropoffadress': dropoffadress,
       'date': date,
@@ -148,6 +157,7 @@ class BookingItem with ChangeNotifier {
   factory BookingItem.fromJson(Map<String, dynamic> json) {
     return BookingItem(
       userId : json['userId'],
+      bookingId : json['bookingId'],
       pickupadress: json['pickupadress'],
       dropoffadress: json['dropoffadress'],
       date: json['date'],

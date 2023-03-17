@@ -59,6 +59,17 @@ class WebApiDataService {
     return await httpService.get(url);
   }
 
+  Future<Response> logOut() async{
+    var url = "$baseUrl/auth/logout";
+    return await httpService.get(url);
+  }
+
+  Future<Response> cancelBooking(String? userId, String? bookingId) async {
+    var url = "$baseUrl/booking/cancelBooking/$bookingId?userId=$userId";
+    //var requestBody = jsonEncode(userPersonalDetails);
+    return await httpService.put(url, null);
+  }
+
   // Future<BaseApiResponse> updatePersonalDetails(
   //     Map<String, dynamic> userPersonalDetails, String? userId) async {
   //   var url = "$baseUrl/$apiBaseSagment/Candidate/$userId/Update";
