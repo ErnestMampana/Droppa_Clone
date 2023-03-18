@@ -44,7 +44,7 @@
 
 // class _MyAppState extends State<MyApp> {
 //   Mode _mode = Mode.overlay;
-//   //const kGoogleApiKey = "API_KEY";
+//   static const kGoogleApiKey = "AIzaSyDW5ueY7LF-y4-gsJ3dHUOaOvRKKrRz8sE";
 
 //   @override
 //   Widget build(BuildContext context) {
@@ -87,13 +87,13 @@
 //         ],
 //         onChanged: (m) {
 //           setState(() {
-//             _mode = m;
+//             //_mode = m;
 //           });
 //         },
 //       );
 
 //   void onError(PlacesAutocompleteResponse response) {
-//     homeScaffoldKey.currentState.showSnackBar(
+//     ScaffoldMessenger.of(context).showSnackBar(
 //       SnackBar(content: Text(response.errorMessage!)),
 //     );
 //   }
@@ -135,9 +135,10 @@
 //     final lat = detail.result.geometry!.location.lat;
 //     final lng = detail.result.geometry!.location.lng;
 
-//     scaffold.showSnackBar(
-//       SnackBar(content: Text("${p.description} - $lat/$lng")),
-//     );
+// // ScaffoldMessenger.of(context).showSnackBar(
+    
+// //       SnackBar(content: Text("${p.description} - $lat/$lng")),
+// //     );
 //   }
 // }
 
@@ -176,20 +177,21 @@
 //   @override
 //   void onResponseError(PlacesAutocompleteResponse response) {
 //     super.onResponseError(response);
-//     searchScaffoldKey.currentState.showSnackBar(
+//     ScaffoldMessenger.of(context).showSnackBar(
+   
 //       SnackBar(content: Text(response.errorMessage!)),
 //     );
 //   }
 
-//   @override
-//   void onResponse(PlacesAutocompleteResponse response) {
-//     super.onResponse(response);
-//     if (response != null && response.predictions.isNotEmpty) {
-//       searchScaffoldKey.currentState.showSnackBar(
-//         SnackBar(content: Text("Got answer")),
-//       );
-//     }
-//   }
+//   // @override
+//   // void onResponse(PlacesAutocompleteResponse response) {
+//   //   super.onResponse(response);
+//   //   if (response != null && response.predictions.isNotEmpty) {
+//   //     ScaffoldMessenger.of(context).showSnackBar(
+//   //       SnackBar(content: Text("Got answer")),
+//   //     );
+//   //   }
+//   // }
 // }
 
 // class Uuid {

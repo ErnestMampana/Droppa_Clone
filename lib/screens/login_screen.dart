@@ -27,6 +27,14 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passordController = TextEditingController();
 
+  
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passordController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -202,6 +210,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   _handleLogin() async {
     try {
+      
       DialogUtils.showLoading(context);
       Map<String, dynamic> userdetails = {
         'username': _emailController.text,
@@ -216,6 +225,7 @@ class _LoginScreenState extends State<LoginScreen> {
         context.read<AppData>().refreshBookingCount();
         DialogUtils.hideDialog(context);
         Navigator.pop(context);
+        
       }
     } catch (e) {
       DialogUtils.hideDialog(context);
@@ -223,10 +233,4 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
-  @override
-  void dispose() {
-    _emailController.dispose();
-    _passordController.dispose();
-    super.dispose();
-  }
 }

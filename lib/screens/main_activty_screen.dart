@@ -388,21 +388,6 @@ class _MainActivityScreenState extends State<MainActivityScreen> {
                     );
                   },
                 ),
-                TextButton(
-                onPressed: () {
-                  DatePicker.showDateTimePicker(context, showTitleActions: true,
-                      onChanged: (date) {
-                    print('======== change $date in time zone ' );
-                  }, onConfirm: (date) {
-                    print('confirm $date');
-                  },
-                      currentTime: DateTime(2008, 12, 31, 23, 12, 34),
-                      locale: LocaleType.en);
-                },
-                child: Text(
-                  'show date time picker (Dutch)',
-                  style: TextStyle(color: Colors.blue),
-                )),
               ],
             ),
           ),

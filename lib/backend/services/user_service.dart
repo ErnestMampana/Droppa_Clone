@@ -67,12 +67,13 @@ class UserService {
     }
   }
 
-  Future<void> createBooking(Map<String, dynamic> booking) async {
+  Future<Booking> createBooking(Map<String, dynamic> booking) async {
     var response = await _webApiService.createBooking(booking);
     if (response.statusCode == 200) {
       var successResponse = response.body;
       var booking = Booking.fromJson(jsonDecode(successResponse));
       LookUp.bookings.add(booking);
+      return booking;
     } else {
       throw Exception(response.body);
     }
@@ -102,6 +103,28 @@ class UserService {
       var successResponse = response.body;
       var booking = Booking.fromJson(jsonDecode(successResponse));
       return booking;
+    } else {
+      throw Exception(response.body);
+    }
+  }
+
+  Future<Booking> makeBookingPayment(Map<String, dynamic> paymentObject) async{
+      var response = await _webApiService.makeBookingPayment(paymentObject);
+    if (response.statusCode == 200) {
+      await getAllBookings(userPersonalDetailsDTO!.userId);
+      var successResponse = response.body;
+      var booking = Booking.fromJson(jsonDecode(successResponse));
+      return booking;
+    } else {
+      throw Exception(response.body);
+    }
+  }
+
+  Future<double> applyPromoCode(Map<String, dynamic> promoData) async {
+    var response = await _webApiService.applyPromoCode(promoData);
+    if (response.statusCode == 200) {
+      var successResponse = response.body;
+      return jsonDecode(successResponse);
     } else {
       throw Exception(response.body);
     }

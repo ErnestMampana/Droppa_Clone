@@ -59,7 +59,7 @@ class WebApiDataService {
     return await httpService.get(url);
   }
 
-  Future<Response> logOut() async{
+  Future<Response> logOut() async {
     var url = "$baseUrl/auth/logout";
     return await httpService.get(url);
   }
@@ -68,6 +68,18 @@ class WebApiDataService {
     var url = "$baseUrl/booking/cancelBooking/$bookingId?userId=$userId";
     //var requestBody = jsonEncode(userPersonalDetails);
     return await httpService.put(url, null);
+  }
+
+  makeBookingPayment(Map<String, dynamic> paymentObject) async {
+    var url = "$baseUrl/booking/makePayment";
+    var requestBody = jsonEncode(paymentObject);
+    return await httpService.put(url, requestBody);
+  }
+
+  Future<Response> applyPromoCode(Map<String, dynamic> promoData) async {
+    var url = "$baseUrl/booking/applypromocode";
+    var requestBody = jsonEncode(promoData);
+    return await httpService.post(url, requestBody);
   }
 
   // Future<BaseApiResponse> updatePersonalDetails(

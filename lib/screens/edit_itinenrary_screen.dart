@@ -6,9 +6,11 @@ import 'package:droppa_clone/backend/classes/person.dart';
 import 'package:droppa_clone/backend/providers/app_data.dart';
 import 'package:droppa_clone/backend/services/user_service.dart';
 import 'package:droppa_clone/screens/main_activty_screen.dart';
+import 'package:droppa_clone/screens/payment_screen.dart';
 import 'package:droppa_clone/widgets/button.dart';
 import 'package:droppa_clone/widgets/counter.dart';
 import 'package:droppa_clone/widgets/date_time.dart';
+import 'package:droppa_clone/widgets/payment_method.dart';
 import 'package:droppa_clone/widgets/pickdrop.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -63,7 +65,7 @@ class _EditItineraryScreenState extends State<EditItineraryScreen> {
   late String _vehicleType;
   late String _dropOffAdress;
   late String _pickUpAdress;
-  
+
   String? _bookingTime;
 
   @override
@@ -236,16 +238,16 @@ class _EditItineraryScreenState extends State<EditItineraryScreen> {
             ),
             GestureDetector(
               onTap: () {
-                DatePicker.showDatePicker(context,
-                    showTitleActions: true,
-                    // minTime: DateTime(2018, 3, 5),
-                    // maxTime: DateTime(2019, 6, 7), 
+                DatePicker.showDateTimePicker(context, showTitleActions: true,
                     onConfirm: (date) {
                   setState(() {
-                    //formattedDate = 
-                    _bookingDate ="${date.year}-${date.month}-${date.day}";
+                    _bookingDate = '${date.year}-${date.month}-${date.day}';
+                    _bookingTime = '${date.hour}:${date.minute}';
                   });
-                }, currentTime: DateTime.now(), locale: LocaleType.en);
+                },
+                    currentTime: DateTime.now(),
+                    //currentTime: DateTime(2008, 12, 31, 23, 12, 34),
+                    locale: LocaleType.en);
               },
               child: DateAndTime(
                 icon: Icons.calendar_month_outlined,
@@ -255,19 +257,9 @@ class _EditItineraryScreenState extends State<EditItineraryScreen> {
             const SizedBox(
               height: 10,
             ),
-            GestureDetector(
-              onTap: () {
-                DatePicker.showTime12hPicker(context, showTitleActions: true,
-                     onConfirm: (date) {
-                  setState(() {
-                    _bookingTime = date..toString();
-                  });
-                }, currentTime: DateTime.now());
-              },
-              child:  DateAndTime(
-                icon: Icons.watch_later_outlined,
-                title: _bookingTime == null ? 'Time' : '${_bookingTime}',
-              ),
+            DateAndTime(
+              icon: Icons.watch_later_outlined,
+              title: _bookingTime == null ? 'Time' : '${_bookingTime}',
             ),
             PickUpAndDrop(
               isSwitched: _isPickSwitched,
@@ -498,7 +490,7 @@ class _EditItineraryScreenState extends State<EditItineraryScreen> {
         "userId": userPersonalDetailsDTO!.userId!,
         "pickupadress": _pickUpAdress,
         "dropoffadress": _dropOffAdress,
-        "date": "2023-03-16",
+        "date": "2023-10-25",
         "vehicle": _vehicleType,
         "paymentType": "paymentType",
         "loads": _loadsNumber,
@@ -509,16 +501,16 @@ class _EditItineraryScreenState extends State<EditItineraryScreen> {
         "dropOffName": _dropOffName.text,
         "dropOffPhone": _dropOffNumber.text,
         "bookingPrice": _totalPrice,
-        "time": "12:45",
+        "time": _bookingTime,
         "isPaid": true,
       };
-      await _userService.createBooking(booking);
+      var response = await _userService.createBooking(booking);
       context.read<AppData>().refreshBookingCount();
       DialogUtils.hideDialog(context);
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (_) => const MainActivityScreen(),
+          builder: (_) => PaymentScreen(price: _totalPrice,bookingId: response.bookingId!),
         ),
       );
     }

@@ -227,70 +227,70 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
-  // _handleSignUp() async {
-  //   bool strongPassword = false;
-
-  //   String pattern =
-  //       r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$';
-  //   RegExp regExp = RegExp(pattern);
-  //   strongPassword = regExp.hasMatch(_passwordController.text);
-  //   if (strongPassword) {
-  //     if (_passwordController.text == _confirmPasswordController.text) {
-  //       DialogUtils.showLoading(context);
-  //       Map<String, dynamic> userPersonalDetails = {
-  //         'userName': _userNameController.text,
-  //         'surname': _userSurnameController.text,
-  //         'celphone': _cellphoneNumberController.text,
-  //         'email': _emailController.text,
-  //         'password': _passwordController.text
-  //       };
-  //       var response =
-  //           await _userService.createAccount(userPersonalDetails);
-  //       //Map<String, dynamic> map = json.decode(response.body);
-  //       DialogUtils.hideDialog(context);
-  //       if (response == "") {
-  //         Navigator.push(
-  //           context,
-  //           MaterialPageRoute(
-  //             builder: (_) => const OtpScreen(),
-  //           ),
-  //         );
-  //       } else {
-  //         //print("=========================== : " + map["message"]);
-  //       }
-  //     }
-  //   }
-
-  //   // For firebase connection
-  //   // Map<String, dynamic> userDetails = {
-  //   //   'email': 'ernest.mampana@gmail.com',
-  //   //   'password': 'thatomohlala',
-  //   //   'returnSecureToken': true
-  //   // };
-  //   // await _authentication.signUp(userDetails);
-  // }
-
   _handleSignUp() async {
-    DialogUtils.showLoading(context);
-    Map<String, dynamic> userPersonalDetails = {
-      'userName': "Ernest",
-      'surname': "Mampana",
-      'cellphone': "0723568069",
-      'email': "ernest@gmail.com",
-      'password': "Th@7!to06"
-    };
+    bool strongPassword = false;
 
-    var response = await _userService.createAccount(userPersonalDetails);
-
-    DialogUtils.hideDialog(context);
-
-    if (response == "") {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (_) => const OtpScreen(),
-        ),
-      );
+    String pattern =
+        r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$';
+    RegExp regExp = RegExp(pattern);
+    strongPassword = regExp.hasMatch(_passwordController.text);
+    if (strongPassword) {
+      if (_passwordController.text == _confirmPasswordController.text) {
+        DialogUtils.showLoading(context);
+        Map<String, dynamic> userPersonalDetails = {
+          'userName': _userNameController.text,
+          'surname': _userSurnameController.text,
+          'celphone': _cellphoneNumberController.text,
+          'email': _emailController.text,
+          'password': _passwordController.text
+        };
+        var response =
+            await _userService.createAccount(userPersonalDetails);
+        //Map<String, dynamic> map = json.decode(response.body);
+        DialogUtils.hideDialog(context);
+        if (response == "") {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => const OtpScreen(),
+            ),
+          );
+        } else {
+          //print("=========================== : " + map["message"]);
+        }
+      }
     }
+
+    // For firebase connection
+    // Map<String, dynamic> userDetails = {
+    //   'email': 'ernest.mampana@gmail.com',
+    //   'password': 'thatomohlala',
+    //   'returnSecureToken': true
+    // };
+    // await _authentication.signUp(userDetails);
   }
+
+  // _handleSignUp() async {
+  //   DialogUtils.showLoading(context);
+  //   Map<String, dynamic> userPersonalDetails = {
+  //     'userName': "Ernest",
+  //     'surname': "Mampana",
+  //     'cellphone': "0723568069",
+  //     'email': "ernest@gmail.com",
+  //     'password': "Th@7!to06"
+  //   };
+
+  //   var response = await _userService.createAccount(userPersonalDetails);
+
+  //   DialogUtils.hideDialog(context);
+
+  //   if (response == "") {
+  //     Navigator.push(
+  //       context,
+  //       MaterialPageRoute(
+  //         builder: (_) => const OtpScreen(),
+  //       ),
+  //     );
+  //   }
+  // }
 }

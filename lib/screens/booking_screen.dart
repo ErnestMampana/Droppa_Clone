@@ -2,6 +2,8 @@
 import 'package:droppa_clone/backend/providers/app_data.dart';
 import 'package:droppa_clone/backend/services/user_service.dart';
 import 'package:droppa_clone/screens/bookings_screen.dart';
+import 'package:droppa_clone/screens/main_activty_screen.dart';
+import 'package:droppa_clone/screens/payment_screen.dart';
 import 'package:droppa_clone/widgets/dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
@@ -110,22 +112,28 @@ class _BookingScreenState extends State<BookingScreen> {
                 ),
                 MaterialButton(
                   onPressed: () {
-                    //_handleSignUp();
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //     builder: (_) => const LoginScreen(),
-                    //   ),
-                    // );
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) =>
+                            widget.booking.status == 'AWAITING_PAYMENT'
+                                ? PaymentScreen(
+                                    price: widget.booking.bookingPrice!,
+                                    bookingId: widget.booking.bookingId!)
+                                : const MainActivityScreen(),
+                      ),
+                    );
                   },
                   color: Colors.blue,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8)),
                   elevation: 0,
                   minWidth: 180,
-                  child: const Text(
-                    'Update date',
-                    style: TextStyle(
+                  child: Text(
+                    widget.booking.status == 'AWAITING_PAYMENT'
+                        ? 'Make Payment'
+                        : 'Update date',
+                    style: const TextStyle(
                       color: Colors.white,
                     ),
                   ),

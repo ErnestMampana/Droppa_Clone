@@ -340,26 +340,27 @@ class _QuoteRequestScreenState extends State<QuoteRequestScreen> {
                           height: 20,
                         ),
                         Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              const Icon(
-                                Icons.my_location_outlined,
-                                color: Color.fromARGB(255, 226, 13, 13),
-                                size: 30,
-                              ),
-                              Container(
-                                width: 225,
-                                height: 30,
-                                child: TextField(
-                                  enabled: false,
-                                  controller: _dropOffAddressController,
-                                  decoration: const InputDecoration(
-                                    suffixIcon: Icon(Icons.search),
-                                    border: OutlineInputBorder(),
-                                  ),
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            const Icon(
+                              Icons.my_location_outlined,
+                              color: Color.fromARGB(255, 226, 13, 13),
+                              size: 30,
+                            ),
+                            Container(
+                              width: 225,
+                              height: 30,
+                              child: TextField(
+                                enabled: false,
+                                controller: _dropOffAddressController,
+                                decoration: const InputDecoration(
+                                  suffixIcon: Icon(Icons.search),
+                                  border: OutlineInputBorder(),
                                 ),
                               ),
-                            ]),
+                            ),
+                          ],
+                        ),
                         const SizedBox(
                           height: 10,
                         ),
