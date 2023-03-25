@@ -176,18 +176,21 @@ class _RentalServiceScreenState extends State<RentalServiceScreen> {
                   ),
                   border: OutlineInputBorder(),
                 ),
-                items: LookUp.typesOfTruck
-                    .map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
+                items: LookUp.typesOfTruck.map<DropdownMenuItem<String>>(
+                  (String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  },
+                ).toList(),
                 onChanged: (dynamic value) {
-                  setState(() {
-                    FocusScope.of(context).requestFocus(FocusNode());
-                    _truckTypeController.text = value!;
-                  });
+                  setState(
+                    () {
+                      FocusScope.of(context).requestFocus(FocusNode());
+                      _truckTypeController.text = value!;
+                    },
+                  );
                 },
               ),
               Row(

@@ -1,15 +1,24 @@
 // ignore_for_file: sized_box_for_whitespace, use_build_context_synchronously
 
+import 'dart:math';
+
 import 'package:droppa_clone/LookUp/lookup.dart';
 import 'package:droppa_clone/backend/classes/person.dart';
+import 'package:droppa_clone/backend/keys.dart';
+import 'package:droppa_clone/backend/models/pick_result.dart';
 import 'package:droppa_clone/backend/services/user_service.dart';
 import 'package:droppa_clone/screens/parcel_screen.dart';
+import 'dart:io' show Platform;
 import 'package:droppa_clone/screens/rental_service_screen.dart';
 import 'package:droppa_clone/screens/vehlicle_quote_screen.dart';
 import 'package:droppa_clone/widgets/Rental_textField.dart';
 import 'package:droppa_clone/widgets/buttom_sheet.dart';
 import 'package:droppa_clone/widgets/button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_google_places/flutter_google_places.dart';
+import 'package:google_distance_matrix/google_distance_matrix.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:google_maps_webservice/places.dart';
 
 class QuoteRequestScreen extends StatefulWidget {
   final String title;
@@ -19,12 +28,24 @@ class QuoteRequestScreen extends StatefulWidget {
       {Key? key, required this.title, required this.description})
       : super(key: key);
 
+  static const kInitialPosition = LatLng(-33.8567844, 151.213108);
+
   @override
   State<QuoteRequestScreen> createState() => _QuoteRequestScreenState();
 }
 
 class _QuoteRequestScreenState extends State<QuoteRequestScreen> {
   final UserService _userService = UserService();
+
+  //google variables
+  final GoogleMapsPlaces _places =
+      GoogleMapsPlaces(apiKey: Keys.googleMapsAndroidKey);
+  GoogleDistanceMatrix googleDistanceMatrix = GoogleDistanceMatrix();
+  double? _distanceInKm;
+  double? _pickUpLat;
+  double? _pickUpLong;
+  double? _dropOffLat;
+  double? _dropOffLong;
 
   //Text Controllers
   final _dropOffAddressController = TextEditingController();
@@ -58,11 +79,15 @@ class _QuoteRequestScreenState extends State<QuoteRequestScreen> {
   final TextEditingController _dropUnitNumberController =
       TextEditingController();
 
-  TextEditingController _pickUpAdress = TextEditingController();
-  TextEditingController _dropOffAdress = TextEditingController();
+  final TextEditingController _pickUpAdress = TextEditingController();
+  final TextEditingController _dropOffAdress = TextEditingController();
 
   String? _title;
   String? _description;
+  String _hintToPlace = "Enter address";
+  String? _hintFromPlace;
+
+  late PickResult selectedPlace;
 
   bool _dismiss = false;
 
@@ -156,14 +181,35 @@ class _QuoteRequestScreenState extends State<QuoteRequestScreen> {
                                 width: 225,
                                 height: 30,
                                 child: GestureDetector(
-                                  onTap: () {},
+                                  onTap: () async {
+                                    var place = await PlacesAutocomplete.show(
+                                        offset: 0,
+                                        radius: 1000,
+                                        context: context,
+                                        apiKey: Keys.googleMapsAndroidKey,
+                                        mode: Mode.overlay,
+                                        types: [],
+                                        strictbounds: false,
+                                        components: [
+                                          Component(Component.country, 'za')
+                                        ],
+                                        //startText: "droppa",
+                                        //google_map_webservice package
+                                        onError: (err) {
+                                          print(err);
+                                        });
+                                    if (place != null) {
+                                      displayPrediction(place, 1);
+                                    }
+                                  },
                                   child: TextField(
-                                    //maxLines: 500,
                                     controller: _pickUpAdress,
-                                    enabled: false,
                                     decoration: const InputDecoration(
-                                      suffixIcon: Icon(Icons.search),
                                       border: OutlineInputBorder(),
+                                      suffixIcon: Icon(Icons.search),
+                                      enabled: false,
+                                      contentPadding: EdgeInsets.only(
+                                          left: 6, top: 8, right: 0, bottom: 0),
                                     ),
                                   ),
                                 ),
@@ -172,62 +218,64 @@ class _QuoteRequestScreenState extends State<QuoteRequestScreen> {
                         const SizedBox(
                           height: 10,
                         ),
-                        InkWell(
-                          onTap: () {
-                            showModalBottomSheet(
-                                context: context,
-                                isDismissible: _dismiss,
-                                isScrollControlled: true,
-                                shape: const RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.vertical(
-                                    top: Radius.circular(15),
+                        _title == "Courier"
+                            ? InkWell(
+                                onTap: () async {
+                                  showModalBottomSheet(
+                                      context: context,
+                                      isDismissible: _dismiss,
+                                      isScrollControlled: true,
+                                      shape: const RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.vertical(
+                                          top: Radius.circular(15),
+                                        ),
+                                      ),
+                                      clipBehavior: Clip.antiAliasWithSaveLayer,
+                                      builder: (BuildContext context) {
+                                        return ButtomSheetWidget(
+                                          buildingNumberController:
+                                              _pickBuildingNumberController,
+                                          conpanyNameTextController:
+                                              _pickCompanyNameTextController,
+                                          postalTextController:
+                                              _pickPostalTextController,
+                                          provinceTextController:
+                                              _pickProvinceTextController,
+                                          streetTextController:
+                                              _pickStreetTextController,
+                                          suburbTextController:
+                                              _pickSuburbTextController,
+                                          unitNumberController:
+                                              _pickUnitNumberController,
+                                          onChanged: (dynamic value) {
+                                            setState(() {
+                                              FocusScope.of(context)
+                                                  .requestFocus(FocusNode());
+                                            });
+                                          },
+                                          onPress: () {
+                                            _pickUpAdress.text =
+                                                "Unit ${_pickUnitNumberController.text} Building ${_pickBuildingNumberController.text} ${_pickSuburbTextController.text} ${_pickStreetTextController.text} ${_pickProvinceTextController.text}";
+                                            print(_pickUpAdress.text);
+                                            Navigator.pop(context);
+                                          },
+                                          onCancel: () {
+                                            setState(() {
+                                              Navigator.pop(context);
+                                            });
+                                          },
+                                        );
+                                      });
+                                },
+                                child: const Text(
+                                  "Can't find address? Click here",
+                                  style: TextStyle(
+                                    decoration: TextDecoration.underline,
+                                    color: Colors.blue,
                                   ),
                                 ),
-                                clipBehavior: Clip.antiAliasWithSaveLayer,
-                                builder: (BuildContext context) {
-                                  return ButtomSheetWidget(
-                                    buildingNumberController:
-                                        _pickBuildingNumberController,
-                                    conpanyNameTextController:
-                                        _pickCompanyNameTextController,
-                                    postalTextController:
-                                        _pickPostalTextController,
-                                    provinceTextController:
-                                        _pickProvinceTextController,
-                                    streetTextController:
-                                        _pickStreetTextController,
-                                    suburbTextController:
-                                        _pickSuburbTextController,
-                                    unitNumberController:
-                                        _pickUnitNumberController,
-                                    onChanged: (dynamic value) {
-                                      setState(() {
-                                        FocusScope.of(context)
-                                            .requestFocus(FocusNode());
-                                      });
-                                    },
-                                    onPress: () {
-                                      _pickUpAdress.text =
-                                          "Unit ${_pickUnitNumberController.text} Building ${_pickBuildingNumberController.text} ${_pickSuburbTextController.text} ${_pickStreetTextController.text} ${_pickProvinceTextController.text}";
-                                      print(_pickUpAdress.text);
-                                      Navigator.pop(context);
-                                    },
-                                    onCancel: () {
-                                      setState(() {
-                                        Navigator.pop(context);
-                                      });
-                                    },
-                                  );
-                                });
-                          },
-                          child: const Text(
-                            "Can't find address? Click here",
-                            style: TextStyle(
-                              decoration: TextDecoration.underline,
-                              color: Colors.blue,
-                            ),
-                          ),
-                        )
+                              )
+                            : SizedBox(),
                       ],
                     ),
                   ),
@@ -350,12 +398,37 @@ class _QuoteRequestScreenState extends State<QuoteRequestScreen> {
                             Container(
                               width: 225,
                               height: 30,
-                              child: TextField(
-                                enabled: false,
-                                controller: _dropOffAddressController,
-                                decoration: const InputDecoration(
-                                  suffixIcon: Icon(Icons.search),
-                                  border: OutlineInputBorder(),
+                              child: GestureDetector(
+                                onTap: () async {
+                                  var place = await PlacesAutocomplete.show(
+                                      offset: 0,
+                                      radius: 1000,
+                                      context: context,
+                                      apiKey: Keys.googleMapsAndroidKey,
+                                      mode: Mode.overlay,
+                                      types: [],
+                                      strictbounds: false,
+                                      components: [
+                                        Component(Component.country, 'za')
+                                      ],
+                                      //startText: "droppa",
+                                      //google_map_webservice package
+                                      onError: (err) {
+                                        print(err);
+                                      });
+                                  if (place != null) {
+                                    displayPrediction(place, 2);
+                                  }
+                                },
+                                child: TextField(
+                                  controller: _dropOffAdress,
+                                  decoration: const InputDecoration(
+                                    border: OutlineInputBorder(),
+                                    suffixIcon: Icon(Icons.search),
+                                    enabled: false,
+                                    contentPadding: EdgeInsets.only(
+                                        left: 6, top: 8, right: 0, bottom: 0),
+                                  ),
                                 ),
                               ),
                             ),
@@ -364,66 +437,68 @@ class _QuoteRequestScreenState extends State<QuoteRequestScreen> {
                         const SizedBox(
                           height: 10,
                         ),
-                        InkWell(
-                          onTap: () {
-                            showModalBottomSheet(
-                                context: context,
-                                isDismissible: _dismiss,
-                                isScrollControlled: true,
-                                shape: const RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.vertical(
-                                    top: Radius.circular(15),
+                        _title == "Courier"
+                            ? InkWell(
+                                onTap: () {
+                                  showModalBottomSheet(
+                                      context: context,
+                                      isDismissible: _dismiss,
+                                      isScrollControlled: true,
+                                      shape: const RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.vertical(
+                                          top: Radius.circular(15),
+                                        ),
+                                      ),
+                                      clipBehavior: Clip.antiAliasWithSaveLayer,
+                                      builder: (BuildContext context) {
+                                        return ButtomSheetWidget(
+                                          buildingNumberController:
+                                              _dropBuildingNumberController,
+                                          conpanyNameTextController:
+                                              _dropCompanyNameTextController,
+                                          postalTextController:
+                                              _dropPostalTextController,
+                                          provinceTextController:
+                                              _dropProvinceTextController,
+                                          streetTextController:
+                                              _dropStreetTextController,
+                                          suburbTextController:
+                                              _dropSuburbTextController,
+                                          unitNumberController:
+                                              _dropUnitNumberController,
+                                          onChanged: (dynamic value) {
+                                            setState(() {
+                                              FocusScope.of(context)
+                                                  .requestFocus(FocusNode());
+                                            });
+                                          },
+                                          onPress: () {
+                                            setState(() {
+                                              _dropOffAdress.text =
+                                                  "Unit ${_dropUnitNumberController.text} Building ${_dropBuildingNumberController.text} ${_dropSuburbTextController.text} ${_dropStreetTextController.text} ${_dropProvinceTextController.text}";
+                                              _dropOffAddressController.text =
+                                                  _dropOffAdress.text;
+                                            });
+                                            print(_dropOffAdress.text);
+                                            Navigator.pop(context);
+                                          },
+                                          onCancel: () {
+                                            setState(() {
+                                              Navigator.pop(context);
+                                            });
+                                          },
+                                        );
+                                      });
+                                },
+                                child: const Text(
+                                  "Can't find address? Click here",
+                                  style: TextStyle(
+                                    decoration: TextDecoration.underline,
+                                    color: Colors.blue,
                                   ),
                                 ),
-                                clipBehavior: Clip.antiAliasWithSaveLayer,
-                                builder: (BuildContext context) {
-                                  return ButtomSheetWidget(
-                                    buildingNumberController:
-                                        _dropBuildingNumberController,
-                                    conpanyNameTextController:
-                                        _dropCompanyNameTextController,
-                                    postalTextController:
-                                        _dropPostalTextController,
-                                    provinceTextController:
-                                        _dropProvinceTextController,
-                                    streetTextController:
-                                        _dropStreetTextController,
-                                    suburbTextController:
-                                        _dropSuburbTextController,
-                                    unitNumberController:
-                                        _dropUnitNumberController,
-                                    onChanged: (dynamic value) {
-                                      setState(() {
-                                        FocusScope.of(context)
-                                            .requestFocus(FocusNode());
-                                      });
-                                    },
-                                    onPress: () {
-                                      setState(() {
-                                        _dropOffAdress.text =
-                                            "Unit ${_dropUnitNumberController.text} Building ${_dropBuildingNumberController.text} ${_dropSuburbTextController.text} ${_dropStreetTextController.text} ${_dropProvinceTextController.text}";
-                                        _dropOffAddressController.text =
-                                            _dropOffAdress.text;
-                                      });
-                                      print(_dropOffAdress.text);
-                                      Navigator.pop(context);
-                                    },
-                                    onCancel: () {
-                                      setState(() {
-                                        Navigator.pop(context);
-                                      });
-                                    },
-                                  );
-                                });
-                          },
-                          child: const Text(
-                            "Can't find address? Click here",
-                            style: TextStyle(
-                              decoration: TextDecoration.underline,
-                              color: Colors.blue,
-                            ),
-                          ),
-                        )
+                              )
+                            : SizedBox(),
                       ],
                     ),
                   ),
@@ -482,7 +557,55 @@ class _QuoteRequestScreenState extends State<QuoteRequestScreen> {
     );
   }
 
+  Future<void> displayPrediction(var p, int textNumber) async {
+    if (p != null) {
+      PlacesDetailsResponse detail =
+          await _places.getDetailsByPlaceId(p.placeId!);
+
+      setState(() {
+        if (textNumber == 1) {
+          _pickUpAdress.text = detail.result.formattedAddress!;
+          _pickUpLat = detail.result.geometry!.location.lat;
+          _pickUpLong = detail.result.geometry!.location.lng;
+        } else {
+          _dropOffAdress.text = detail.result.formattedAddress!;
+          _dropOffLat = detail.result.geometry!.location.lat;
+          _dropOffLong = detail.result.geometry!.location.lng;
+        }
+      });
+    }
+  }
+
+  Future<double> calculateDistance(double pickUpLat, double pickUpLong,
+      double dropOffLat, double dropOffLong) async {
+    var distanceMatrix = await googleDistanceMatrix.getDistance(
+      Keys.key,
+      origin: Coordinate(
+          latitude: pickUpLat.toString(), longitude: pickUpLong.toString()),
+      destination: Coordinate(
+          latitude: dropOffLat.toString(), longitude: dropOffLong.toString()),
+    );
+
+    setState(() {
+      _distanceInKm = distanceMatrix as double?;
+    });
+
+    // var p = 0.017453292519943295;
+    // var a = 0.5 -
+    //     cos((dropOffLat - pickUpLat) * p) / 2 +
+    //     cos(pickUpLat * p) *
+    //         cos(dropOffLat * p) *
+    //         (1 - cos((dropOffLong - pickUpLong) * p)) /
+    //         2;
+    // return 12742 * asin(sqrt(a));
+
+    return _distanceInKm!;
+  }
+
   void _handlePriceRequest() async {
+    var distance = calculateDistance(
+        _pickUpLat!, _pickUpLong!, _dropOffLat!, _dropOffLong!);
+    print("=============================== : " + distance.toString());
     Map<String, dynamic> addressDetails = {
       "pickupCoordinates": _pickUpAdress.text,
       "dropOffCoordinates": _dropOffAdress.text

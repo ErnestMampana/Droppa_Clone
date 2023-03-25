@@ -171,7 +171,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                         )),
                   ),
                   PaymentMethodSelect(
-                    imageUrl: 'assets/box1.png',
+                    imageUrl: 'assets/payfast.png',
                     price: "PayFast",
                     value: 2,
                     groupValue: _groupValue,
@@ -183,7 +183,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                     },
                   ),
                   PaymentMethodSelect(
-                    imageUrl: 'assets/box1.png',
+                    imageUrl: 'assets/ozow.png',
                     price: "OZOW",
                     value: 3,
                     groupValue: _groupValue,

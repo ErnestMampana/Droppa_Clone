@@ -241,7 +241,7 @@ class _EditItineraryScreenState extends State<EditItineraryScreen> {
                 DatePicker.showDateTimePicker(context, showTitleActions: true,
                     onConfirm: (date) {
                   setState(() {
-                    _bookingDate = DateFormat('yyyy-MMM-dd').format(date);
+                    _bookingDate = DateFormat('yyyy-MM-dd').format(date);
                     _bookingTime = '${date.hour}:${date.minute}';
                   });
                 },
@@ -257,7 +257,6 @@ class _EditItineraryScreenState extends State<EditItineraryScreen> {
             const SizedBox(
               height: 10,
             ),
-            
             DateAndTime(
               icon: Icons.watch_later_outlined,
               title: _bookingTime == null ? 'Time' : '${_bookingTime}',
@@ -395,9 +394,13 @@ class _EditItineraryScreenState extends State<EditItineraryScreen> {
                       //height: 100,
                       child: TextField(
                         controller: _specialNote,
-                        decoration: const InputDecoration(
+                        decoration: InputDecoration(
+                          labelText: 'Enter Message',
                           border: OutlineInputBorder(),
                         ),
+                        keyboardType: TextInputType.multiline,
+                        minLines: 1, // <-- SEE HERE
+                        maxLines: 5, // <-- SEE HERE
                       ),
                     ),
                   ),
@@ -491,7 +494,7 @@ class _EditItineraryScreenState extends State<EditItineraryScreen> {
         "userId": userPersonalDetailsDTO!.userId!,
         "pickupadress": _pickUpAdress,
         "dropoffadress": _dropOffAdress,
-        "date": "2023-10-25",
+        "date": _bookingDate,
         "vehicle": _vehicleType,
         "paymentType": "paymentType",
         "loads": _loadsNumber,
