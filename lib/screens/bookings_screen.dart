@@ -38,7 +38,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
     return Scaffold(
       backgroundColor: Colors.grey[200],
       appBar: AppBar(
-        title: Text('Bookings'),
+        title: const Text('Bookings'),
         centerTitle: true,
         elevation: 0,
       ),
@@ -190,10 +190,10 @@ class _BookingsScreenState extends State<BookingsScreen> {
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: const [
-              Text('2022-12-24'),
-              Text('2022-12-24'),
-              Text('11:34 AM'),
+            children:  [
+              Text('${bookingData.date}'),
+              Text('${bookingData.date}'),
+              Text('${bookingData.time}'),
             ],
           ),
           const Divider(

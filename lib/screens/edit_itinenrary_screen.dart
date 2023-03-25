@@ -241,7 +241,7 @@ class _EditItineraryScreenState extends State<EditItineraryScreen> {
                 DatePicker.showDateTimePicker(context, showTitleActions: true,
                     onConfirm: (date) {
                   setState(() {
-                    _bookingDate = '${date.year}-${date.month}-${date.day}';
+                    _bookingDate = DateFormat('yyyy-MMM-dd').format(date);
                     _bookingTime = '${date.hour}:${date.minute}';
                   });
                 },
@@ -257,6 +257,7 @@ class _EditItineraryScreenState extends State<EditItineraryScreen> {
             const SizedBox(
               height: 10,
             ),
+            
             DateAndTime(
               icon: Icons.watch_later_outlined,
               title: _bookingTime == null ? 'Time' : '${_bookingTime}',
@@ -510,7 +511,8 @@ class _EditItineraryScreenState extends State<EditItineraryScreen> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (_) => PaymentScreen(price: _totalPrice,bookingId: response.bookingId!),
+          builder: (_) =>
+              PaymentScreen(price: _totalPrice, bookingId: response.bookingId!),
         ),
       );
     }

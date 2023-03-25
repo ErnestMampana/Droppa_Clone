@@ -248,13 +248,14 @@ class _PaymentScreenState extends State<PaymentScreen> {
                               ),
                             ),
                             MaterialButton(
-                              onPressed: () {
+                              onPressed: _enabled ?  () {
                                 _handlePromo();
-                              },
+                              } : (){} ,
                               color: Colors.black,
-                              child: const Text(
-                                'Apply',
-                                style: TextStyle(color: Colors.white),
+                              child:  Text(
+                                _enabled ?'Apply':
+                                'Applied',
+                                style: const TextStyle(color: Colors.white),
                               ),
                             ),
                           ],
@@ -271,8 +272,18 @@ class _PaymentScreenState extends State<PaymentScreen> {
             SizedBox(
               width: 400,
               child: MaterialButton(
-                onPressed: () {
-                  _handlePayment();
+                onPressed: () async {
+                  var sc = await _handlePayment();
+                  if (sc) {
+                    context.read<AppData>().changePrice(
+                        userPersonalDetailsDTO!.walletBalance! - _totalPrice!);
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const MainActivityScreen(),
+                      ),
+                    );
+                  }
                 },
                 color: Colors.blue,
                 shape: RoundedRectangleBorder(
@@ -293,7 +304,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
     );
   }
 
-  _handlePayment() async {
+  Future<bool> _handlePayment() async {
+    bool success = false;
     Map<String, dynamic> paymentObject = {
       "userId": userPersonalDetailsDTO!.userId,
       "bookingId": widget.bookingId,
@@ -302,32 +314,29 @@ class _PaymentScreenState extends State<PaymentScreen> {
       "bookingPrice": _totalPrice,
     };
     if (_paymentType == 'Wallet') {
-      if (userPersonalDetailsDTO!.walletBalance! < _totalPrice!) {
-        DialogUtils.showErrorMessage(context, "Insufficient Funds");
-      } else {
-        
+      try {
         await _userService.makeBookingPayment(paymentObject);
-        context.read<AppData>().changePrice(userPersonalDetailsDTO!.walletBalance! - _totalPrice!);
-
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (_) => const MainActivityScreen(),
-          ),
-        );
+        success = true;
+      } catch (e) {
+        DialogUtils.showErrorMessage(context, e.toString());
       }
     }
+    return success;
   }
 
   void _handlePromo() async {
-    Map<String, dynamic> promoData = {
-      "bookingPrice": _totalPrice,
-      "promoCode": _promoCodeController.text
-    };
-    double response = await _userService.applyPromoCode(promoData);
-    setState(() {
-      _totalPrice = response;
-      _enabled = false;
-    });
+    try {
+      Map<String, dynamic> promoData = {
+        "bookingPrice": _totalPrice,
+        "promoCode": _promoCodeController.text
+      };
+      double response = await _userService.applyPromoCode(promoData);
+      setState(() {
+        _totalPrice = response;
+        _enabled = false;
+      });
+    } catch (e) {
+      DialogUtils.showErrorMessage(context, e.toString());
+    }
   }
 }

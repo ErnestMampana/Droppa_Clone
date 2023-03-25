@@ -1,4 +1,6 @@
 import 'package:droppa_clone/LookUp/lookup.dart';
+import 'package:droppa_clone/backend/classes/Rental.dart';
+import 'package:droppa_clone/screens/payment_screen.dart';
 import 'package:droppa_clone/widgets/Rental_textField.dart';
 import 'package:droppa_clone/widgets/button.dart';
 import 'package:flutter/cupertino.dart';
@@ -29,12 +31,14 @@ class _ConfirmRentalScreenState extends State<ConfirmRentalScreen> {
       TextEditingController();
   final TextEditingController _instructionTextController =
       TextEditingController();
+      
+        double _totalPrice = 0.0;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Confirm Rental'),
+        title: const Text('Confirm Rental'),
         centerTitle: true,
         elevation: 0,
       ),
@@ -58,9 +62,9 @@ class _ConfirmRentalScreenState extends State<ConfirmRentalScreen> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const Text(
-                    'R 1 214,00',
-                    style: TextStyle(
+                   Text(
+                    'R $_totalPrice',
+                    style: const TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
                         fontSize: 20),
@@ -80,9 +84,9 @@ class _ConfirmRentalScreenState extends State<ConfirmRentalScreen> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const Text(
-                    'R 1 214,00',
-                    style: TextStyle(
+                   Text(
+                    'R ${_totalPrice * 0.15}',
+                    style:const TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
                         fontSize: 20),
@@ -102,9 +106,9 @@ class _ConfirmRentalScreenState extends State<ConfirmRentalScreen> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const Text(
-                    'R 1 214,00',
-                    style: TextStyle(
+                   Text(
+                    'R ${_totalPrice + _totalPrice* 0.15}',
+                    style: const TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
                         fontSize: 20),
@@ -121,7 +125,7 @@ class _ConfirmRentalScreenState extends State<ConfirmRentalScreen> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (_) => const ConfirmRentalScreen(),
+                      builder: (_) =>  PaymentScreen(bookingId: rentalDetails!.rentalId!,price: _totalPrice),
                     ),
                   );
                 },

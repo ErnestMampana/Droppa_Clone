@@ -8,6 +8,7 @@ class AppData with ChangeNotifier {
   int _bookingCount = 0;
   void changePrice(double price) {
     _walletPrice = price;
+    userPersonalDetailsDTO!.walletBalance = _walletPrice;
     notifyListeners();
   }
 
@@ -32,7 +33,7 @@ class AppData with ChangeNotifier {
   }
 
   void refreshBookings(){
-    
+
   }
 
   void refreshUser(Person user) {

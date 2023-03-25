@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 
+import 'package:droppa_clone/backend/classes/person.dart';
 import 'package:droppa_clone/backend/services/WebApiDataService%20.dart';
 import 'package:droppa_clone/backend/services/firebase_service.dart';
 import 'package:droppa_clone/backend/services/user_service.dart';
@@ -145,6 +146,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   height: 10,
                 ),
                 TextField(
+                  obscureText: true,
                   decoration: InputDecoration(
                     errorText: _passwordValid ? 'Required field' : null,
                     border: const OutlineInputBorder(),
@@ -161,6 +163,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   height: 10,
                 ),
                 TextField(
+                  obscureText: true,
                   decoration: InputDecoration(
                     errorText: _confirmPasswordValid ? 'Required field' : null,
                     border: const OutlineInputBorder(),
@@ -240,15 +243,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
         Map<String, dynamic> userPersonalDetails = {
           'userName': _userNameController.text,
           'surname': _userSurnameController.text,
-          'celphone': _cellphoneNumberController.text,
+          'cellphone': _cellphoneNumberController.text,
           'email': _emailController.text,
           'password': _passwordController.text
         };
-        var response =
-            await _userService.createAccount(userPersonalDetails);
+        var response = await _userService.createAccount(userPersonalDetails);
         //Map<String, dynamic> map = json.decode(response.body);
         DialogUtils.hideDialog(context);
-        if (response == "") {
+        if (response.userId != null) {
           Navigator.push(
             context,
             MaterialPageRoute(

@@ -61,5 +61,14 @@ class LookUp {
     //     vehicle: '1-ton'),
   ];
 
-  //static Map Person = {};
+  //For Rental service page
+  static String streetAddress = "";
+  static int postalCode = 0;
+  static String suburb = "";
+  static String province = "";
+  static String complexName = "";
+  static int unitNumber = 0;
+  static String? startDate;
+  static String? endDate;
+  static String truckType = "";
 }

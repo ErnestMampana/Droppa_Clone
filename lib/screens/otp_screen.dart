@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 
+import 'package:droppa_clone/backend/classes/person.dart';
 import 'package:droppa_clone/backend/services/WebApiDataService%20.dart';
 import 'package:droppa_clone/backend/services/user_service.dart';
 import 'package:droppa_clone/screens/main_activty_screen.dart';
@@ -91,12 +92,13 @@ class _OtpScreenState extends State<OtpScreen> {
 
   void _handleConfirmation() async {
     DialogUtils.showLoading(context);
-    String email = "ernest@gmail.com";
+    String email = userPersonalDetailsDTO!.userId!;
     int code = int.parse(_otpController.text);
 
-    var userPersonalDetailsDTO = await _userService.confirmOtp(email, code);
+    var userPersonalDetails = await _userService.confirmOtp(email, code);
     DialogUtils.hideDialog(context);
-    if (userPersonalDetailsDTO.token != null) {
+    if (userPersonalDetails.token != null) {
+      await _userService.getAllBookings(userPersonalDetails.userId);
       print("================ : Account Activated");
       Navigator.push(
         context,

@@ -11,12 +11,13 @@ import '../../LookUp/lookup.dart';
 class UserService {
   final WebApiDataService _webApiService = WebApiDataService();
 
-  Future<String> createAccount(Map<String, dynamic> userPersonalDetails) async {
+  Future<Person> createAccount(Map<String, dynamic> userPersonalDetails) async {
     //var key = await _storage.read(key: clientKey);
     var response = await _webApiService.createAccount(userPersonalDetails);
     if (response.statusCode == 200) {
       var successResponse = response.body;
-      return "";
+      userPersonalDetailsDTO = Person.fromJson(jsonDecode(successResponse));
+      return userPersonalDetailsDTO!;
     } else {
       throw Exception(response.body);
     }
@@ -86,7 +87,7 @@ class UserService {
 
       List<dynamic> responseData = jsonDecode(successResponse);
       LookUp.bookings.clear();
-      for (var element in responseData) { 
+      for (var element in responseData) {
         LookUp.bookings.add(Booking.fromJson(element));
       }
       List<Booking> bookings = [];
@@ -96,8 +97,8 @@ class UserService {
     }
   }
 
-  Future<Booking> cancelBooking(String? bookingId, String? userId)async {
-    var response = await _webApiService.cancelBooking(userId,bookingId);
+  Future<Booking> cancelBooking(String? bookingId, String? userId) async {
+    var response = await _webApiService.cancelBooking(userId, bookingId);
     if (response.statusCode == 200) {
       await getAllBookings(userId);
       var successResponse = response.body;
@@ -108,15 +109,17 @@ class UserService {
     }
   }
 
-  Future<Booking> makeBookingPayment(Map<String, dynamic> paymentObject) async{
-      var response = await _webApiService.makeBookingPayment(paymentObject);
+  Future<Booking> makeBookingPayment(Map<String, dynamic> paymentObject) async {
+    var response = await _webApiService.makeBookingPayment(paymentObject);
     if (response.statusCode == 200) {
       await getAllBookings(userPersonalDetailsDTO!.userId);
       var successResponse = response.body;
       var booking = Booking.fromJson(jsonDecode(successResponse));
       return booking;
     } else {
-      throw Exception(response.body);
+      var errorResponse = jsonDecode(response.body);
+      String message = errorResponse['message'];
+      throw Exception(message);
     }
   }
 
