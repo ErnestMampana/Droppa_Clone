@@ -21,6 +21,7 @@ class RentalTextField extends StatelessWidget {
           height: 10,
         ),
         TextField(
+          //keyboardType: TextInputType.number,
           controller: textController,
           autocorrect: false,
           decoration: const InputDecoration(

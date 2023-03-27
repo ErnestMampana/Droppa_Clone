@@ -307,7 +307,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
   Future<bool> _handlePayment() async {
     bool success = false;
     Map<String, dynamic> paymentObject = {
-      "userId": userPersonalDetailsDTO!.userId,
+      "userId": userPersonalDetailsDTO!.email,
       "bookingId": widget.bookingId,
       "paymentType": _paymentType,
       "usedPromo": _promoCodeController.text,

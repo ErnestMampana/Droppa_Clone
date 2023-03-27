@@ -51,7 +51,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       appBar: AppBar(
         elevation: 0,
         centerTitle: true,
-        title: const Text('Sign in'),
+        title: const Text('Sign up'),
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -250,7 +250,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         var response = await _userService.createAccount(userPersonalDetails);
         //Map<String, dynamic> map = json.decode(response.body);
         DialogUtils.hideDialog(context);
-        if (response.userId != null) {
+        if (response.email != null) {
           Navigator.push(
             context,
             MaterialPageRoute(

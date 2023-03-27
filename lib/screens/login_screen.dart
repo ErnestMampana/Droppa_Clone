@@ -221,7 +221,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
       if (response.token != null) {
         context.read<AppData>().changePrice(response.walletBalance!);
-        await _userService.getAllBookings(response.userId);
+        await _userService.getAllBookings(response.email);
         context.read<AppData>().refreshBookingCount();
         DialogUtils.hideDialog(context);
         Navigator.pop(context);

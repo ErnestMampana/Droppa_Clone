@@ -92,13 +92,13 @@ class _OtpScreenState extends State<OtpScreen> {
 
   void _handleConfirmation() async {
     DialogUtils.showLoading(context);
-    String email = userPersonalDetailsDTO!.userId!;
+    String email = userPersonalDetailsDTO!.email!;
     int code = int.parse(_otpController.text);
 
     var userPersonalDetails = await _userService.confirmOtp(email, code);
     DialogUtils.hideDialog(context);
     if (userPersonalDetails.token != null) {
-      await _userService.getAllBookings(userPersonalDetails.userId);
+      await _userService.getAllBookings(userPersonalDetails.email);
       print("================ : Account Activated");
       Navigator.push(
         context,

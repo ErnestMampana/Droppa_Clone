@@ -4,18 +4,18 @@ import 'package:flutter/material.dart';
 Person? userPersonalDetailsDTO;
 
 class Person with ChangeNotifier {
-  String? userId;
+  String? email;
   String? userName;
   String? surname;
-  String? celphoneNumber;
+  String? cellphone;
   double? walletBalance;
   List<Booking>? myBookings;
   String? token;
 
   Person({
-    this.userId,
+    this.email,
     this.userName,
-    this.celphoneNumber,
+    this.cellphone,
     this.walletBalance,
     this.myBookings,
     this.surname,
@@ -24,9 +24,9 @@ class Person with ChangeNotifier {
 
   factory Person.fromJson(Map<String, dynamic> json) {
     return Person(
-        userId : json['userId'], 
-        userName:json['userName'], 
-        celphoneNumber:json['celphoneNumber'], 
+        email : json['email'],
+        userName:json['userName'],
+        cellphone:json['cellphone'],
         walletBalance : json['walletBalance'], 
         myBookings : json['myBookings'], 
         surname:json['surname'],

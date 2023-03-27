@@ -3,6 +3,8 @@
 import 'package:droppa_clone/backend/providers/app_data.dart';
 import 'package:droppa_clone/backend/classes/person.dart';
 import 'package:droppa_clone/backend/services/user_service.dart';
+import 'package:droppa_clone/screens/payment_screen.dart';
+import 'package:droppa_clone/screens/wallet_credit_screen.dart';
 import 'package:droppa_clone/screens/wallet_screen.dart';
 import 'package:droppa_clone/widgets/button.dart';
 import 'package:droppa_clone/widgets/dialog.dart';
@@ -173,7 +175,12 @@ class _LoadWalletScreenState extends State<LoadWalletScreen> {
               title: 'Credit wallet',
               radisNumber: 20,
               onTaped: () {
-                _loadWallet();
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => WalletCreditScreen(totalPrice: _price!),
+                  ),
+                );
               },
             ),
           ),
@@ -187,15 +194,9 @@ class _LoadWalletScreenState extends State<LoadWalletScreen> {
     double amount = await _userService.loadWallet(_price!);
     context.read<AppData>().changePrice(amount);
     DialogUtils.hideDialog(context);
-    setState(() {
-      Navigator.pop(context);
-    });
-    // Navigator.pushReplacement(
-    //   context,
-    //   MaterialPageRoute(
-    //     builder: (_) => const WalletScreen(),
-    //   ),
-    // );
+    // setState(() {
+    //   Navigator.pop(context);
+    // });
   }
 
   _changeRadio(int itemNumber) {

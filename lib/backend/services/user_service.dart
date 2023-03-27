@@ -35,7 +35,7 @@ class UserService {
   }
 
   Future<double> loadWallet(double price) async {
-    String email = userPersonalDetailsDTO!.userId!;
+    String email = userPersonalDetailsDTO!.email!;
     var response = await _webApiService.loadWallet(email, price);
     if (response.statusCode == 200) {
       var successResponse = response.body;
@@ -112,7 +112,7 @@ class UserService {
   Future<Booking> makeBookingPayment(Map<String, dynamic> paymentObject) async {
     var response = await _webApiService.makeBookingPayment(paymentObject);
     if (response.statusCode == 200) {
-      await getAllBookings(userPersonalDetailsDTO!.userId);
+      await getAllBookings(userPersonalDetailsDTO!.email);
       var successResponse = response.body;
       var booking = Booking.fromJson(jsonDecode(successResponse));
       return booking;
