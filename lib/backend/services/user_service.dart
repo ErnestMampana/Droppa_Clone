@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:droppa_clone/backend/classes/Rental.dart';
 import 'package:droppa_clone/backend/classes/booking.dart';
 import 'package:droppa_clone/backend/classes/person.dart';
 import 'package:droppa_clone/backend/services/WebApiDataService%20.dart';
@@ -130,6 +131,32 @@ class UserService {
       return jsonDecode(successResponse);
     } else {
       throw Exception(response.body);
+    }
+  }
+
+  Future<Rental> createRentalBooking(Map<String, dynamic> rentalData) async {
+    var response = await _webApiService.createRentalBooking(rentalData);
+    if (response.statusCode == 200) {
+      var successResponse = response.body;
+      var rental = Rental.fromJson(jsonDecode(successResponse));
+      LookUp.rentals.add(rental);
+      return rental;
+    } else {
+      throw Exception(response.body);
+    }
+  }
+
+  Future<Rental> makeRentalBookingPayment(Map<String, dynamic> paymentObject) async {
+    var response = await _webApiService.makeRentalBookingPayment(paymentObject);
+    if (response.statusCode == 200) {
+      await getAllBookings(userPersonalDetailsDTO!.email);
+      var successResponse = response.body;
+      var booking = Rental.fromJson(jsonDecode(successResponse));
+      return booking;
+    } else {
+      var errorResponse = jsonDecode(response.body);
+      String message = errorResponse['message'];
+      throw Exception(message);
     }
   }
 }

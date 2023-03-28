@@ -1,7 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 
-Rental rentalDetails = Rental();
+Rental? rentalDetails;
 
 class Rental with ChangeNotifier {
   String? rentalId;
@@ -18,7 +18,7 @@ class Rental with ChangeNotifier {
   String? companyName;
   String? contactPerson;
   String? mobileNumber;
-  String? rentalBunch;
+  String? rentalBrunch;
   int? labours;
   int? noDays;
   String? instruction;
@@ -38,7 +38,7 @@ class Rental with ChangeNotifier {
     this.companyName,
     this.contactPerson,
     this.mobileNumber,
-    this.rentalBunch,
+    this.rentalBrunch,
     this.labours,
     this.noDays,
     this.instruction,
@@ -60,7 +60,7 @@ class Rental with ChangeNotifier {
       'companyName': companyName,
       'contactPerson': contactPerson,
       'mobileNumber': mobileNumber,
-      'rentalBunch': rentalBunch,
+      'rentalBunch': rentalBrunch,
       'labours': labours,
       'noDays': noDays,
       'instruction': instruction,
@@ -83,7 +83,7 @@ class Rental with ChangeNotifier {
         companyName: json['companyName'],
         contactPerson: json['contactPerson'],
         mobileNumber: json['mobileNumber'],
-        rentalBunch: json['rentalBunch'],
+        rentalBrunch: json['rentalBrunch'],
         labours: json['labours'],
         noDays: json['noDays'],
         instruction: json['instruction']);

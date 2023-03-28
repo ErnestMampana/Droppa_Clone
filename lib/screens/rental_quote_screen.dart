@@ -1,3 +1,4 @@
+import 'package:droppa_clone/LookUp/lookup.dart';
 import 'package:droppa_clone/screens/confirm_rental_screen.dart';
 import 'package:droppa_clone/screens/edit_itinenrary_screen.dart';
 import 'package:droppa_clone/widgets/button.dart';
@@ -22,7 +23,7 @@ class _RentalQuoteScreenState extends State<RentalQuoteScreen> {
     return Scaffold(
       backgroundColor: Colors.grey[300],
       appBar: AppBar(
-        title: Text('Quotes'),
+        title: const Text('Quotes'),
         centerTitle: true,
         elevation: 0,
       ),
@@ -68,7 +69,7 @@ class _RentalQuoteScreenState extends State<RentalQuoteScreen> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (_) => const ConfirmRentalScreen(),
+                      builder: (_) => ConfirmRentalScreen(price: 12000),
                     ),
                   );
                 },
@@ -87,11 +88,11 @@ class _RentalQuoteScreenState extends State<RentalQuoteScreen> {
                 color: Colors.grey[300],
                 child: Column(
                   children: [
-                    const Align(
+                     Align(
                       alignment: Alignment.topLeft,
                       child: Text(
-                        'Non Refrigirated',
-                        style: TextStyle(
+                        LookUp.truckType,
+                        style: const TextStyle(
                             fontSize: 20, fontWeight: FontWeight.bold),
                       ),
                     ),

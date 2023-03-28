@@ -275,8 +275,7 @@ class _EditItineraryScreenState extends State<EditItineraryScreen> {
                   _pickNameValid = false;
                   _pickNumberValid = false;
                   if (_isPickSwitched) {
-                    _pickUpNumber.text =
-                        userPersonalDetailsDTO!.cellphone!;
+                    _pickUpNumber.text = userPersonalDetailsDTO!.cellphone!;
                     _pickUpname.text =
                         "${userPersonalDetailsDTO!.userName} ${userPersonalDetailsDTO!.surname}";
                   } else {
@@ -334,8 +333,7 @@ class _EditItineraryScreenState extends State<EditItineraryScreen> {
                   _dropOffNameValid = false;
                   _dropOffNumberValid = false;
                   if (_dropOffSwitch) {
-                    _dropOffNumber.text =
-                        userPersonalDetailsDTO!.cellphone!;
+                    _dropOffNumber.text = userPersonalDetailsDTO!.cellphone!;
                     _dropOffName.text =
                         "${userPersonalDetailsDTO!.userName} ${userPersonalDetailsDTO!.surname}";
                   } else {
@@ -514,8 +512,11 @@ class _EditItineraryScreenState extends State<EditItineraryScreen> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (_) =>
-              PaymentScreen(price: _totalPrice, bookingId: response.bookingId!),
+          builder: (_) => PaymentScreen(
+            price: _totalPrice,
+            bookingId: response.bookingId!,
+            bookingScreen: 'Fleet_Booking',
+          ),
         ),
       );
     }

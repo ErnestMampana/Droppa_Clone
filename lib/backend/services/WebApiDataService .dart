@@ -42,13 +42,13 @@ class WebApiDataService {
     return await httpService.put(url, null);
   }
 
-  requestPrice(Map<String, dynamic> addressDetails) async {
+  Future<Response> requestPrice(Map<String, dynamic> addressDetails) async {
     var url = "$baseUrl/booking/getprice";
     var requestBody = jsonEncode(addressDetails);
     return await httpService.post(url, requestBody);
   }
 
-  createBooking(Map<String, dynamic> booking) async {
+  Future<Response> createBooking(Map<String, dynamic> booking) async {
     var url = "$baseUrl/booking/book";
     var requestBody = jsonEncode(booking);
     return await httpService.post(url, requestBody);
@@ -80,6 +80,18 @@ class WebApiDataService {
     var url = "$baseUrl/booking/applypromocode";
     var requestBody = jsonEncode(promoData);
     return await httpService.post(url, requestBody);
+  }
+
+  Future<Response> createRentalBooking(Map<String, dynamic> rentalData) async {
+    var url = "$baseUrl/rental/createRentalBooking";
+    var requestBody = jsonEncode(rentalData);
+    return await httpService.post(url, requestBody);
+  }
+
+  Future<Response> makeRentalBookingPayment(Map<String, dynamic> paymentObject) async {
+    var url = "$baseUrl/rental/makePayment";
+    var requestBody = jsonEncode(paymentObject);
+    return await httpService.put(url, requestBody);
   }
 
   // Future<BaseApiResponse> updatePersonalDetails(

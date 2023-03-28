@@ -1,5 +1,10 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:droppa_clone/LookUp/lookup.dart';
 import 'package:droppa_clone/backend/classes/Rental.dart';
+import 'package:droppa_clone/backend/classes/person.dart';
+import 'package:droppa_clone/backend/services/user_service.dart';
+import 'package:droppa_clone/screens/login_screen.dart';
 import 'package:droppa_clone/screens/payment_screen.dart';
 import 'package:droppa_clone/widgets/Rental_textField.dart';
 import 'package:droppa_clone/widgets/button.dart';
@@ -10,7 +15,8 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'dart:io' show Platform;
 
 class ConfirmRentalScreen extends StatefulWidget {
-  const ConfirmRentalScreen({super.key});
+  final double price;
+  const ConfirmRentalScreen({super.key, required this.price});
 
   @override
   State<ConfirmRentalScreen> createState() => _ConfirmRentalScreenState();
@@ -31,8 +37,17 @@ class _ConfirmRentalScreenState extends State<ConfirmRentalScreen> {
       TextEditingController();
   final TextEditingController _instructionTextController =
       TextEditingController();
-      
-        double _totalPrice = 0.0;
+  final _brunchController = TextEditingController();
+
+  double _totalPrice = 0.0;
+
+  final UserService _userService = UserService();
+
+  @override
+  void initState() {
+    _totalPrice = widget.price;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +77,7 @@ class _ConfirmRentalScreenState extends State<ConfirmRentalScreen> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                   Text(
+                  Text(
                     'R $_totalPrice',
                     style: const TextStyle(
                         color: Colors.white,
@@ -84,9 +99,9 @@ class _ConfirmRentalScreenState extends State<ConfirmRentalScreen> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                   Text(
+                  Text(
                     'R ${_totalPrice * 0.15}',
-                    style:const TextStyle(
+                    style: const TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
                         fontSize: 20),
@@ -106,8 +121,8 @@ class _ConfirmRentalScreenState extends State<ConfirmRentalScreen> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                   Text(
-                    'R ${_totalPrice + _totalPrice* 0.15}',
+                  Text(
+                    'R ${_totalPrice + _totalPrice * 0.15}',
                     style: const TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
@@ -121,13 +136,29 @@ class _ConfirmRentalScreenState extends State<ConfirmRentalScreen> {
               RsButton(
                 title: 'Confirm Rental',
                 radisNumber: 5,
-                onTaped: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) =>  PaymentScreen(bookingId: rentalDetails!.rentalId!,price: _totalPrice),
-                    ),
-                  );
+                onTaped: () async {
+                  if (userPersonalDetailsDTO == null) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const LoginScreen(),
+                      ),
+                    );
+                  } else {
+                    var sc = await _handleRentalBooking();
+                    if (sc) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => PaymentScreen(
+                            bookingId: rentalDetails!.rentalId!,
+                            price: _totalPrice,
+                            bookingScreen: 'Rental_Booking',
+                          ),
+                        ),
+                      );
+                    }
+                  }
                 },
               )
             ],
@@ -139,7 +170,7 @@ class _ConfirmRentalScreenState extends State<ConfirmRentalScreen> {
           padding: const EdgeInsets.all(20),
           child: Column(
             children: [
-              Text(
+              const Text(
                 'Additional Information',
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
               ),
@@ -167,6 +198,15 @@ class _ConfirmRentalScreenState extends State<ConfirmRentalScreen> {
               const SizedBox(
                 height: 15,
               ),
+              Row(children: const [
+                Text(
+                  'Brunch',
+                  textAlign: TextAlign.start,
+                ),
+              ]),
+              const SizedBox(
+                height: 10,
+              ),
               DropdownButtonFormField(
                 decoration: const InputDecoration(
                   contentPadding:
@@ -183,6 +223,8 @@ class _ConfirmRentalScreenState extends State<ConfirmRentalScreen> {
                 onChanged: (dynamic value) {
                   setState(() {
                     FocusScope.of(context).requestFocus(FocusNode());
+                    _brunchController.text = value!;
+                    FocusScope.of(context).requestFocus(FocusNode());
                   });
                 },
               ),
@@ -192,13 +234,6 @@ class _ConfirmRentalScreenState extends State<ConfirmRentalScreen> {
               RentalTextField(
                 label: 'Number of Labour(s) (R700/labour)',
                 textController: _laboursTextController,
-              ),
-              const SizedBox(
-                height: 15,
-              ),
-              RentalTextField(
-                label: 'Number Of days',
-                textController: _numberOfDaysTextController,
               ),
               const SizedBox(
                 height: 15,
@@ -262,5 +297,38 @@ class _ConfirmRentalScreenState extends State<ConfirmRentalScreen> {
         ),
       ),
     );
+  }
+
+  Future<bool> _handleRentalBooking() async {
+    bool gotIt = false;
+    Map<String, dynamic> rentalData = {
+      "userId": userPersonalDetailsDTO!.email,
+      "streetAddress": LookUp.streetAddress,
+      "postalCode": LookUp.postalCode,
+      "suburb": LookUp.suburb,
+      "province": LookUp.province,
+      "complexName": LookUp.complexName,
+      "unitNumber": LookUp.unitNumber,
+      "startDate": LookUp.startDate,
+      "endDate": LookUp.endDate,
+      "truckType": LookUp.truckType,
+      "price": widget.price,
+      "companyName": _companyNameTextController.text,
+      "contactPerson": _conatactPersonTextController.text,
+      "mobileNumber": _mobileNumberTextController.text,
+      "rentalBrunch": _brunchController.text,
+      "labours": _laboursTextController.text,
+      "noDays": LookUp.noDays,
+      "instruction": _instructionTextController.text,
+    };
+
+    var response = await _userService.createRentalBooking(rentalData);
+
+    if (response.rentalId != null) {
+      rentalDetails = response;
+      gotIt = true;
+    }
+
+    return gotIt;
   }
 }

@@ -24,6 +24,11 @@ class _WalletCreditScreenState extends State<WalletCreditScreen> {
   String? _paymentType;
   double? _price;
   final UserService _userService = UserService();
+  
+   final _promoCodeController = TextEditingController();
+   
+     bool _enabled = true;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -141,6 +146,72 @@ class _WalletCreditScreenState extends State<WalletCreditScreen> {
             const SizedBox(
               height: 10,
             ),
+            Container(
+                    height: 80,
+                    width: 350,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(10),
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.3),
+                          spreadRadius: 5,
+                          blurRadius: 10,
+                          offset:
+                              const Offset(1, 1), // changes position of shadow
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      children: [
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.only(left: 15),
+                          child: Align(
+                            alignment: Alignment.topLeft,
+                            child: Text(
+                              'Promo Code',
+                              style: TextStyle(
+                                color: Colors.blue,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            SizedBox(
+                              width: 225,
+                              height: 30,
+                              child: TextField(
+                                enabled: _enabled,
+                                controller: _promoCodeController,
+                                decoration: const InputDecoration(
+                                  border: OutlineInputBorder(),
+                                ),
+                              ),
+                            ),
+                            MaterialButton(
+                              onPressed: _enabled ?  () {
+                                _handlePromo();
+                              } : (){} ,
+                              color: Colors.black,
+                              child:  Text(
+                                _enabled ?'Apply':
+                                'Applied',
+                                style: const TextStyle(color: Colors.white),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
             SizedBox(
               width: 400,
               child: MaterialButton(
@@ -180,5 +251,21 @@ class _WalletCreditScreenState extends State<WalletCreditScreen> {
       }
     
     return success;
+  }
+
+  void _handlePromo() async {
+    try {
+      // Map<String, dynamic> promoData = {
+      //   "bookingPrice": _totalPrice,
+      //   "promoCode": _promoCodeController.text
+      // };
+      // double response = await _userService.applyPromoCode(promoData);
+      setState(() {
+        // _totalPrice = response;
+        _enabled = false;
+      });
+    } catch (e) {
+      DialogUtils.showErrorMessage(context, e.toString());
+    }
   }
 }

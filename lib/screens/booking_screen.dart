@@ -119,7 +119,9 @@ class _BookingScreenState extends State<BookingScreen> {
                             widget.booking.status == 'AWAITING_PAYMENT'
                                 ? PaymentScreen(
                                     price: widget.booking.bookingPrice!,
-                                    bookingId: widget.booking.bookingId!)
+                                    bookingId: widget.booking.bookingId!,
+                                    bookingScreen: 'Fleet_Booking',
+                                  )
                                 : const MainActivityScreen(),
                       ),
                     );

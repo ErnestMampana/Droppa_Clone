@@ -16,8 +16,12 @@ import '../widgets/payment_method.dart';
 class PaymentScreen extends StatefulWidget {
   final double price;
   final String bookingId;
+  final String bookingScreen;
   const PaymentScreen(
-      {super.key, required this.price, required this.bookingId});
+      {super.key,
+      required this.price,
+      required this.bookingId,
+      required this.bookingScreen});
 
   @override
   State<PaymentScreen> createState() => _PaymentScreenState();
@@ -84,8 +88,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
               height: 50,
             ),
             Container(
-              height: 400,
-              width: 400,
+              height: MediaQuery.of(context).size.height * 0.50,
+              width: MediaQuery.of(context).size.width * 0.95,
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: const BorderRadius.all(
@@ -248,13 +252,14 @@ class _PaymentScreenState extends State<PaymentScreen> {
                               ),
                             ),
                             MaterialButton(
-                              onPressed: _enabled ?  () {
-                                _handlePromo();
-                              } : (){} ,
+                              onPressed: _enabled
+                                  ? () {
+                                      _handlePromo();
+                                    }
+                                  : () {},
                               color: Colors.black,
-                              child:  Text(
-                                _enabled ?'Apply':
-                                'Applied',
+                              child: Text(
+                                _enabled ? 'Apply' : 'Applied',
                                 style: const TextStyle(color: Colors.white),
                               ),
                             ),
@@ -270,10 +275,12 @@ class _PaymentScreenState extends State<PaymentScreen> {
               height: 10,
             ),
             SizedBox(
-              width: 400,
+              width: MediaQuery.of(context).size.width * 0.95,
               child: MaterialButton(
                 onPressed: () async {
-                  var sc = await _handlePayment();
+                  var sc = widget.bookingScreen == 'Fleet_Booking'
+                      ? await _handleFleetBookingPayment()
+                      : await _handleRentalBookingPayment();
                   if (sc) {
                     context.read<AppData>().changePrice(
                         userPersonalDetailsDTO!.walletBalance! - _totalPrice!);
@@ -304,7 +311,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
     );
   }
 
-  Future<bool> _handlePayment() async {
+  Future<bool> _handleFleetBookingPayment() async {
     bool success = false;
     Map<String, dynamic> paymentObject = {
       "userId": userPersonalDetailsDTO!.email,
@@ -316,6 +323,26 @@ class _PaymentScreenState extends State<PaymentScreen> {
     if (_paymentType == 'Wallet') {
       try {
         await _userService.makeBookingPayment(paymentObject);
+        success = true;
+      } catch (e) {
+        DialogUtils.showErrorMessage(context, e.toString());
+      }
+    }
+    return success;
+  }
+
+  Future<bool> _handleRentalBookingPayment() async {
+    bool success = false;
+    Map<String, dynamic> paymentObject = {
+      "userId": userPersonalDetailsDTO!.email,
+      "bookingId": widget.bookingId,
+      "paymentType": _paymentType,
+      "usedPromo": _promoCodeController.text,
+      "bookingPrice": _totalPrice,
+    };
+    if (_paymentType == 'Wallet') {
+      try {
+        await _userService.makeRentalBookingPayment(paymentObject);
         success = true;
       } catch (e) {
         DialogUtils.showErrorMessage(context, e.toString());
