@@ -1,18 +1,13 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first, use_build_context_synchronously
-import 'package:droppa_clone/backend/providers/app_data.dart';
 import 'package:droppa_clone/backend/services/user_service.dart';
 import 'package:droppa_clone/screens/bookings_screen.dart';
 import 'package:droppa_clone/screens/main_activty_screen.dart';
 import 'package:droppa_clone/screens/payment_screen.dart';
 import 'package:droppa_clone/widgets/dialog.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
-
 import 'package:droppa_clone/backend/classes/booking.dart';
 import 'package:droppa_clone/widgets/booking_address.dart';
 import 'package:droppa_clone/widgets/booking_details.dart';
-import 'package:provider/provider.dart';
 
 class BookingScreen extends StatefulWidget {
   final BookingItem booking;

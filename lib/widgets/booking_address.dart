@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 
 class BookingAddress extends StatelessWidget {
   final String title;
@@ -58,10 +56,16 @@ class BookingAddress extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               Row(
-                children: [Icon(Icons.person), Text(name)],
+                children: [
+                  const Icon(Icons.person),
+                  Text(name),
+                ],
               ),
               Row(
-                children: [Icon(Icons.call), Text(contact)],
+                children: [
+                  const Icon(Icons.call),
+                  Text(contact),
+                ],
               ),
             ],
           )

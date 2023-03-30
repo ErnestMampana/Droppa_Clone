@@ -1,10 +1,7 @@
 import 'package:droppa_clone/LookUp/lookup.dart';
 import 'package:droppa_clone/backend/classes/booking.dart';
 import 'package:droppa_clone/screens/booking_screen.dart';
-import 'package:droppa_clone/widgets/bookings_details.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 
 class BookingsScreen extends StatefulWidget {
   const BookingsScreen({super.key});
@@ -14,20 +11,15 @@ class BookingsScreen extends StatefulWidget {
 }
 
 class _BookingsScreenState extends State<BookingsScreen> {
-  List<Map<String, dynamic>> _bookings = [];
+  final List<Map<String, dynamic>> _bookings = [];
 
   @override
   void initState() {
-    // TODO: implement initState
-    // print(Booking.bookings.);
     setState(() {
-      //vancanciesFuture = _getVacancies();
-
       _bookings.clear();
       for (var booking in LookUp.bookings) {
         _bookings.add(booking.toMap());
       }
-      //_runFilter();
       debugPrint(_bookings.toString());
     });
     super.initState();

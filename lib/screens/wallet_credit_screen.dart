@@ -31,7 +31,6 @@ class _WalletCreditScreenState extends State<WalletCreditScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     _price = widget.totalPrice;
     super.initState();
   }

@@ -1,5 +1,4 @@
 import 'package:droppa_clone/backend/providers/app_data.dart';
-import 'package:droppa_clone/backend/classes/person.dart';
 import 'package:droppa_clone/screens/load_wallet_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

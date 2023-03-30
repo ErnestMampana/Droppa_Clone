@@ -4,8 +4,6 @@ import 'package:droppa_clone/backend/classes/Rental.dart';
 import 'package:droppa_clone/backend/classes/booking.dart';
 import 'package:droppa_clone/backend/classes/person.dart';
 import 'package:droppa_clone/backend/services/WebApiDataService%20.dart';
-import 'package:flutter/src/widgets/editable_text.dart';
-import 'package:http/http.dart';
 
 import '../../LookUp/lookup.dart';
 

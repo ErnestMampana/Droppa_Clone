@@ -1,17 +1,12 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:droppa_clone/backend/providers/app_data.dart';
-import 'package:droppa_clone/backend/classes/person.dart';
 import 'package:droppa_clone/backend/services/user_service.dart';
-import 'package:droppa_clone/screens/payment_screen.dart';
 import 'package:droppa_clone/screens/wallet_credit_screen.dart';
-import 'package:droppa_clone/screens/wallet_screen.dart';
 import 'package:droppa_clone/widgets/button.dart';
 import 'package:droppa_clone/widgets/dialog.dart';
 import 'package:droppa_clone/widgets/walllet_amount_select.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:provider/provider.dart';
 
 class LoadWalletScreen extends StatefulWidget {

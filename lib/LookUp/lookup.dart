@@ -1,6 +1,6 @@
+import 'package:droppa_clone/backend/classes/Parcel.dart';
 import 'package:droppa_clone/backend/classes/Rental.dart';
 import 'package:droppa_clone/backend/classes/booking.dart';
-import 'package:droppa_clone/backend/classes/person.dart';
 
 class LookUp {
   static final provinces = [
@@ -62,6 +62,8 @@ class LookUp {
     //     vehicle: '1-ton'),
   ];
 
+  static List<Parcel> parcels = [];
+
   static List<Rental> rentals =[];
 
   //For Rental service page
@@ -75,4 +77,11 @@ class LookUp {
   static String? endDate;
   static String truckType = "";
   static int noDays = 0;
+
+
+
+  //For Courier
+  static double courierPrice= 0;
+  static String courierPickUpAddress = "";
+  static String courierDropOffAddress = "";
 }

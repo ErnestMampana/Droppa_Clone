@@ -1,9 +1,5 @@
 // ignore_for_file: use_build_context_synchronously
-
-import 'dart:convert';
-
 import 'package:droppa_clone/backend/classes/person.dart';
-import 'package:droppa_clone/backend/services/WebApiDataService%20.dart';
 import 'package:droppa_clone/backend/services/user_service.dart';
 import 'package:droppa_clone/screens/main_activty_screen.dart';
 import 'package:droppa_clone/widgets/Rental_textField.dart';
@@ -24,6 +20,14 @@ class _OtpScreenState extends State<OtpScreen> {
 
   //TextController
   final TextEditingController _otpController = TextEditingController();
+
+  bool _otpValid = false;
+
+  @override
+  void dispose() {
+    _otpController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,6 +60,12 @@ class _OtpScreenState extends State<OtpScreen> {
                 height: 50,
               ),
               RentalTextField(
+                  onTap: () {
+                    setState(() {
+                      _otpValid = false;
+                    });
+                  },
+                  textValid: _otpValid,
                   label: 'Confirmation code(OTP)',
                   textController: _otpController),
               const SizedBox(
@@ -91,24 +101,27 @@ class _OtpScreenState extends State<OtpScreen> {
   }
 
   void _handleConfirmation() async {
-    DialogUtils.showLoading(context);
-    String email = userPersonalDetailsDTO!.email!;
-    int code = int.parse(_otpController.text);
-
-    var userPersonalDetails = await _userService.confirmOtp(email, code);
-    DialogUtils.hideDialog(context);
-    if (userPersonalDetails.token != null) {
-      await _userService.getAllBookings(userPersonalDetails.email);
-      print("================ : Account Activated");
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (_) =>  const MainActivityScreen(),
-        ),
-      );
+    if (_otpController.text.isEmpty) {
+      _otpValid = true;
     } else {
-      // Map<String, dynamic> map = json.decode(response.body);
-      // print("================ : " + map['message']);
+      DialogUtils.showLoading(context);
+      String email = userPersonalDetailsDTO!.email!;
+      int code = int.parse(_otpController.text);
+
+      var userPersonalDetails = await _userService.confirmOtp(email, code);
+      DialogUtils.hideDialog(context);
+      if (userPersonalDetails.token != null) {
+        await _userService.getAllBookings(userPersonalDetails.email);
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => const MainActivityScreen(),
+          ),
+        );
+      } else {
+        // Map<String, dynamic> map = json.decode(response.body);
+        // print("================ : " + map['message']);
+      }
     }
   }
 }

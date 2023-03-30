@@ -1,22 +1,16 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:droppa_clone/LookUp/lookup.dart';
-import 'package:droppa_clone/backend/classes/booking.dart';
 import 'package:droppa_clone/backend/classes/person.dart';
 import 'package:droppa_clone/backend/providers/app_data.dart';
 import 'package:droppa_clone/backend/services/user_service.dart';
-import 'package:droppa_clone/screens/main_activty_screen.dart';
 import 'package:droppa_clone/screens/payment_screen.dart';
 import 'package:droppa_clone/widgets/button.dart';
 import 'package:droppa_clone/widgets/counter.dart';
 import 'package:droppa_clone/widgets/date_time.dart';
-import 'package:droppa_clone/widgets/payment_method.dart';
 import 'package:droppa_clone/widgets/pickdrop.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:io' show Platform;
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
@@ -67,6 +61,16 @@ class _EditItineraryScreenState extends State<EditItineraryScreen> {
   late String _pickUpAdress;
 
   String? _bookingTime;
+
+  @override
+  void dispose() {
+    _pickUpname.dispose();
+    _pickUpNumber.dispose();
+    _dropOffName.dispose();
+    _dropOffNumber.dispose();
+    _specialNote.dispose();
+    super.dispose();
+  }
 
   @override
   void initState() {
@@ -259,7 +263,7 @@ class _EditItineraryScreenState extends State<EditItineraryScreen> {
             ),
             DateAndTime(
               icon: Icons.watch_later_outlined,
-              title: _bookingTime == null ? 'Time' : '${_bookingTime}',
+              title: _bookingTime == null ? 'Time' : '$_bookingTime',
             ),
             PickUpAndDrop(
               isSwitched: _isPickSwitched,
@@ -392,13 +396,13 @@ class _EditItineraryScreenState extends State<EditItineraryScreen> {
                       //height: 100,
                       child: TextField(
                         controller: _specialNote,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           labelText: 'Enter Message',
                           border: OutlineInputBorder(),
                         ),
                         keyboardType: TextInputType.multiline,
-                        minLines: 1, // <-- SEE HERE
-                        maxLines: 5, // <-- SEE HERE
+                        minLines: 1, 
+                        maxLines: 5, 
                       ),
                     ),
                   ),

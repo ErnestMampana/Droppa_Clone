@@ -1,16 +1,13 @@
+import 'dart:io' show Platform;
+
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'package:droppa_clone/LookUp/lookup.dart';
-import 'package:droppa_clone/backend/classes/Rental.dart';
-import 'package:droppa_clone/screens/login_screen.dart';
 import 'package:droppa_clone/screens/rental_quote_screen.dart';
 import 'package:droppa_clone/widgets/Rental_textField.dart';
 import 'package:droppa_clone/widgets/button.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'dart:io' show Platform;
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:intl/intl.dart';
-import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 class RentalServiceScreen extends StatefulWidget {
   const RentalServiceScreen({Key? key}) : super(key: key);
@@ -33,12 +30,29 @@ class _RentalServiceScreenState extends State<RentalServiceScreen> {
   String _dateCount = '';
   String _range = '';
   String _rangeCount = '';
-
   String? _startDate;
-
   String? _endDate;
 
   bool _isSwitched = false;
+  bool _streetAddressValid = false;
+  bool _postalCodeValid = false;
+  bool _suburbValid = false;
+  final bool _complexNameValid = false;
+  final bool _unitValid = false;
+  double _bookingPrice = 14000;
+
+  @override
+  void dispose() {
+    _postalCodeTextController.dispose();
+    _suburbTextController.dispose();
+    _complexNameTextController.dispose();
+    _unitNumberTextController.dispose();
+    _provinceController.dispose();
+    _truckTypeController.dispose();
+    _streetTextController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,13 +78,25 @@ class _RentalServiceScreenState extends State<RentalServiceScreen> {
                 height: 20,
               ),
               RentalTextField(
+                onTap: () {
+                  setState(() {
+                    _streetAddressValid = false;
+                  });
+                },
                 label: 'Street Address',
                 textController: _streetTextController,
+                textValid: _streetAddressValid,
               ),
               const SizedBox(
                 height: 20,
               ),
               RentalTextField(
+                onTap: () {
+                  setState(() {
+                    _postalCodeValid = false;
+                  });
+                },
+                textValid: _postalCodeValid,
                 label: 'Postal Code',
                 textController: _postalCodeTextController,
               ),
@@ -78,6 +104,12 @@ class _RentalServiceScreenState extends State<RentalServiceScreen> {
                 height: 20,
               ),
               RentalTextField(
+                onTap: () {
+                  setState(() {
+                    _suburbValid = false;
+                  });
+                },
+                textValid: _suburbValid,
                 label: 'Suburb',
                 textController: _suburbTextController,
               ),
@@ -122,6 +154,8 @@ class _RentalServiceScreenState extends State<RentalServiceScreen> {
                 height: 20,
               ),
               RentalTextField(
+                onTap: () {},
+                textValid: _complexNameValid,
                 label: 'Complex Name (Optional)',
                 textController: _complexNameTextController,
               ),
@@ -129,6 +163,8 @@ class _RentalServiceScreenState extends State<RentalServiceScreen> {
                 height: 20,
               ),
               RentalTextField(
+                onTap: () {},
+                textValid: _unitValid,
                 label: 'Unit Number/Floor (Optional)',
                 textController: _unitNumberTextController,
               ),
@@ -228,13 +264,15 @@ class _RentalServiceScreenState extends State<RentalServiceScreen> {
                 title: 'Next',
                 radisNumber: 5,
                 onTaped: () {
-                  _setValues();
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => const RentalQuoteScreen(),
-                    ),
-                  );
+                  bool sc = _setValues();
+                  if (sc) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => RentalQuoteScreen(price: _bookingPrice),
+                      ),
+                    );
+                  }
                 },
               ),
             ],
@@ -263,8 +301,23 @@ class _RentalServiceScreenState extends State<RentalServiceScreen> {
     });
   }
 
-  void _setValues() {
-    setState(() {
+  bool _setValues() {
+    bool success = false;
+    if (_streetTextController.text.isEmpty &&
+        _postalCodeTextController.text.isEmpty &&
+        _suburbTextController.text.isEmpty) {
+      setState(() {
+        _streetAddressValid = true;
+        _postalCodeValid = true;
+        _suburbValid = true;
+      });
+    } else if (_streetTextController.text.isEmpty) {
+      _streetAddressValid = true;
+    } else if (_postalCodeTextController.text.isEmpty) {
+      _postalCodeValid = true;
+    } else if (_suburbTextController.text.isEmpty) {
+      _suburbValid = true;
+    } else {
       LookUp.streetAddress = _streetTextController.text;
       LookUp.postalCode = int.parse(_postalCodeTextController.text);
       LookUp.suburb = _suburbTextController.text;
@@ -276,6 +329,8 @@ class _RentalServiceScreenState extends State<RentalServiceScreen> {
       LookUp.startDate = _startDate;
       LookUp.endDate = _endDate;
       LookUp.truckType = _truckTypeController.text;
-    });
+      success = true;
+    }
+    return success;
   }
 }

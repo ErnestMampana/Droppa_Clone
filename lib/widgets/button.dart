@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 
 class RsButton extends StatelessWidget {
   final String title;
@@ -24,7 +22,7 @@ class RsButton extends StatelessWidget {
       minWidth: double.maxFinite,
       child: Text(
         title,
-        style: TextStyle(
+        style: const TextStyle(
           color: Colors.white,
         ),
       ),

@@ -6,6 +6,11 @@ import 'package:flutter/material.dart';
 class AppData with ChangeNotifier {
   double _walletPrice = 00.0;
   int _bookingCount = 0;
+
+  void clearPrice() {
+    _walletPrice = 0.0;
+  }
+
   void changePrice(double price) {
     _walletPrice = price;
     userPersonalDetailsDTO!.walletBalance = _walletPrice;
@@ -21,9 +26,9 @@ class AppData with ChangeNotifier {
     notifyListeners();
   }
 
-  void refreshBookingCount(){
-     _bookingCount = LookUp.bookings.length;
-     notifyListeners();
+  void refreshBookingCount() {
+    _bookingCount = LookUp.bookings.length;
+    notifyListeners();
   }
 
   void clearBooking() {
@@ -32,9 +37,7 @@ class AppData with ChangeNotifier {
     notifyListeners();
   }
 
-  void refreshBookings(){
-
-  }
+  void refreshBookings() {}
 
   void refreshUser(Person user) {
     userPersonalDetailsDTO = user;

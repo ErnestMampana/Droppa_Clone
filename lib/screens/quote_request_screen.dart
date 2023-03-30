@@ -1,19 +1,13 @@
 // ignore_for_file: sized_box_for_whitespace, use_build_context_synchronously
 
-import 'dart:math';
 
 import 'package:droppa_clone/LookUp/lookup.dart';
-import 'package:droppa_clone/backend/classes/person.dart';
 import 'package:droppa_clone/backend/keys.dart';
 import 'package:droppa_clone/backend/models/pick_result.dart';
 import 'package:droppa_clone/backend/services/user_service.dart';
 import 'package:droppa_clone/screens/parcel_screen.dart';
-import 'dart:io' show Platform;
-import 'package:droppa_clone/screens/rental_service_screen.dart';
 import 'package:droppa_clone/screens/vehlicle_quote_screen.dart';
-import 'package:droppa_clone/widgets/Rental_textField.dart';
 import 'package:droppa_clone/widgets/buttom_sheet.dart';
-import 'package:droppa_clone/widgets/button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_google_places/flutter_google_places.dart';
 import 'package:google_distance_matrix/google_distance_matrix.dart';
@@ -84,12 +78,17 @@ class _QuoteRequestScreenState extends State<QuoteRequestScreen> {
 
   String? _title;
   String? _description;
-  String _hintToPlace = "Enter address";
-  String? _hintFromPlace;
 
   late PickResult selectedPlace;
 
-  bool _dismiss = false;
+  final bool _dismiss = false;
+  bool _companyNameValid = false;
+  bool _postalCodeValid = false;
+  bool _provinceValid = false;
+  bool _streetAddressValid = false;
+  bool _suburbValid = false;
+
+  
 
   @override
   void initState() {
@@ -195,9 +194,7 @@ class _QuoteRequestScreenState extends State<QuoteRequestScreen> {
                                         ],
                                         //startText: "droppa",
                                         //google_map_webservice package
-                                        onError: (err) {
-                                          print(err);
-                                        });
+                                        onError: (err) {});
                                     if (place != null) {
                                       displayPrediction(place, 1);
                                     }
@@ -233,6 +230,37 @@ class _QuoteRequestScreenState extends State<QuoteRequestScreen> {
                                       clipBehavior: Clip.antiAliasWithSaveLayer,
                                       builder: (BuildContext context) {
                                         return ButtomSheetWidget(
+                                          onTapCompanyName: () {
+                                            setState(() {
+                                              _companyNameValid = false;
+                                            });
+                                          },
+                                          onTapPostalCode: () {
+                                            setState(() {
+                                              _postalCodeValid = false;
+                                            });
+                                          },
+                                          onTapProvince: () {
+                                            setState(() {
+                                              _provinceValid = false;
+                                            });
+                                          },
+                                          onTapStreetAddress: () {
+                                            setState(() {
+                                              _streetAddressValid = false;
+                                            });
+                                          },
+                                          onTapSuburb: () {
+                                            setState(() {
+                                              _suburbValid = false;
+                                            });
+                                          },
+                                          companyNameValid: _companyNameValid,
+                                          postalCodeValid: _postalCodeValid,
+                                          provinceValid: _provinceValid,
+                                          streetAddressValid:
+                                              _streetAddressValid,
+                                          suburbValid: _suburbValid,
                                           buildingNumberController:
                                               _pickBuildingNumberController,
                                           conpanyNameTextController:
@@ -256,7 +284,7 @@ class _QuoteRequestScreenState extends State<QuoteRequestScreen> {
                                           onPress: () {
                                             _pickUpAdress.text =
                                                 "Unit ${_pickUnitNumberController.text} Building ${_pickBuildingNumberController.text} ${_pickSuburbTextController.text} ${_pickStreetTextController.text} ${_pickProvinceTextController.text}";
-                                            print(_pickUpAdress.text);
+
                                             Navigator.pop(context);
                                           },
                                           onCancel: () {
@@ -275,7 +303,7 @@ class _QuoteRequestScreenState extends State<QuoteRequestScreen> {
                                   ),
                                 ),
                               )
-                            : SizedBox(),
+                            : const SizedBox(),
                       ],
                     ),
                   ),
@@ -302,41 +330,36 @@ class _QuoteRequestScreenState extends State<QuoteRequestScreen> {
               const SizedBox(
                 height: 10,
               ),
-              Container(
-                // margin: const EdgeInsets.all(10),
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      const Icon(
-                        Icons.circle,
-                        size: 15,
-                        color: Color.fromARGB(255, 219, 8, 8),
-                      ),
-                      const Text(' - - - - - - '),
-                      Container(
-                        width: 150,
-                        height: 30,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          color: const Color.fromARGB(255, 219, 8, 8),
-                        ),
-                        //color: Colors.black54,
-                        child: const Center(
-                          child: Text(
-                            'Selected Service',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ),
-                      ),
-                      const Text(' - - - - - - '),
-                      const Icon(
-                        Icons.circle,
-                        size: 15,
-                        color: Color.fromARGB(255, 219, 8, 8),
-                      ),
-                    ]),
-              ),
+              Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+                const Icon(
+                  Icons.circle,
+                  size: 15,
+                  color: Color.fromARGB(255, 219, 8, 8),
+                ),
+                const Text(' - - - - - - '),
+                Container(
+                  width: 150,
+                  height: 30,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    color: const Color.fromARGB(255, 219, 8, 8),
+                  ),
+                  //color: Colors.black54,
+                  child: const Center(
+                    child: Text(
+                      'Selected Service',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ),
+                const Text(' - - - - - - '),
+                const Icon(
+                  Icons.circle,
+                  size: 15,
+                  color: Color.fromARGB(255, 219, 8, 8),
+                ),
+              ]),
               const SizedBox(
                 height: 10,
               ),
@@ -413,9 +436,7 @@ class _QuoteRequestScreenState extends State<QuoteRequestScreen> {
                                       ],
                                       //startText: "droppa",
                                       //google_map_webservice package
-                                      onError: (err) {
-                                        print(err);
-                                      });
+                                      onError: (err) {});
                                   if (place != null) {
                                     displayPrediction(place, 2);
                                   }
@@ -452,6 +473,37 @@ class _QuoteRequestScreenState extends State<QuoteRequestScreen> {
                                       clipBehavior: Clip.antiAliasWithSaveLayer,
                                       builder: (BuildContext context) {
                                         return ButtomSheetWidget(
+                                          onTapCompanyName: () {
+                                            setState(() {
+                                              _companyNameValid = false;
+                                            });
+                                          },
+                                          onTapPostalCode: () {
+                                            setState(() {
+                                              _postalCodeValid = false;
+                                            });
+                                          },
+                                          onTapProvince: () {
+                                            setState(() {
+                                              _provinceValid = false;
+                                            });
+                                          },
+                                          onTapStreetAddress: () {
+                                            setState(() {
+                                              _streetAddressValid = false;
+                                            });
+                                          },
+                                          onTapSuburb: () {
+                                            setState(() {
+                                              _suburbValid = false;
+                                            });
+                                          },
+                                          companyNameValid: _companyNameValid,
+                                          postalCodeValid: _postalCodeValid,
+                                          provinceValid: _provinceValid,
+                                          streetAddressValid:
+                                              _streetAddressValid,
+                                          suburbValid: _suburbValid,
                                           buildingNumberController:
                                               _dropBuildingNumberController,
                                           conpanyNameTextController:
@@ -473,13 +525,15 @@ class _QuoteRequestScreenState extends State<QuoteRequestScreen> {
                                             });
                                           },
                                           onPress: () {
-                                            setState(() {
-                                              _dropOffAdress.text =
-                                                  "Unit ${_dropUnitNumberController.text} Building ${_dropBuildingNumberController.text} ${_dropSuburbTextController.text} ${_dropStreetTextController.text} ${_dropProvinceTextController.text}";
-                                              _dropOffAddressController.text =
-                                                  _dropOffAdress.text;
-                                            });
-                                            print(_dropOffAdress.text);
+                                            setState(
+                                              () {
+                                                _dropOffAdress.text =
+                                                    "Unit ${_dropUnitNumberController.text} Building ${_dropBuildingNumberController.text} ${_dropSuburbTextController.text} ${_dropStreetTextController.text} ${_dropProvinceTextController.text}";
+                                                _dropOffAddressController.text =
+                                                    _dropOffAdress.text;
+                                              },
+                                            );
+
                                             Navigator.pop(context);
                                           },
                                           onCancel: () {
@@ -498,7 +552,7 @@ class _QuoteRequestScreenState extends State<QuoteRequestScreen> {
                                   ),
                                 ),
                               )
-                            : SizedBox(),
+                            : const SizedBox(),
                       ],
                     ),
                   ),
@@ -525,12 +579,10 @@ class _QuoteRequestScreenState extends State<QuoteRequestScreen> {
               MaterialButton(
                 onPressed: _title == 'Courier'
                     ? () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => const ParcelScreen(),
-                          ),
-                        );
+                        if (_pickUpAdress.text.isNotEmpty ||
+                            _dropOffAdress.text.isNotEmpty) {
+                          _handlePriceRequest();
+                        }
                       }
                     : () {
                         if (_pickUpAdress.text != "" ||
@@ -603,23 +655,40 @@ class _QuoteRequestScreenState extends State<QuoteRequestScreen> {
   }
 
   void _handlePriceRequest() async {
-    var distance = calculateDistance(
-        _pickUpLat!, _pickUpLong!, _dropOffLat!, _dropOffLong!);
-    print("=============================== : " + distance.toString());
-    Map<String, dynamic> addressDetails = {
-      "pickupCoordinates": _pickUpAdress.text,
-      "dropOffCoordinates": _dropOffAdress.text
-    };
-    double requestedAmount = await _userService.requestPrice(addressDetails);
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (_) => VehicleQuoteScreen(
-          price: requestedAmount,
-          dropOffAdress: _dropOffAdress.text,
-          pickUpAdress: _pickUpAdress.text,
+    if (_title == 'Fleet') {
+      var distance = calculateDistance(
+          _pickUpLat!, _pickUpLong!, _dropOffLat!, _dropOffLong!);
+
+      Map<String, dynamic> addressDetails = {
+        "pickupCoordinates": _pickUpAdress.text,
+        "dropOffCoordinates": _dropOffAdress.text
+      };
+      double requestedAmount = await _userService.requestPrice(addressDetails);
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => VehicleQuoteScreen(
+            price: requestedAmount,
+            dropOffAdress: _dropOffAdress.text,
+            pickUpAdress: _pickUpAdress.text,
+          ),
         ),
-      ),
-    );
+      );
+    } else {
+      Map<String, dynamic> addressDetails = {
+        "pickupCoordinates": _pickUpAdress.text,
+        "dropOffCoordinates": _dropOffAdress.text
+      };
+      LookUp.courierDropOffAddress = _dropOffAdress.text;
+      LookUp.courierPickUpAddress = _pickUpAdress.text;
+      double price = await _userService.requestPrice(addressDetails);
+      LookUp.courierPrice = price;
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => const ParcelScreen(),
+        ),
+      );
+    }
   }
 }

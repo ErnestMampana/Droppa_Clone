@@ -1,11 +1,7 @@
 import 'package:droppa_clone/LookUp/lookup.dart';
-import 'package:droppa_clone/LookUp/strings.dart';
 import 'package:droppa_clone/widgets/Rental_textField.dart';
 import 'package:droppa_clone/widgets/button.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 
 class ButtomSheetWidget extends StatelessWidget {
   final void Function(String?)? onChanged;
@@ -18,6 +14,17 @@ class ButtomSheetWidget extends StatelessWidget {
   final TextEditingController provinceTextController;
   final Function onPress;
   final VoidCallback onCancel;
+  final bool companyNameValid;
+  final bool streetAddressValid;
+  final bool postalCodeValid;
+  final bool suburbValid;
+  final bool provinceValid;
+  final VoidCallback onTapCompanyName;
+  final VoidCallback onTapPostalCode;
+  final VoidCallback onTapStreetAddress;
+  final VoidCallback onTapSuburb;
+  final VoidCallback onTapProvince;
+
   const ButtomSheetWidget({
     Key? key,
     required this.onChanged,
@@ -30,6 +37,16 @@ class ButtomSheetWidget extends StatelessWidget {
     required this.provinceTextController,
     required this.onPress,
     required this.onCancel,
+    required this.companyNameValid,
+    required this.streetAddressValid,
+    required this.postalCodeValid,
+    required this.suburbValid,
+    required this.provinceValid,
+    required this.onTapCompanyName,
+    required this.onTapPostalCode,
+    required this.onTapStreetAddress,
+    required this.onTapSuburb,
+    required this.onTapProvince,
   }) : super(key: key);
 
   @override
@@ -115,6 +132,8 @@ class ButtomSheetWidget extends StatelessWidget {
                           height: 15,
                         ),
                         RentalTextField(
+                          onTap: onTapCompanyName,
+                          textValid: companyNameValid,
                           label: 'Company Name(Optional)',
                           textController: conpanyNameTextController,
                         ),
@@ -150,6 +169,8 @@ class ButtomSheetWidget extends StatelessWidget {
                           height: 15,
                         ),
                         RentalTextField(
+                          onTap: onTapStreetAddress,
+                          textValid: streetAddressValid,
                           label: 'Street Address',
                           textController: streetTextController,
                         ),
@@ -157,6 +178,8 @@ class ButtomSheetWidget extends StatelessWidget {
                           height: 15,
                         ),
                         RentalTextField(
+                          onTap: onTapPostalCode,
+                          textValid: postalCodeValid,
                           label: 'Postal Code',
                           textController: postalTextController,
                         ),
@@ -164,6 +187,8 @@ class ButtomSheetWidget extends StatelessWidget {
                           height: 15,
                         ),
                         RentalTextField(
+                          onTap: onTapSuburb,
+                          textValid: suburbValid,
                           label: 'Suburb',
                           textController: suburbTextController,
                         ),
@@ -171,6 +196,8 @@ class ButtomSheetWidget extends StatelessWidget {
                           height: 15,
                         ),
                         RentalTextField(
+                          onTap: onTapProvince,
+                          textValid: provinceValid,
                           label: 'Province',
                           textController: provinceTextController,
                         ),

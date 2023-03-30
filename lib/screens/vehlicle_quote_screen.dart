@@ -29,10 +29,9 @@ class _VehicleQuoteScreenState extends State<VehicleQuoteScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
-    super.initState();
     _totalPrice = widget.price! + LookUp.minivanPrice;
     _vehicleType = 'Mini-Van';
+    super.initState();
   }
 
   @override
@@ -278,23 +277,24 @@ class _VehicleQuoteScreenState extends State<VehicleQuoteScreen> {
                 height: 5,
               ),
               RsButton(
-                  title: 'Confirm booking',
-                  radisNumber: 5,
-                  onTaped: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => userPersonalDetailsDTO == null
-                            ? const LoginScreen()
-                            : EditItineraryScreen(
-                                dropOffAdress: widget.dropOffAdress!,
-                                pickUpAdress: widget.pickUpAdress!,
-                                quotePrice: _totalPrice,
-                                vehicleType: _vehicleType,
-                              ),
-                      ),
-                    );
-                  })
+                title: 'Confirm booking',
+                radisNumber: 5,
+                onTaped: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => userPersonalDetailsDTO == null
+                          ? const LoginScreen()
+                          : EditItineraryScreen(
+                              dropOffAdress: widget.dropOffAdress!,
+                              pickUpAdress: widget.pickUpAdress!,
+                              quotePrice: _totalPrice,
+                              vehicleType: _vehicleType,
+                            ),
+                    ),
+                  );
+                },
+              ),
             ],
           ),
         ),

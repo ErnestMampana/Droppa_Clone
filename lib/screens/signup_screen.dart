@@ -1,17 +1,9 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'dart:convert';
-
-import 'package:droppa_clone/backend/classes/person.dart';
-import 'package:droppa_clone/backend/services/WebApiDataService%20.dart';
 import 'package:droppa_clone/backend/services/firebase_service.dart';
 import 'package:droppa_clone/backend/services/user_service.dart';
-import 'package:droppa_clone/screens/main_activty_screen.dart';
 import 'package:droppa_clone/screens/otp_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
-
 import '../widgets/dialog.dart';
 import 'login_screen.dart';
 
@@ -23,7 +15,7 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
-  final Authantication _authentication = Authantication();
+  //final Authantication _authentication = Authantication();
   final UserService _userService = UserService();
 
   //Controllers
@@ -43,6 +35,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
   bool _cellphoneValid = false;
   bool _passwordValid = false;
   bool _confirmPasswordValid = false;
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
+    _cellphoneNumberController.dispose();
+    _userNameController.dispose();
+    _userSurnameController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

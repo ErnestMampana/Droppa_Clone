@@ -10,8 +10,6 @@ import 'package:droppa_clone/widgets/Rental_textField.dart';
 import 'package:droppa_clone/widgets/button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'dart:io' show Platform;
 
 class ConfirmRentalScreen extends StatefulWidget {
@@ -42,6 +40,24 @@ class _ConfirmRentalScreenState extends State<ConfirmRentalScreen> {
   double _totalPrice = 0.0;
 
   final UserService _userService = UserService();
+
+  bool _companyNameValid = false;
+  bool _contactPersonValid = false;
+  bool _mobileNumberValid = false;
+  bool _laboursValid = false;
+  bool _deliveryNoteValid = false;
+
+  @override
+  void dispose() {
+    _laboursTextController.dispose();
+    _companyNameTextController.dispose();
+    _conatactPersonTextController.dispose();
+    _mobileNumberTextController.dispose();
+    _numberOfDaysTextController.dispose();
+    _instructionTextController.dispose();
+    _brunchController.dispose();
+    super.dispose();
+  }
 
   @override
   void initState() {
@@ -178,6 +194,12 @@ class _ConfirmRentalScreenState extends State<ConfirmRentalScreen> {
                 height: 10,
               ),
               RentalTextField(
+                onTap: () {
+                  setState(() {
+                    _companyNameValid = false;
+                  });
+                },
+                textValid: _companyNameValid,
                 label: 'Company Name(Optional)',
                 textController: _companyNameTextController,
               ),
@@ -185,6 +207,12 @@ class _ConfirmRentalScreenState extends State<ConfirmRentalScreen> {
                 height: 15,
               ),
               RentalTextField(
+                onTap: () {
+                  setState(() {
+                    _contactPersonValid = false;
+                  });
+                },
+                textValid: _contactPersonValid,
                 label: 'Contact Person Name',
                 textController: _conatactPersonTextController,
               ),
@@ -192,6 +220,12 @@ class _ConfirmRentalScreenState extends State<ConfirmRentalScreen> {
                 height: 15,
               ),
               RentalTextField(
+                onTap: () {
+                  setState(() {
+                    _mobileNumberValid = false;
+                  });
+                },
+                textValid: _mobileNumberValid,
                 label: 'Mobile Number',
                 textController: _mobileNumberTextController,
               ),
@@ -232,6 +266,12 @@ class _ConfirmRentalScreenState extends State<ConfirmRentalScreen> {
                 height: 15,
               ),
               RentalTextField(
+                onTap: () {
+                  setState(() {
+                    _laboursValid = false;
+                  });
+                },
+                textValid: _laboursValid,
                 label: 'Number of Labour(s) (R700/labour)',
                 textController: _laboursTextController,
               ),
@@ -239,6 +279,12 @@ class _ConfirmRentalScreenState extends State<ConfirmRentalScreen> {
                 height: 15,
               ),
               RentalTextField(
+                onTap: () {
+                  setState(() {
+                    _deliveryNoteValid = false;
+                  });
+                },
+                textValid: _deliveryNoteValid,
                 label: 'Enter Delivery/Special Instruction',
                 textController: _instructionTextController,
               ),
@@ -300,35 +346,51 @@ class _ConfirmRentalScreenState extends State<ConfirmRentalScreen> {
   }
 
   Future<bool> _handleRentalBooking() async {
-    bool gotIt = false;
-    Map<String, dynamic> rentalData = {
-      "userId": userPersonalDetailsDTO!.email,
-      "streetAddress": LookUp.streetAddress,
-      "postalCode": LookUp.postalCode,
-      "suburb": LookUp.suburb,
-      "province": LookUp.province,
-      "complexName": LookUp.complexName,
-      "unitNumber": LookUp.unitNumber,
-      "startDate": LookUp.startDate,
-      "endDate": LookUp.endDate,
-      "truckType": LookUp.truckType,
-      "price": widget.price,
-      "companyName": _companyNameTextController.text,
-      "contactPerson": _conatactPersonTextController.text,
-      "mobileNumber": _mobileNumberTextController.text,
-      "rentalBrunch": _brunchController.text,
-      "labours": _laboursTextController.text,
-      "noDays": LookUp.noDays,
-      "instruction": _instructionTextController.text,
-    };
+    bool success = false;
+    if (_conatactPersonTextController.text.isEmpty &&
+        _mobileNumberTextController.text.isEmpty &&
+        _laboursTextController.text.isEmpty) {
+      setState(() {
+        _contactPersonValid = true;
+        _mobileNumberValid = true;
+        _laboursValid = true;
+      });
+    } else if (_conatactPersonTextController.text.isEmpty) {
+      _contactPersonValid = true;
+    } else if (_mobileNumberTextController.text.isEmpty) {
+      _mobileNumberValid = true;
+    } else if (_laboursTextController.text.isEmpty) {
+      _laboursValid = true;
+    } else {
+      Map<String, dynamic> rentalData = {
+        "userId": userPersonalDetailsDTO!.email,
+        "streetAddress": LookUp.streetAddress,
+        "postalCode": LookUp.postalCode,
+        "suburb": LookUp.suburb,
+        "province": LookUp.province,
+        "complexName": LookUp.complexName,
+        "unitNumber": LookUp.unitNumber,
+        "startDate": LookUp.startDate,
+        "endDate": LookUp.endDate,
+        "truckType": LookUp.truckType,
+        "price": widget.price,
+        "companyName": _companyNameTextController.text,
+        "contactPerson": _conatactPersonTextController.text,
+        "mobileNumber": _mobileNumberTextController.text,
+        "rentalBrunch": _brunchController.text,
+        "labours": _laboursTextController.text,
+        "noDays": LookUp.noDays,
+        "instruction": _instructionTextController.text,
+      };
 
-    var response = await _userService.createRentalBooking(rentalData);
+      var response = await _userService.createRentalBooking(rentalData);
 
-    if (response.rentalId != null) {
-      rentalDetails = response;
-      gotIt = true;
+      if (response.rentalId != null) {
+        rentalDetails = response;
+        success = true;
+      }
     }
 
-    return gotIt;
+    return success;
   }
 }

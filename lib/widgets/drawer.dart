@@ -3,14 +3,11 @@
 import 'package:droppa_clone/backend/classes/person.dart';
 import 'package:droppa_clone/backend/providers/app_data.dart';
 import 'package:droppa_clone/backend/services/WebApiDataService%20.dart';
-import 'package:droppa_clone/backend/services/user_service.dart';
 import 'package:droppa_clone/screens/bookings_screen.dart';
 import 'package:droppa_clone/screens/login_screen.dart';
 import 'package:droppa_clone/widgets/dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import '../LookUp/lookup.dart';
 import '../screens/main_activty_screen.dart';
 
 class CustomDrawer extends StatefulWidget {
@@ -275,7 +272,7 @@ class CustomDrawerState extends State<CustomDrawer> {
       DialogUtils.hideDialog(context);
       userPersonalDetailsDTO =  null;
       context.read<AppData>().clearBooking();
-      context.read<AppData>().changePrice(00.0);
+      context.read<AppData>().clearPrice();
       //Navigator.pop(context);
       Navigator.push(
         context,

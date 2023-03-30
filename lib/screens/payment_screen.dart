@@ -5,10 +5,7 @@ import 'package:droppa_clone/backend/providers/app_data.dart';
 import 'package:droppa_clone/backend/services/user_service.dart';
 import 'package:droppa_clone/screens/main_activty_screen.dart';
 import 'package:droppa_clone/widgets/dialog.dart';
-import 'package:droppa_clone/widgets/walllet_amount_select.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:provider/provider.dart';
 
 import '../widgets/payment_method.dart';

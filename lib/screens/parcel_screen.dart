@@ -1,7 +1,8 @@
+import 'package:droppa_clone/LookUp/lookup.dart';
 import 'package:droppa_clone/LookUp/strings.dart';
-import 'package:droppa_clone/widgets/Rental_textField.dart';
+import 'package:droppa_clone/backend/classes/Parcel.dart';
+import 'package:droppa_clone/screens/courier_screen.dart';
 import 'package:droppa_clone/widgets/button.dart';
-import 'package:droppa_clone/widgets/parcel.dart';
 import 'package:droppa_clone/widgets/parcel_container.dart';
 import 'package:flutter/material.dart';
 
@@ -19,12 +20,27 @@ class _ParcelScreenState extends State<ParcelScreen> {
   bool _isSelectedEn = false;
   bool _isSelectedEnn = false;
   bool _isSelecteddEn = false;
+  int _parcelNumber = 1;
 
   //Text Controllers
   final TextEditingController _massTextController = TextEditingController();
   final TextEditingController _lenghtTextController = TextEditingController();
   final TextEditingController _widthTextController = TextEditingController();
   final TextEditingController _heightTextController = TextEditingController();
+
+  bool _heightValid = false;
+  bool _lengthValid = false;
+  bool _massValid = false;
+  bool _widthValid = false;
+
+  @override
+  void dispose() {
+    _massTextController.dispose();
+    _lenghtTextController.dispose();
+    _widthTextController.dispose();
+    _heightTextController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,6 +80,31 @@ class _ParcelScreenState extends State<ParcelScreen> {
                 height: 20,
               ),
               ParcelContainerWideget(
+                onTapHeight: () {
+                  setState(() {
+                    _heightValid = false;
+                  });
+                },
+                onTapLength: () {
+                  setState(() {
+                    _lengthValid = false;
+                  });
+                },
+                onTapMass: () {
+                  setState(() {
+                    _massValid = false;
+                  });
+                },
+                onTapWidth: () {
+                  setState(() {
+                    _widthValid = false;
+                  });
+                },
+                number: _parcelNumber,
+                heightValid: _heightValid,
+                lengthValid: _lengthValid,
+                massValid: _massValid,
+                widthValid: _widthValid,
                 massTextController: _massTextController,
                 lenghtTextController: _lenghtTextController,
                 widthTextController: _widthTextController,
@@ -108,12 +149,59 @@ class _ParcelScreenState extends State<ParcelScreen> {
               const SizedBox(
                 height: 20,
               ),
-              // ParcelContainerWideget(
-              //   massTextController: _massTextController,
-              //   lenghtTextController: _lenghtTextController,
-              //   widthTextController: _widthTextController,
-              //   heightTextController: _heightTextController,
-              // ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  GestureDetector(
+                    child: const Icon(
+                      Icons.remove_circle,
+                      size: 50,
+                      color: Colors.red,
+                    ),
+                    onTap: () {
+                      if (LookUp.parcels.isNotEmpty) {
+                        LookUp.parcels.removeLast();
+                        setState(() {
+                          _parcelNumber -= 1;
+                        });
+                      }
+                    },
+                  ),
+                  GestureDetector(
+                    child: const Icon(
+                      Icons.add_circle,
+                      size: 50,
+                      color: Colors.blue,
+                    ),
+                    onTap: () {
+                      if (_heightTextController.text.isNotEmpty &&
+                          _lenghtTextController.text.isNotEmpty &&
+                          _massTextController.text.isNotEmpty &&
+                          _widthTextController.text.isNotEmpty) {
+                        if (LookUp.parcels.length < 5) {
+                          LookUp.parcels.add(
+                            Parcel(
+                              height: double.parse(_heightTextController.text),
+                              length: double.parse(_lenghtTextController.text),
+                              mass: double.parse(_massTextController.text),
+                              width: double.parse(_widthTextController.text),
+                            ),
+                          );
+                          setState(() {
+                            _heightTextController.text = "";
+                            _lenghtTextController.text = "";
+                            _massTextController.text = "";
+                            _widthTextController.text = "";
+                            _parcelNumber += 1;
+                            print(
+                                " ================= : ${LookUp.parcels.length}");
+                          });
+                        }
+                      }
+                    },
+                  ),
+                ],
+              ),
             ],
           ),
         ),
@@ -140,7 +228,13 @@ class _ParcelScreenState extends State<ParcelScreen> {
                   ),
                 ],
               ),
-              RsButton(title: 'Done', radisNumber: 6, onTaped: () {}),
+              RsButton(
+                title: 'Done',
+                radisNumber: 6,
+                onTaped: () {
+                  _handleParcels();
+                },
+              ),
               // SizedBox(
               //   height: 50,
               // )
@@ -149,5 +243,29 @@ class _ParcelScreenState extends State<ParcelScreen> {
         ),
       ),
     );
+  }
+
+  _handleParcels() async {
+    if (_heightTextController.text.isNotEmpty &&
+        _lenghtTextController.text.isNotEmpty &&
+        _massTextController.text.isNotEmpty &&
+        _widthTextController.text.isNotEmpty) {
+      if (LookUp.parcels.length < 5) {
+        LookUp.parcels.add(
+          Parcel(
+            height: double.parse(_heightTextController.text),
+            length: double.parse(_lenghtTextController.text),
+            mass: double.parse(_massTextController.text),
+            width: double.parse(_widthTextController.text),
+          ),
+        );
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => const CourierSecreen(),
+          ),
+        );
+      }
+    }
   }
 }

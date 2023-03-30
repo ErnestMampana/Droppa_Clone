@@ -4,9 +4,9 @@ import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 
 class LocalStorageService {
-  static final _databaseName = "movethenation.db";
+  static const _databaseName = "movethenation.db";
   // Increment this version when you need to change the schema.
-  static final _databaseVersion = 1;
+  static const _databaseVersion = 1;
 
   // Make this a singleton class.
   LocalStorageService._privateConstructor();

@@ -4,19 +4,15 @@ import 'package:droppa_clone/LookUp/lookup.dart';
 import 'package:droppa_clone/LookUp/strings.dart';
 import 'package:droppa_clone/backend/providers/app_data.dart';
 import 'package:droppa_clone/backend/classes/person.dart';
-import 'package:droppa_clone/screens/booking_screen.dart';
 import 'package:droppa_clone/screens/bookings_screen.dart';
 import 'package:droppa_clone/screens/login_screen.dart';
 import 'package:droppa_clone/screens/quote_request_screen.dart';
 import 'package:droppa_clone/screens/rental_service_screen.dart';
-import 'package:droppa_clone/screens/vehlicle_quote_screen.dart';
 import 'package:droppa_clone/screens/wallet_screen.dart';
 import 'package:droppa_clone/widgets/button.dart';
 import 'package:droppa_clone/widgets/dialog.dart';
 import 'package:droppa_clone/widgets/drawer.dart';
-import 'package:droppa_clone/widgets/vehicle_select.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:provider/provider.dart';
 
 class MainActivityScreen extends StatefulWidget {

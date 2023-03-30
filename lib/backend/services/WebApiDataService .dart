@@ -1,9 +1,8 @@
-import 'dart:convert';
+// ignore_for_file: file_names
 
+import 'dart:convert';
 import 'package:droppa_clone/backend/services/http_service.dart';
 import 'package:http/http.dart';
-
-import '../models/api_base_mode.dart';
 
 class WebApiDataService {
   final String baseUrl = "http://10.0.2.2:8080/api/v1";
@@ -88,7 +87,8 @@ class WebApiDataService {
     return await httpService.post(url, requestBody);
   }
 
-  Future<Response> makeRentalBookingPayment(Map<String, dynamic> paymentObject) async {
+  Future<Response> makeRentalBookingPayment(
+      Map<String, dynamic> paymentObject) async {
     var url = "$baseUrl/rental/makePayment";
     var requestBody = jsonEncode(paymentObject);
     return await httpService.put(url, requestBody);

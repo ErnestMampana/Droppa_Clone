@@ -1,10 +1,18 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 
 class RentalTextField extends StatelessWidget {
   final String label;
+  final bool textValid;
   final TextEditingController textController;
+  final VoidCallback onTap;
   const RentalTextField(
-      {Key? key, required this.label, required this.textController})
+      {Key? key,
+      required this.label,
+      required this.textController,
+      required this.textValid,
+      required this.onTap})
       : super(key: key);
 
   @override
@@ -21,12 +29,15 @@ class RentalTextField extends StatelessWidget {
           height: 10,
         ),
         TextField(
+          onTap: onTap,
           //keyboardType: TextInputType.number,
           controller: textController,
           autocorrect: false,
-          decoration: const InputDecoration(
-            contentPadding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 7),
-            border: OutlineInputBorder(),
+          decoration: InputDecoration(
+            contentPadding:
+                const EdgeInsets.symmetric(vertical: 5.0, horizontal: 7),
+            errorText: textValid ? 'Required field' : null,
+            border: const OutlineInputBorder(),
           ),
         ),
       ],

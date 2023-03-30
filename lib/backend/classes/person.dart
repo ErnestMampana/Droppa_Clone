@@ -34,6 +34,4 @@ class Person with ChangeNotifier {
         );
   }
 
-//double get balance => walletBalance!;
-  notifyListeners();
 }

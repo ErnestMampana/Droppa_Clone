@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home:
-           const MainActivityScreen(),// PaymentScreen(price: 1250), 
+           const MainActivityScreen(), 
           // routes: {
           //   '/wallet_screen': (context) => const WalletScreen(),
           // },

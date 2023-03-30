@@ -1,14 +1,12 @@
 import 'package:droppa_clone/LookUp/lookup.dart';
 import 'package:droppa_clone/screens/confirm_rental_screen.dart';
-import 'package:droppa_clone/screens/edit_itinenrary_screen.dart';
 import 'package:droppa_clone/widgets/button.dart';
 import 'package:droppa_clone/widgets/vehicle_select.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 
 class RentalQuoteScreen extends StatefulWidget {
-  const RentalQuoteScreen({super.key});
+  final double price;
+  const RentalQuoteScreen({super.key, required this.price});
 
   @override
   State<RentalQuoteScreen> createState() => _RentalQuoteScreenState();
@@ -17,6 +15,15 @@ class RentalQuoteScreen extends StatefulWidget {
 class _RentalQuoteScreenState extends State<RentalQuoteScreen> {
   //variables
   int _groupValue = 1;
+  double? _totalPrice;
+  double? _price;
+
+  @override
+  void initState() {
+    _totalPrice = widget.price;
+    _price = widget.price;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,9 +57,9 @@ class _RentalQuoteScreenState extends State<RentalQuoteScreen> {
                     'Total (Incl VAT)',
                     style: TextStyle(color: Colors.white),
                   ),
-                  const Text(
-                    'R 1 214,00',
-                    style: TextStyle(
+                   Text(
+                    'R $_totalPrice',
+                    style: const TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
                     ),
@@ -69,7 +76,7 @@ class _RentalQuoteScreenState extends State<RentalQuoteScreen> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (_) => ConfirmRentalScreen(price: 12000),
+                      builder: (_) => ConfirmRentalScreen(price: _totalPrice!),
                     ),
                   );
                 },
@@ -88,7 +95,7 @@ class _RentalQuoteScreenState extends State<RentalQuoteScreen> {
                 color: Colors.grey[300],
                 child: Column(
                   children: [
-                     Align(
+                    Align(
                       alignment: Alignment.topLeft,
                       child: Text(
                         LookUp.truckType,
@@ -122,13 +129,14 @@ class _RentalQuoteScreenState extends State<RentalQuoteScreen> {
             ),
             SelectVehicleController(
               title: '1 Ton',
-              description: 'R11 472,86',
+              description: 'R ${_price! + 1500}',
               imageUrl: 'assets/elite1.png',
               itemNumber: 1,
               groupValue: _groupValue,
               onChanged: (itemNumber) {
                 setState(() {
                   _groupValue = itemNumber!;
+                  _totalPrice = _price! + 1500;
                 });
               },
             ),
@@ -137,13 +145,14 @@ class _RentalQuoteScreenState extends State<RentalQuoteScreen> {
             ),
             SelectVehicleController(
               title: '2.5 Ton',
-              description: 'R11 472,86',
+              description: 'R ${_price! + 2000}',
               imageUrl: 'assets/elite2.5.png',
               itemNumber: 2,
               groupValue: _groupValue,
               onChanged: (itemNumber) {
                 setState(() {
                   _groupValue = itemNumber!;
+                  _totalPrice = _price! + 2000;
                 });
               },
             ),
@@ -152,13 +161,14 @@ class _RentalQuoteScreenState extends State<RentalQuoteScreen> {
             ),
             SelectVehicleController(
               title: '4 Ton',
-              description: 'R11 472,86',
+              description: 'R ${_price! + 2500}',
               imageUrl: 'assets/elite4.png',
               itemNumber: 3,
               groupValue: _groupValue,
               onChanged: (itemNumber) {
                 setState(() {
                   _groupValue = itemNumber!;
+                  _totalPrice = _price! + 2500;
                 });
               },
             ),
@@ -167,13 +177,14 @@ class _RentalQuoteScreenState extends State<RentalQuoteScreen> {
             ),
             SelectVehicleController(
               title: '6 Ton',
-              description: 'R11 472,86',
+              description: 'R ${_price! + 3000}',
               imageUrl: 'assets/elite6.png',
               itemNumber: 4,
               groupValue: _groupValue,
               onChanged: (itemNumber) {
                 setState(() {
                   _groupValue = itemNumber!;
+                  _totalPrice = _price! + 3000;
                 });
               },
             ),
@@ -182,13 +193,14 @@ class _RentalQuoteScreenState extends State<RentalQuoteScreen> {
             ),
             SelectVehicleController(
               title: '8 Ton',
-              description: 'R11 472,86',
+              description: 'R ${_price! + 3500}',
               imageUrl: 'assets/elite7.png',
               itemNumber: 5,
               groupValue: _groupValue,
               onChanged: (itemNumber) {
                 setState(() {
                   _groupValue = itemNumber!;
+                  _totalPrice = _price! + 3500;
                 });
               },
             ),

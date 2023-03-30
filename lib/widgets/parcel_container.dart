@@ -1,8 +1,6 @@
 import 'package:droppa_clone/widgets/Rental_textField.dart';
 import 'package:droppa_clone/widgets/parcel.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 
 class ParcelContainerWideget extends StatelessWidget {
   final TextEditingController massTextController;
@@ -17,6 +15,15 @@ class ParcelContainerWideget extends StatelessWidget {
   final bool isSelectedEn;
   final bool isSelectedEnn;
   final bool isSelecteddEn;
+  final bool massValid;
+  final bool lengthValid;
+  final bool heightValid;
+  final bool widthValid;
+  final VoidCallback onTapHeight;
+  final VoidCallback onTapWidth;
+  final VoidCallback onTapLength;
+  final VoidCallback onTapMass;
+  final int number;
 
   const ParcelContainerWideget(
       {super.key,
@@ -31,7 +38,15 @@ class ParcelContainerWideget extends StatelessWidget {
       required this.isSelectedEnvelope,
       required this.isSelectedEn,
       required this.isSelectedEnn,
-      required this.isSelecteddEn});
+      required this.isSelecteddEn,
+      required this.massValid,
+      required this.lengthValid,
+      required this.heightValid,
+      required this.widthValid,
+      required this.onTapHeight,
+      required this.onTapWidth,
+      required this.onTapLength,
+      required this.onTapMass, required this.number});
 
   @override
   Widget build(BuildContext context) {
@@ -57,12 +72,12 @@ class ParcelContainerWideget extends StatelessWidget {
               color: Colors.blue,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: const [
+                children:  [
                   Padding(
-                    padding: EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      'Parcel 1',
-                      style: TextStyle(
+                      'Parcel $number',
+                      style: const TextStyle(
                         color: Colors.white,
                       ),
                     ),
@@ -83,6 +98,8 @@ class ParcelContainerWideget extends StatelessWidget {
                     ),
                     Flexible(
                       child: RentalTextField(
+                        onTap: onTapMass,
+                        textValid: massValid,
                         label: 'Mass',
                         textController: massTextController,
                       ),
@@ -92,6 +109,8 @@ class ParcelContainerWideget extends StatelessWidget {
                     ),
                     Flexible(
                       child: RentalTextField(
+                        onTap: onTapLength,
+                        textValid: lengthValid,
                         label: 'Length',
                         textController: lenghtTextController,
                       ),
@@ -101,6 +120,8 @@ class ParcelContainerWideget extends StatelessWidget {
                     ),
                     Flexible(
                       child: RentalTextField(
+                        onTap: onTapWidth,
+                        textValid: widthValid,
                         label: 'Width',
                         textController: widthTextController,
                       ),
@@ -110,6 +131,8 @@ class ParcelContainerWideget extends StatelessWidget {
                     ),
                     Flexible(
                       child: RentalTextField(
+                        onTap: onTapHeight,
+                        textValid: heightValid,
                         label: 'Height',
                         textController: heightTextController,
                       ),
