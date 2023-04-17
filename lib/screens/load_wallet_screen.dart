@@ -194,78 +194,35 @@ class _LoadWalletScreenState extends State<LoadWalletScreen> {
     // });
   }
 
-  _changeRadio(int itemNumber) {
-    if (itemNumber == 1) {
-      setState(() {
-        _groupValue = itemNumber;
-        _isSelected1 = true;
-        _isSelected2 = false;
-        _isSelected3 = false;
-        _isSelected4 = false;
-        _isSelected5 = false;
-        _isSelected6 = false;
-        _price = 500;
-      });
-    }
-    if (itemNumber == 2) {
-      setState(() {
-        _groupValue = itemNumber;
-        _isSelected1 = false;
-        _isSelected2 = true;
-        _isSelected3 = false;
-        _isSelected4 = false;
-        _isSelected5 = false;
-        _isSelected6 = false;
-        _price = 1000;
-      });
-    }
-    if (itemNumber == 3) {
-      setState(() {
-        _groupValue = itemNumber;
-        _isSelected1 = false;
-        _isSelected2 = false;
-        _isSelected3 = true;
-        _isSelected4 = false;
-        _isSelected5 = false;
-        _isSelected6 = false;
-        _price = 2000;
-      });
-    }
-    if (itemNumber == 4) {
-      setState(() {
-        _groupValue = itemNumber;
-        _isSelected1 = false;
-        _isSelected2 = false;
-        _isSelected3 = false;
-        _isSelected4 = true;
-        _isSelected5 = false;
-        _isSelected6 = false;
-        _price = 5000;
-      });
-    }
-    if (itemNumber == 5) {
-      setState(() {
-        _groupValue = itemNumber;
-        _isSelected1 = false;
-        _isSelected2 = false;
-        _isSelected3 = false;
-        _isSelected4 = false;
-        _isSelected5 = true;
-        _isSelected6 = false;
-        _price = 10000;
-      });
-    }
-    if (itemNumber == 6) {
-      setState(() {
-        _groupValue = itemNumber;
-        _isSelected1 = false;
-        _isSelected2 = false;
-        _isSelected3 = false;
-        _isSelected4 = false;
-        _isSelected5 = false;
-        _isSelected6 = true;
-        _price = 20000;
-      });
-    }
+  void _changeRadio(int itemNumber) {
+    setState(() {
+      _groupValue = itemNumber;
+      _isSelected1 = itemNumber == 1;
+      _isSelected2 = itemNumber == 2;
+      _isSelected3 = itemNumber == 3;
+      _isSelected4 = itemNumber == 4;
+      _isSelected5 = itemNumber == 5;
+      _isSelected6 = itemNumber == 6;
+      switch (itemNumber) {
+        case 1:
+          _price = 500;
+          break;
+        case 2:
+          _price = 1000;
+          break;
+        case 3:
+          _price = 2000;
+          break;
+        case 4:
+          _price = 5000;
+          break;
+        case 5:
+          _price = 10000;
+          break;
+        case 6:
+          _price = 20000;
+          break;
+      }
+    });
   }
 }

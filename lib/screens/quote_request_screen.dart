@@ -1,6 +1,5 @@
 // ignore_for_file: sized_box_for_whitespace, use_build_context_synchronously
 
-
 import 'package:droppa_clone/LookUp/lookup.dart';
 import 'package:droppa_clone/backend/keys.dart';
 import 'package:droppa_clone/backend/models/pick_result.dart';
@@ -87,8 +86,6 @@ class _QuoteRequestScreenState extends State<QuoteRequestScreen> {
   bool _provinceValid = false;
   bool _streetAddressValid = false;
   bool _suburbValid = false;
-
-  
 
   @override
   void initState() {
@@ -448,7 +445,11 @@ class _QuoteRequestScreenState extends State<QuoteRequestScreen> {
                                     suffixIcon: Icon(Icons.search),
                                     enabled: false,
                                     contentPadding: EdgeInsets.only(
-                                        left: 6, top: 8, right: 0, bottom: 0),
+                                      left: 6,
+                                      top: 8,
+                                      right: 0,
+                                      bottom: 0,
+                                    ),
                                   ),
                                 ),
                               ),

@@ -125,8 +125,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
                   Padding(
                     padding: const EdgeInsets.only(bottom: 15),
                     child: Container(
-                        height: 50,
-                        width: 350,
+                        height: MediaQuery.of(context).size.height * 0.50,
+                        width: MediaQuery.of(context).size.width * 0.95,
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: const BorderRadius.all(
@@ -253,7 +253,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                   ? () {
                                       _handlePromo();
                                     }
-                                  : () {},
+                                  : null,
                               color: Colors.black,
                               child: Text(
                                 _enabled ? 'Apply' : 'Applied',

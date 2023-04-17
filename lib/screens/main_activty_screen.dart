@@ -197,8 +197,9 @@ class _MainActivityScreenState extends State<MainActivityScreen> {
                                       ),
                                     );
                                   } else {
-                                    DialogUtils.showErrorMessage(context,
-                                        "Log in to access your wallet");
+                                    DialogUtils.toastMessage("error ");
+                                    // DialogUtils.showErrorMessage(context,
+                                    //     "Log in to access your wallet");
                                   }
                                   // void toastMessage(String text) {
                                   //   Fluttertoast.showToast(

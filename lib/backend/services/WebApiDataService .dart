@@ -1,6 +1,7 @@
 // ignore_for_file: file_names
 
 import 'dart:convert';
+import 'package:droppa_clone/backend/classes/Parcel.dart';
 import 'package:droppa_clone/backend/services/http_service.dart';
 import 'package:http/http.dart';
 
@@ -92,6 +93,12 @@ class WebApiDataService {
     var url = "$baseUrl/rental/makePayment";
     var requestBody = jsonEncode(paymentObject);
     return await httpService.put(url, requestBody);
+  }
+
+  Future<Response> addParcels(Map<String,dynamic> parcels) async{
+    var url = "$baseUrl/parcel/add";
+    var requestBody = jsonEncode(parcels);
+    return await httpService.post(url, requestBody);
   }
 
   // Future<BaseApiResponse> updatePersonalDetails(

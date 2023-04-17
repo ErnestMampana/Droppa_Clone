@@ -1,6 +1,9 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:droppa_clone/LookUp/lookup.dart';
 import 'package:droppa_clone/LookUp/strings.dart';
 import 'package:droppa_clone/backend/classes/Parcel.dart';
+import 'package:droppa_clone/backend/services/user_service.dart';
 import 'package:droppa_clone/screens/courier_screen.dart';
 import 'package:droppa_clone/widgets/button.dart';
 import 'package:droppa_clone/widgets/parcel_container.dart';
@@ -32,6 +35,8 @@ class _ParcelScreenState extends State<ParcelScreen> {
   bool _lengthValid = false;
   bool _massValid = false;
   bool _widthValid = false;
+
+  final _userService = UserService();
 
   @override
   void dispose() {
@@ -259,13 +264,19 @@ class _ParcelScreenState extends State<ParcelScreen> {
             width: double.parse(_widthTextController.text),
           ),
         );
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => const CourierSecreen(),
-          ),
-        );
       }
+      List<Map<String, dynamic>> parcelsList = [];
+      for (var parcel in LookUp.parcels) {
+        parcelsList.add(parcel.toMap());
+      }
+      Map<String, dynamic> parcels = {"parcels": parcelsList};
+      await _userService.addParcels(parcels);
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => const CourierSecreen(),
+        ),
+      );
     }
   }
 }
